@@ -1,7 +1,12 @@
 ---
 ---
-<dialog id="gallery-modal" class="card">
-  <h3 id="gm-title"></h3>
-  <p id="gm-desc"></p>
+<dialog id="gallery-modal" class="gallery-modal">
+  <div class="gallery-modal-visual" id="gm-preview">🖼️</div>
+  <div class="gallery-modal-meta">
+    <p class="eyebrow" id="gm-type"></p>
+    <h3 id="gm-title"></h3>
+    <p class="muted" id="gm-owner"></p>
+    <p id="gm-desc"></p>
+  </div>
   <button class="btn alt" type="button" onclick="this.closest('dialog').close()">關閉</button>
 </dialog>

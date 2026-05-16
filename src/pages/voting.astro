@@ -13,6 +13,7 @@ import { voteTabs, voteWorks } from '../data/voting';
   <section class="card"><h2>分類</h2><div class="actions">{voteTabs.map((t) => <button class="btn alt vote-tab" data-type={t.key}>{t.label}</button>)}</div></section>
   <section id="vote-list" class="tool-grid">{voteWorks.map((w) => <div data-work-type={w.type}><VoteWorkCard work={w} /></div>)}</section>
   <LeaderboardPanel works={voteWorks} />
+  <section class="card vote-status-card"><p class="eyebrow">舞台狀態</p><h2>現場票選進行中</h2><p>主持人會在最後統一揭曉 TOP 3，歡迎繼續為你喜歡的作品按讚投票。</p></section>
   <section class="feature-grid">
     <article class="card"><h2>獎項說明</h2><ul><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團票選）</li><li>最暖故事獎（主持人特選）</li></ul></article>
     <article class="card notice"><h2>主持人控制區（預留）</h2><p>正式版可加入開始投票、暫停投票、公布得獎者、重設場次。</p></article>
