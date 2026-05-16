@@ -1,18 +1,62 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
-import PromptCard from '../components/prompts/PromptCard.astro';
+import StepCard from '../components/common/StepCard.astro';
+import CTASection from '../components/common/CTASection.astro';
+import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import StylePackCard from '../components/prompts/StylePackCard.astro';
 import { stickerLabContent } from '../content/prompts';
+import { stickerSteps } from '../content/workshopPages';
 ---
 <WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
-  <section class="card"><h1>做出專屬旅行主題 LINE 貼圖素材</h1></section>
-  {stickerLabContent.packs.map((pack) => (
-    <section class="card">
-      <h2>{pack.title}</h2>
-      <p>{pack.style}</p>
-      <p>適合照片：{pack.photoFit.join('、')}</p>
-      <ol>{pack.scenarios.map((s) => <li>{s}</li>)}</ol>
-      <PromptCard title={`${pack.title}｜ChatGPT`} platform="ChatGPT" prompt={pack.prompts.chatgpt} />
-      <PromptCard title={`${pack.title}｜Gemini`} platform="Gemini" prompt={pack.prompts.gemini} />
-    </section>
-  ))}
+  <section class="hero">
+    <p class="eyebrow">第三個可分享成果</p>
+    <h1>做出專屬旅行主題 LINE 貼圖素材</h1>
+    <p>選一款最適合你的風格包，上傳照片、複製提示詞，讓 AI 幫你做出一張 8 格旅行貼圖素材總圖。</p>
+    <div class="actions">
+      <a class="btn" href="#style-packs">選風格包</a>
+      <a class="btn alt" href="#line-maker">LINE 拍貼步驟</a>
+    </div>
+  </section>
+
+  <section class="feature-grid">
+    <article class="card">
+      <p class="eyebrow">人人必達</p>
+      <h2>完成 8 格素材總圖</h2>
+      <p>先把素材總圖分享到工作坊 LINE 群組，就能參加後續展示與投票。</p>
+    </article>
+    <article class="card">
+      <p class="eyebrow">進階挑戰</p>
+      <h2>匯入 LINE 拍貼裁切</h2>
+      <p>時間足夠的學員可以繼續裁切成真正的 LINE 貼圖並嘗試送審。</p>
+    </article>
+  </section>
+
+  <section id="style-packs" class="section-heading">
+    <p class="eyebrow">6 款風格包</p>
+    <h2>選最像你的旅行情境</h2>
+  </section>
+  {stickerLabContent.packs.map((pack) => <StylePackCard pack={pack} />)}
+
+  <section id="line-maker" class="section-heading">
+    <p class="eyebrow">LINE 拍貼操作</p>
+    <h2>把素材總圖變成真正的 LINE 貼圖</h2>
+  </section>
+  <section class="step-grid">
+    {stickerSteps.map(([title, text], index) => <StepCard index={index + 1} title={title} text={text} />)}
+  </section>
+
+  <section class="asset-grid">
+    <AssetPlaceholder title="6 種風格示意圖" text="每款風格包建議放一張完成圖或 mockup。" />
+    <AssetPlaceholder title="LINE 拍貼手機截圖" text="放下載、匯入、裁切、送審流程截圖。" />
+    <AssetPlaceholder title="LINE 拍貼操作短影片" text="拆成下載、匯入裁切、整理貼圖、送審四段。" type="影片" />
+  </section>
+
+  <CTASection
+    title="先把 8 格素材總圖上傳到群組"
+    text="還沒裁切也沒關係。先讓大家看到你的作品，後續就能參加人氣票選。"
+    primaryLabel="前往現場投票頁"
+    primaryHref="/voting"
+    secondaryLabel="查看成果牆"
+    secondaryHref="/gallery"
+  />
 </WorkshopLayout>

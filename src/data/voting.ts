@@ -1,5 +1,5 @@
 export type VoteWork = { id: string; type: 'doll' | 'sticker'; title: string; author: string; votes: number; image: string };
-export const voteTabs = [{ key: 'doll', label: '公仔作品' },{ key: 'sticker', label: '貼圖作品' }] as const;
+export const voteTabs = [{ key: 'all', label: '全部作品' },{ key: 'doll', label: '公仔作品' },{ key: 'sticker', label: '貼圖作品' }] as const;
 export const voteWorks: VoteWork[] = [
 {id:'d1',type:'doll',title:'出發吧！海島旅人',author:'Mia',votes:38,image:'🧳'},
 {id:'d2',type:'doll',title:'親子東京冒險團',author:'Kelly',votes:32,image:'👨‍👩‍👧'},

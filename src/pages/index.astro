@@ -1,9 +1,47 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import { schedule } from '../content/schedule';
+import { homeInteractions, homeOutcomes } from '../content/workshopPages';
 ---
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
-  <section class="card"><h1>AI 旅遊規劃師工作坊</h1><p>溫暖旅行感 × 輕盈 AI 未來感的互動教學平台。</p><a class="btn" href="/prep">先完成課前準備</a></section>
-  <section class="card"><h2>今天你會完成 3 個成果</h2><ul><li>專屬 AI 3D 可愛公仔圖</li><li>個人化旅遊需求整理</li><li>旅行主題 LINE 貼圖素材</li></ul></section>
-  <section class="card"><h2>正式 3.5 小時時間表</h2>{schedule.map(([time,item]) => <p><strong>{time}</strong>｜{item}</p>)}</section>
+  <section class="hero">
+    <p class="eyebrow">實體工作坊操作平台</p>
+    <h1>AI 旅遊規劃師工作坊</h1>
+    <p>今天不是只聽課，而是跟著網站一步步完成公仔、旅遊研究與 LINE 貼圖素材，把 AI 變成回家也能重做的生活工具。</p>
+    <div class="actions">
+      <a class="btn" href="/prep">先完成課前準備</a>
+      <a class="btn alt" href="/doll-maker">開始第一個作品</a>
+      <a class="btn ghost" href="/voting">查看投票頁</a>
+    </div>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">今天你會完成 3 個 AI 成果</p>
+    <h2>先做出作品，再理解方法</h2>
+  </section>
+  <section class="feature-grid">
+    {homeOutcomes.map((item) => (
+      <article class="card">
+        <h3>{item.title}</h3>
+        <p>{item.text}</p>
+      </article>
+    ))}
+  </section>
+
+  <section class="two-col">
+    <div class="card">
+      <p class="eyebrow">正式 3.5 小時時間表</p>
+      <h2>13:30-17:00</h2>
+      <div class="timeline">
+        {schedule.map(([time,item]) => (
+          <div class="schedule-row"><strong>{time}</strong><span>{item}</span></div>
+        ))}
+      </div>
+    </div>
+    <div class="card">
+      <p class="eyebrow">互動預告</p>
+      <h2>現場會一起完成</h2>
+      <ul>{homeInteractions.map((item) => <li>{item}</li>)}</ul>
+    </div>
+  </section>
 </WorkshopLayout>

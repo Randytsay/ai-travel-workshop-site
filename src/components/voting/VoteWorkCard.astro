@@ -4,6 +4,7 @@ const { work } = Astro.props;
 <article class="card vote-card">
   <div class="emoji">{work.image}</div>
   <h3>{work.title}</h3>
-  <p>{work.author} · {work.votes} 票</p>
-  <button class="btn" type="button">投一票（MVP 假互動）</button>
+  <p>{work.author} · <span data-vote-count>{work.votes}</span> 票</p>
+  <button class="btn vote-button" type="button">投一票</button>
+  <p class="muted" data-vote-feedback hidden>已記錄在本機 demo 票數。</p>
 </article>

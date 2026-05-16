@@ -1,14 +1,47 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import CTASection from '../components/common/CTASection.astro';
+import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
 ---
 <WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
-  <section class="card"><h1>感謝參與今天的 AI 旅遊規劃師工作坊！</h1><p>你的回饋，會讓下一場更好。</p></section>
-  <section class="card"><h2>為什麼要填問卷</h2><ul>{surveyReasons.map((r)=> <li>{r}</li>)}</ul></section>
-  <section class="card"><h2>完成問卷可獲得</h2><ul>{surveyRewards.map((r)=> <li>{r}</li>)}</ul></section>
-  <section class="card"><h2>問卷按鈕區</h2><a class="btn" href="#">前往課後問卷（Placeholder）</a></section>
-  <section class="card"><h2>加入 LINE 官方 AI 助教</h2><p>課後更新、講義補充與延伸練習會由 LINE 官方帳號推送。</p></section>
-  <section class="card"><h2>「我要講義」三步驟</h2><ol>{lineSteps.map((s)=> <li>{s}</li>)}</ol></section>
-  <section class="card"><h2>講義形式說明</h2><p>你會收到互動式網頁講義完整版 + PDF 重點版，方便回家複習與分享。</p></section>
-  <a class="btn alt" href="/">返回首頁，持續練習 AI 工具</a>
+  <section class="hero">
+    <p class="eyebrow">課後延續</p>
+    <h1>感謝參與今天的 AI 旅遊規劃師工作坊</h1>
+    <p>最後一步請完成問卷，並加入 LINE 官方 AI 助教。你會收到互動式網頁講義與 PDF 重點版，方便回家複習。</p>
+  </section>
+
+  <section class="feature-grid">
+    <article class="card"><h2>為什麼要填問卷</h2><ul>{surveyReasons.map((r)=> <li>{r}</li>)}</ul></article>
+    <article class="card"><h2>完成問卷可獲得</h2><ul>{surveyRewards.map((r)=> <li>{r}</li>)}</ul></article>
+    <article class="card notice"><h2>關鍵字提醒</h2><p>加入 LINE 官方 AI 助教後，請輸入「我要講義」。</p></article>
+  </section>
+
+  <section class="two-col">
+    <section class="card">
+      <p class="eyebrow">問卷入口</p>
+      <h2>前往課後問卷</h2>
+      <p>正式活動前請替換成你的問卷連結或 QR Code。</p>
+      <a class="btn" href="#">前往課後問卷（待替換）</a>
+    </section>
+    <section class="card">
+      <p class="eyebrow">講義領取流程</p>
+      <h2>「我要講義」三步驟</h2>
+      <ol>{lineSteps.map((s)=> <li>{s}</li>)}</ol>
+    </section>
+  </section>
+
+  <section class="asset-grid">
+    <AssetPlaceholder title="問卷 QR Code" text="正式活動前替換成 Google Form 或其他問卷工具的 QR Code。" />
+    <AssetPlaceholder title="LINE 官方 AI 助教 QR Code" text="正式活動前替換成官方帳號加入 QR Code。" />
+    <AssetPlaceholder title="講義領取流程圖" text="可放三步驟圖解或現場投影片同款圖。" />
+  </section>
+
+  <section class="card">
+    <p class="eyebrow">講義形式說明</p>
+    <h2>主體是網頁講義，PDF 是重點整理</h2>
+    <p>網頁講義可保留一鍵複製提示詞、操作影片、更新版流程與成果牆；PDF 則適合列印與快速回顧。</p>
+  </section>
+
+  <CTASection title="回到首頁持續練習" text="課後可以依照網站順序重新操作一次，把今天的流程變成自己的 AI 工作方法。" primaryLabel="返回首頁" primaryHref="/" secondaryLabel="查看成果牆" secondaryHref="/gallery" />
 </WorkshopLayout>

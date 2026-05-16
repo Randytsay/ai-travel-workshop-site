@@ -1,0 +1,15 @@
+---
+import PromptCard from './PromptCard.astro';
+const { title, description, prompts, defaultOpen = false } = Astro.props;
+---
+<section class="prompt-group">
+  <div class="section-heading compact">
+    <p class="eyebrow">提示詞</p>
+    <h2>{title}</h2>
+    {description && <p>{description}</p>}
+  </div>
+  <div class="prompt-grid">
+    <PromptCard title={`${title}｜ChatGPT`} platform="ChatGPT" prompt={prompts.chatgpt} defaultOpen={defaultOpen} />
+    <PromptCard title={`${title}｜Gemini 備援`} platform="Gemini" prompt={prompts.gemini} defaultOpen={defaultOpen} />
+  </div>
+</section>
