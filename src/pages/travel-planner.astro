@@ -11,74 +11,80 @@ import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
   <section class="hero">
-    <p class="eyebrow">第二個核心成果</p>
-    <h1>讓 AI 幫你規劃一場說走就走的旅行</h1>
-    <p>本頁提供三軌入口：專屬 GPT、一般 ChatGPT 備援、Gemini 備援。目標是在短時間內取得旅遊需求摘要與 NotebookLM 研究提示詞。</p>
+    <p class="eyebrow">🗺️ 第二站：目的地規劃</p>
+    <h1>目的地規劃控制台</h1>
+    <p>這站我們開啟多軌並行的路線：不管你是搭乘專屬 GPT 航班、一般 ChatGPT 備援，或轉機 Gemini，目標都是在短時間內取得旅遊需求摘要與下一站的研究通行證（提示詞）。</p>
   </section>
 
   <section class="feature-grid">
-    <article class="card">
-      <p class="eyebrow">方法 1｜推薦方式</p>
-      <h2>開啟專屬 GPT</h2>
+    <article class="card boarding-pass-card">
+      <p class="eyebrow">✈️ 路線 1｜頭等艙直達</p>
+      <h2>專屬 GPT 航班</h2>
       <p>照著回答 3 輪問題，就能得到需求摘要與 NotebookLM 接力內容。</p>
-      <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl}>開啟 GPT</a>
+      <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl}>登機：開啟 GPT</a>
     </article>
-    <article class="card">
-      <p class="eyebrow">方法 2｜GPT 額度不足</p>
-      <h2>貼到一般 ChatGPT</h2>
-      <p>如果專屬 GPT 受限，直接一鍵複製備援提示詞到一般聊天框。</p>
+    <article class="card boarding-pass-card">
+      <p class="eyebrow">🚌 路線 2｜商務艙轉機</p>
+      <h2>一般 ChatGPT 備援</h2>
+      <p>如果專屬航班客滿，請一鍵複製備援票根（提示詞）到一般聊天框。</p>
       <div class="actions">
         <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.chatgpt}>複製備援提示詞</button>
-        <a class="btn alt" href="#fallback-prompts">查看完整提示詞</a>
+        <a class="btn alt" href="#fallback-prompts">查看票根內容</a>
       </div>
     </article>
-    <article class="card">
-      <p class="eyebrow">方法 3｜ChatGPT 也受限</p>
-      <h2>改用 Gemini</h2>
-      <p>使用 Gemini 備援版完成需求訪談，先把成果做出來。</p>
+    <article class="card boarding-pass-card">
+      <p class="eyebrow">🚁 路線 3｜緊急直升機</p>
+      <h2>Gemini 備援路線</h2>
+      <p>如果 ChatGPT 航線暫停，改用 Gemini 備援版完成需求訪談，使命必達。</p>
       <div class="actions">
-        <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.gemini}>複製 Gemini 備援提示詞</button>
+        <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.gemini}>複製 Gemini 備援</button>
         <a class="btn alt" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.geminiUrl}>開啟 Gemini</a>
       </div>
     </article>
   </section>
   <section class="feature-grid">
-    <article class="card notice" style="grid-column: 1 / -1;">
-      <p class="eyebrow">新手上路指引</p>
-      <h2>不知道怎麼回答 AI？參考這個範例：</h2>
-      <div class="example-block">
+  <section class="feature-grid">
+    <article class="card itinerary-card" style="grid-column: 1 / -1; margin-top: 24px; background: #fdfaf5;">
+      <p class="eyebrow">🧭 新手上路指引</p>
+      <h2>不知道怎麼回答 AI？參考這個旅行範本：</h2>
+      <div class="example-block" style="background:#fff; border-left: 3px solid var(--sunset); box-shadow:var(--shadow-soft);">
         <ul class="example-list">
-          <li><strong>目的地：</strong>日本京都</li>
-          <li><strong>天數：</strong>5 天 4 夜</li>
-          <li><strong>旅伴：</strong>我和伴侶，共 2 人</li>
-          <li><strong>預算：</strong>包含機加酒，每人約 4 萬台幣</li>
-          <li><strong>旅遊風格：</strong>步調放慢，喜歡探索在地咖啡廳、體驗傳統文化，不想要每天塞滿行程。</li>
+          <li><strong>📍 目的地：</strong>日本京都</li>
+          <li><strong>⏱️ 天數：</strong>5 天 4 夜</li>
+          <li><strong>👥 旅伴：</strong>我和伴侶，共 2 人</li>
+          <li><strong>💰 預算：</strong>包含機加酒，每人約 4 萬台幣</li>
+          <li><strong>✨ 旅遊風格：</strong>步調放慢，喜歡探索在地咖啡廳、體驗傳統文化，不想要每天塞滿行程。</li>
         </ul>
       </div>
     </article>
   </section>
 
   <section class="section-heading">
-    <p class="eyebrow">你會拿到什麼</p>
-    <h2>4 步完成旅遊研究接力</h2>
+    <p class="eyebrow">🗺️ 你的地圖路線</p>
+    <h2>4 站完成旅遊研究接力</h2>
   </section>
-  <section class="step-grid">
-    {travelFlow.map(([title, text], index) => <StepCard index={index + 1} title={title} text={text} />)}
+  <section class="timeline" style="margin-top:20px;">
+    {travelFlow.map(([title, text], index) => (
+      <div class="schedule-row" style="align-items: center; border: none; padding-bottom: 30px;">
+        <div style="font-weight: 800; color: var(--ocean); font-size: 1.2rem;">站點 {index + 1}</div>
+        <div><h3 style="margin:0; color:var(--night);">{title}</h3><p style="margin:4px 0 0; font-size:0.95rem;">{text}</p></div>
+      </div>
+    ))}
   </section>
 
   <section id="fallback-prompts" class="section-heading">
-    <p class="eyebrow">備援提示詞</p>
-    <h2>無論工具額度如何，都有路能走</h2>
+    <p class="eyebrow">🎟️ 備用票根（提示詞）</p>
+    <h2>無論航班如何變化，都有路能走</h2>
   </section>
   <div class="prompt-grid">
     <PromptCard title="ChatGPT 備援提示詞（完整）" platform="ChatGPT" prompt={travelPrompts.chatgpt} />
     <PromptCard title="Gemini 備援提示詞（完整）" platform="Gemini" prompt={travelPrompts.gemini} />
   </div>
 
-  <section class="asset-grid">
-    <AssetPlaceholder title="GPT 問答示意截圖" text="放 3 輪訪談與需求摘要確認的示意畫面。" />
-    <AssetPlaceholder title="需求摘要示意圖" text="放最終輸出的旅客需求總表示例。" />
-    <AssetPlaceholder title="60-90 秒示範短影片" text="示範從開啟 GPT 到取得 NotebookLM prompt 的流程。" type="影片" />
+  <section class="asset-grid" style="margin-top: 32px;">
+    <AssetPlaceholder title="GPT 問答示意圖" text="放 3 輪訪談與需求摘要確認的示意畫面。" type="圖片" />
+    <AssetPlaceholder title="需求摘要簽證圖" text="放最終輸出的旅客需求總表示例。" type="圖片" />
+    <AssetPlaceholder title="60-90 秒登機示範" text="示範從開啟 GPT 到取得 NotebookLM prompt 的流程。" type="影片" />
   </section>
 
   <CompleteTaskButton 

@@ -11,46 +11,56 @@ import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
   <section class="hero">
-    <p class="eyebrow">第三個可分享成果</p>
-    <h1>做出專屬旅行主題 LINE 貼圖素材</h1>
-    <p>選一款最適合你的風格包，上傳照片、複製提示詞，讓 AI 幫你做出一張 8 格旅行貼圖素材總圖。</p>
-    <div class="actions">
-      <a class="btn" href="#style-packs">選風格包</a>
-      <a class="btn alt" href="#line-maker">LINE 拍貼步驟</a>
+    <div class="hero-home">
+      <div>
+        <p class="eyebrow">🛍️ 第四站：紀念貼紙市集</p>
+        <h1>製作專屬旅行紀念貼紙</h1>
+        <p>選一款最適合你的旅行紀念風格，上傳照片、複製魔法咒語，讓 AI 幫你做出一張 8 格旅行貼紙素材總圖，把回憶變成日常對話的驚喜。</p>
+        <div class="actions">
+          <a class="btn" href="#style-packs">挑選貼紙風格</a>
+          <a class="btn alt" href="#line-maker">LINE 手機上架流程</a>
+        </div>
+      </div>
+      <div class="hero-mockups" style="height: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px dashed #cbd5e1;">
+        {Array.from({length: 8}).map((_, i) => (
+          <div style="aspect-ratio: 1; background: #fff; border-radius: 8px; box-shadow: var(--shadow-soft); display: grid; place-items: center; font-size: 1.5rem; border: 1px solid #f0f0f0;">✨</div>
+        ))}
+        <p class="muted" style="grid-column: 1 / -1; text-align: center; margin: 8px 0 0; font-size: 0.8rem;">8 格素材總圖預覽</p>
+      </div>
     </div>
   </section>
 
   <section class="feature-grid">
-    <article class="card">
-      <p class="eyebrow">人人必達</p>
+    <article class="card notice-card">
+      <p class="eyebrow">✨ 基礎挑戰</p>
       <h2>完成 8 格素材總圖</h2>
-      <p>先把素材總圖分享到工作坊 LINE 群組，就能參加後續展示與投票。</p>
+      <p>先把素材總圖分享到工作坊 LINE 群組，就能參加最後的展示與頒獎舞台。</p>
     </article>
-    <article class="card">
-      <p class="eyebrow">進階挑戰</p>
-      <h2>匯入 LINE 拍貼裁切</h2>
-      <p>時間足夠的學員可以繼續裁切成真正的 LINE 貼圖並嘗試送審。</p>
+    <article class="card itinerary-card">
+      <p class="eyebrow">🚀 進階挑戰</p>
+      <h2>手機裁切與上架</h2>
+      <p>時間足夠的學員可以繼續用手機裁切成真正的 LINE 貼圖並嘗試送審。</p>
     </article>
   </section>
 
   <section id="style-packs" class="section-heading">
-    <p class="eyebrow">6 款風格包</p>
-    <h2>選最像你的旅行情境</h2>
+    <p class="eyebrow">🎁 6 款貼紙風格包</p>
+    <h2>選擇最適合這趟旅程的情境</h2>
   </section>
   {stickerLabContent.packs.map((pack) => <StylePackCard pack={pack} />)}
 
   <section id="line-maker" class="section-heading">
-    <p class="eyebrow">LINE 拍貼操作</p>
-    <h2>把素材總圖變成真正的 LINE 貼圖</h2>
+    <p class="eyebrow">📱 手機實作流程</p>
+    <h2>把總圖變成真正的 LINE 貼圖</h2>
   </section>
   <section class="step-grid">
     {stickerSteps.map(([title, text], index) => <StepCard index={index + 1} title={title} text={text} />)}
   </section>
 
-  <section class="asset-grid">
-    <AssetPlaceholder title="6 種風格示意圖" text="每款風格包建議放一張完成圖或 mockup。" />
-    <AssetPlaceholder title="LINE 拍貼手機截圖" text="放下載、匯入、裁切、送審流程截圖。" />
-    <AssetPlaceholder title="LINE 拍貼操作短影片" text="拆成下載、匯入裁切、整理貼圖、送審四段。" type="影片" />
+  <section class="asset-grid" style="margin-top: 32px;">
+    <AssetPlaceholder title="6 款風格展示櫥窗" text="每款風格包建議放一張完成圖或 mockup。" type="圖片" />
+    <AssetPlaceholder title="手機裁切流程圖" text="放下載、匯入、裁切、送審流程截圖。" type="圖片" />
+    <AssetPlaceholder title="操作短影片" text="拆成下載、匯入裁切、整理貼圖、送審四段。" type="影片" />
   </section>
 
   <CompleteTaskButton 

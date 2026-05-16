@@ -13,9 +13,9 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
 ---
 <WorkshopLayout title="NotebookLM 研究升級" currentPath="/notebooklm">
   <section class="hero">
-    <p class="eyebrow">把聊天結果變成研究資料</p>
-    <h1>讓 NotebookLM 接手旅遊研究</h1>
-    <p>上一頁整理出的需求不是終點。把它轉成 NotebookLM 的來源後，就能查證資訊、比較方案、產出行程、簡報與資訊圖表。</p>
+    <p class="eyebrow">📚 第三站：深度研究</p>
+    <h1>旅遊研究資料室 (NotebookLM)</h1>
+    <p>上一站整理出的簽證清單不是終點。把它交給這間研究室後，就能查證資訊、比較方案、產出行程、簡報與行前清單。</p>
     <div class="actions">
       <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.notebookLmUrl}>開啟 NotebookLM</a>
       <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製 Deep Research 提示詞</button>
@@ -24,52 +24,59 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
   </section>
 
   <section class="section-heading">
-    <p class="eyebrow">操作流程</p>
-    <h2>6 步把需求變成研究</h2>
+    <p class="eyebrow">📋 研究手冊</p>
+    <h2>6 步把需求變成出發指南</h2>
   </section>
   <section class="step-grid">
     {notebookSteps.map(([title, text], index) => <StepCard index={index + 1} title={title} text={text} />)}
   </section>
 
   <section class="feature-grid">
-    <article class="card notice" style="grid-column: 1 / -1;">
-      <p class="eyebrow">研究流程圖</p>
-      <h2>從聊天到簡報，AI 幫你處理資訊</h2>
-      <p class="flow-highlight">需求總表 → NotebookLM 筆記 (Note) → 轉為來源 (Source) → Deep Research → 產生研究報告 → 轉化為簡報與資訊圖表</p>
+    <article class="card notice-card" style="grid-column: 1 / -1;">
+      <p class="eyebrow">🗺️ 導航流程圖</p>
+      <h2>從聊天到簡報，研究室幫你處理資訊</h2>
+      <div class="flow-highlight" style="margin-top:16px;">
+        <span class="chip">需求總表</span> <span style="color:var(--ocean);">➜</span>
+        <span class="chip">NotebookLM 筆記</span> <span style="color:var(--ocean);">➜</span>
+        <span class="chip">轉為來源</span> <span style="color:var(--ocean);">➜</span>
+        <span class="chip">Deep Research</span> <span style="color:var(--ocean);">➜</span>
+        <span class="chip">研究報告</span> <span style="color:var(--ocean);">➜</span>
+        <span class="chip">簡報/圖表</span>
+      </div>
     </article>
   </section>
 
   <section class="feature-grid">
-    <article class="card">
-      <p class="eyebrow">範例成果 1</p>
+    <article class="card showcase-card">
+      <p class="eyebrow">成果 1</p>
       <h2>深度研究報告</h2>
       <p>透過多方來源交叉比對，產出具備事實查核的旅遊景點歷史與交通分析。</p>
     </article>
-    <article class="card">
-      <p class="eyebrow">範例成果 2</p>
+    <article class="card showcase-card">
+      <p class="eyebrow">成果 2</p>
       <h2>行程規劃簡報</h2>
       <p>將研究報告整理成每日行程大綱，適合與旅伴開會討論時直接投影。</p>
     </article>
-    <article class="card">
-      <p class="eyebrow">範例成果 3</p>
+    <article class="card showcase-card">
+      <p class="eyebrow">成果 3</p>
       <h2>行前準備資訊圖表</h2>
       <p>行李清單、天氣提醒、緊急聯絡方式，一目了然的行前懶人包。</p>
     </article>
   </section>
 
   <section id="notebook-prompts" class="section-heading">
-    <p class="eyebrow">NotebookLM 提示詞</p>
+    <p class="eyebrow">📂 研究資料櫃</p>
     <h2>研究、行程、簡報、資訊圖表一次備好</h2>
   </section>
   <div class="prompt-grid">
     {notebookContent.prompts.map((item) => <PromptCard title={item.title} platform="NotebookLM" prompt={item.prompts.chatgpt} />)}
   </div>
 
-  <section class="asset-grid">
-    <AssetPlaceholder title="NotebookLM 建立筆記本截圖" text="放建立筆記本與貼入 Note 的畫面。" />
-    <AssetPlaceholder title="Note 轉 Source 截圖" text="讓學員知道需求總表要先成為來源。" />
-    <AssetPlaceholder title="Deep Research 操作截圖" text="放貼入研究提示詞與匯入來源的畫面。" />
-    <AssetPlaceholder title="旅遊簡報與資訊圖表範例" text="放課後可延伸產出的成果示意。" />
+  <section class="asset-grid" style="margin-top: 32px;">
+    <AssetPlaceholder title="NotebookLM 報到截圖" text="放建立筆記本與貼入 Note 的畫面。" type="圖片" />
+    <AssetPlaceholder title="Note 轉 Source 截圖" text="讓學員知道需求總表要先成為來源。" type="圖片" />
+    <AssetPlaceholder title="Deep Research 操作截圖" text="放貼入研究提示詞與匯入來源的畫面。" type="圖片" />
+    <AssetPlaceholder title="旅遊簡報展示" text="放課後可延伸產出的成果示意。" type="圖片" />
   </section>
 
   <CompleteTaskButton 
@@ -80,9 +87,9 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
   />
 
   <CTASection
-    title="接下來，把 AI 帶回日常聊天"
+    title="護照蓋章，準備下一站"
     text="旅遊研究完成後，下一關會用更輕鬆的方式，做出旅行主題 LINE 貼圖素材。"
-    primaryLabel="前往 LINE 貼圖工坊"
+    primaryLabel="前往第四站：旅行貼紙市集"
     primaryHref="/sticker-lab"
     secondaryLabel="回到旅遊規劃師"
     secondaryHref="/travel-planner"

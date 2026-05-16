@@ -7,17 +7,22 @@ import { voteTabs, voteWorks } from '../data/voting';
 ---
 <WorkshopLayout title="現場互動投票" currentPath="/voting">
   <section class="hero">
-    <p class="eyebrow">現場互動</p>
-    <h1>現場人氣票選</h1>
-    <p>選出你最喜歡的作品，給創作者一個掌聲。目前是可 demo 的本機互動版，正式版再串 Firebase Realtime Database。</p>
+    <p class="eyebrow">🏆 壓軸互動</p>
+    <h1>現場頒獎舞台</h1>
+    <p>選出你最喜歡的紀念品與旅遊規劃，給旅伴們一個熱烈掌聲 👏 目前為可展示的本機互動版，正式版將串接即時資料庫。</p>
   </section>
-  <section class="card"><h2>分類</h2><div class="actions">{voteTabs.map((t) => <button class="btn alt vote-tab" data-type={t.key}>{t.label}</button>)}</div></section>
-  <section id="vote-list" class="tool-grid">{voteWorks.map((w) => <div data-work-type={w.type}><VoteWorkCard work={w} /></div>)}</section>
+  <section class="card" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--glass);">
+    <h2 style="margin:0; font-size:1.1rem; color:var(--ink-soft);">分類標籤：</h2>
+    <div class="actions" style="margin:0;">
+      {voteTabs.map((t) => <button class="btn ghost vote-tab chip" data-type={t.key} style="padding:6px 16px; min-height:auto; font-size:0.9rem;">{t.label}</button>)}
+    </div>
+  </section>
+  <section id="vote-list" class="tool-grid">{voteWorks.map((w) => <div class="card postcard-card" style="padding:16px; margin-bottom:0;" data-work-type={w.type}><VoteWorkCard work={w} /></div>)}</section>
   <LeaderboardPanel works={voteWorks} />
-  <section class="card vote-status-card"><p class="eyebrow">舞台狀態</p><h2>現場票選進行中</h2><p>主持人會在最後統一揭曉 TOP 3，歡迎繼續為你喜歡的作品按讚投票。</p></section>
+  <section class="card vote-status-card"><p class="eyebrow">🚥 舞台狀態</p><h2>現場票選進行中</h2><p>主持人會在最後統一揭曉排行榜 TOP 3，歡迎繼續為你喜歡的旅伴作品按讚投票。</p></section>
   <section class="feature-grid">
-    <article class="card"><h2>獎項說明</h2><ul><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團票選）</li><li>最暖故事獎（主持人特選）</li></ul></article>
-    <article class="card notice"><h2>主持人控制區（預留）</h2><p>正式版可加入開始投票、暫停投票、公布得獎者、重設場次。</p></article>
+    <article class="card showcase-card" style="text-align:left;"><h2>🎁 獎項說明</h2><ul class="example-list"><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團特選）</li><li>最暖故事獎（主持人特選）</li></ul></article>
+    <article class="card notice-card" style="background:#fdfdfd; border-color:#e0e0e0;"><h2>⚙️ Admin Control (預留)</h2><p>正式版可開啟：開始投票、暫停投票、公布得獎者、重設場次。</p></article>
   </section>
   <p class="disclaimer-text" style="margin-top: 12px;">上傳作品代表同意於本次工作坊成果展示與現場票選使用；若不希望公開展示，請於上傳前告知講師或助教。</p>
   <CompleteTaskButton 
@@ -27,7 +32,7 @@ import { voteTabs, voteWorks } from '../data/voting';
     nextHref="/survey"
     successMessage="投票完成！看看誰會是今天的人氣王？"
   />
-  <section class="card"><p><strong>待串接：</strong>Firebase Realtime Database、裝置投票限制、即時排行榜刷新與投影模式。</p></section>
+  <section class="card" style="background:#f9f9f9; padding:16px; font-size:0.85rem;"><p style="margin:0; text-align:center;"><strong>⚙️ 系統待接狀態：</strong>Firebase Realtime Database、裝置投票限制、即時排行榜刷新與投影模式。</p></section>
 </WorkshopLayout>
 <script>
   const tabs = document.querySelectorAll('.vote-tab');

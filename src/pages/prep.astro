@@ -7,43 +7,43 @@ import { prepChecklist, prepTools, prepFaqs } from '../content/prepPage';
 ---
 <WorkshopLayout title="課前準備" currentPath="/prep">
   <section class="hero">
-    <p class="eyebrow">上課前 5 分鐘檢查</p>
-    <h1>課前準備</h1>
-    <p>先確認帳號、工具與照片素材都準備好，正式操作時就能把注意力放在作品與旅遊規劃上。</p>
+    <p class="eyebrow">🧳 上課前 5 分鐘檢查</p>
+    <h1>出發前行李檢查</h1>
+    <p>先確認帳號、工具與照片素材都準備好，正式旅程中就能把注意力放在享受創造與規劃的樂趣上。</p>
   </section>
 
   <section class="two-col">
-    <section class="card">
-      <p class="eyebrow">Checklist</p>
-      <h2>請逐項確認</h2>
-      <ul>{prepChecklist.map((item) => <li>{item}</li>)}</ul>
+    <section class="card postcard-card">
+      <p class="eyebrow">📝 Packing List</p>
+      <h2>請逐項確認行李清單</h2>
+      <ul class="example-list">{prepChecklist.map((item) => <li>{item}</li>)}</ul>
     </section>
-    <section class="card notice">
-      <p class="eyebrow">免費版額度提醒</p>
-      <h2>少量但高價值地使用生圖</h2>
-      <p>本次流程已設計為免費版可完成，但請優先完成關鍵任務，避免重複生圖消耗額度。</p>
+    <section class="card notice-card">
+      <p class="eyebrow">💰 旅費管理小提醒</p>
+      <h2>享受免費版的巧思</h2>
+      <p>本次行程的設計讓你能在免費額度內玩得開心，但也提醒你集中在關鍵步驟生圖，把寶貴額度用在刀口上喔。</p>
     </section>
   </section>
 
   <section class="section-heading">
-    <p class="eyebrow">本次會用到的工具</p>
+    <p class="eyebrow">🛂 你的旅行護照工具</p>
     <h2>主力工具與備援工具都先打開</h2>
   </section>
-  <section class="tool-grid">{prepTools.map((tool) => <article class="card"><h2>{tool.name}</h2><p>{tool.desc}</p></article>)}</section>
+  <section class="tool-grid">{prepTools.map((tool) => <article class="card boarding-pass-card"><h2>{tool.name}</h2><p>{tool.desc}</p></article>)}</section>
 
   <section class="section-heading">
-    <p class="eyebrow">待補素材插槽</p>
-    <h2>正式活動前替換成你的 QR Code 與截圖</h2>
+    <p class="eyebrow">🛄 行李牌 / 登機口預留</p>
+    <h2>正式出發前，會替換成你的專屬通行碼 (QR Code)</h2>
   </section>
   <section class="asset-grid">
-    <AssetPlaceholder title="ChatGPT 登入截圖" text="放登入、切換帳號與上傳照片的操作畫面。" />
-    <AssetPlaceholder title="Gemini / NotebookLM 開啟截圖" text="放備援工具入口與建立 Notebook 的畫面。" />
-    <AssetPlaceholder title="LINE 拍貼下載 QR Code" text="正式活動前替換為可掃描 QR Code。" />
-    <AssetPlaceholder title="工作坊 LINE 群組 QR Code" text="正式活動前替換為群組或報到用 QR Code。" />
+    <AssetPlaceholder title="ChatGPT 登入截圖" text="放登入、切換帳號與上傳照片的操作畫面。" type="圖片" />
+    <AssetPlaceholder title="Gemini / NotebookLM 開啟截圖" text="放備援工具入口與建立 Notebook 的畫面。" type="圖片" />
+    <AssetPlaceholder title="LINE 拍貼下載 QR Code" text="正式活動前替換為可掃描 QR Code。" type="QR Code" />
+    <AssetPlaceholder title="工作坊 LINE 群組 QR Code" text="正式活動前替換為群組或報到用 QR Code。" type="QR Code" />
   </section>
 
   <section class="section-heading">
-    <p class="eyebrow">FAQ</p>
+    <p class="eyebrow">❓ 迷路指南 (FAQ)</p>
     <h2>卡住時先看這裡</h2>
   </section>
   <FAQAccordion items={prepFaqs} />

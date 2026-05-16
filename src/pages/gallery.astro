@@ -6,35 +6,44 @@ import { galleryFilters, galleryItems } from '../data/gallery';
 ---
 <WorkshopLayout title="成果牆" currentPath="/gallery">
   <section class="hero">
-    <p class="eyebrow">Workshop Showcase</p>
-    <h1>成果牆 Gallery</h1>
-    <p>看看大家今天完成的公仔、貼圖與旅遊規劃成果，這裡會逐步變成每場工作坊的共創作品牆。</p>
+    <p class="eyebrow">🖼️ 旅程的尾聲</p>
+    <h1>旅行回憶明信片牆</h1>
+    <p>看看大家今天完成的紀念品、貼紙與旅遊規劃，這裡會逐步充滿每場工作坊的共創作品，就像一面寫滿故事的明信片牆。</p>
   </section>
-  <section class="card">
-    <h2>篩選作品類型</h2>
-    <div class="actions">{galleryFilters.map((f) => <button class="btn alt filter-btn" data-filter={f.key}>{f.label}</button>)}</div>
+  <section class="card" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--glass);">
+    <h2 style="margin:0; font-size:1.1rem; color:var(--ink-soft);">分類郵戳：</h2>
+    <div class="actions" style="margin:0;">{galleryFilters.map((f) => <button class="btn ghost filter-btn chip" data-filter={f.key} style="padding:6px 16px; min-height:auto; font-size:0.9rem;">{f.label}</button>)}</div>
   </section>
-  <section id="gallery-wrap" class="gallery-wall">{galleryItems.map((item) => <div data-item-type={item.type} data-title={item.title} data-desc={item.desc}><GalleryGrid items={[item]} /></div>)}</section>
+  <section id="gallery-wrap" class="gallery-wall" style="margin-top:20px;">{galleryItems.map((item) => <div class="card postcard-card" style="padding:16px; margin-bottom:0;" data-item-type={item.type} data-title={item.title} data-desc={item.desc}><GalleryGrid items={[item]} /></div>)}</section>
   <GalleryModal />
-  <section class="card notice"><h2>成果來源說明</h2><p>目前為 mock data 展示；後續將從學員授權提交素材同步至成果牆。</p><p><strong>TODO:</strong> 後續串接 Google Drive / Apps Script 資料源。</p></section>
-  <a class="btn" href="/survey">前往問卷領講義</a>
+  <section style="margin:32px 0; text-align:center; opacity:0.6; font-size:0.85rem;"><p>目前為示範資料；正式版將自表單動態同步素材。</p></section>
+  <div style="text-align:center; margin-bottom: 40px;"><a class="btn" href="/survey" style="min-width: 200px;">領取紀念品 (課後問卷)</a></div>
 </WorkshopLayout>
 <script>
   const filters = document.querySelectorAll('.filter-btn');
   const items = document.querySelectorAll('[data-item-type]');
-  const modal = document.getElementById('gallery-modal');
+  const modal = document.getElementById('gallery-modal') as HTMLDialogElement;
   filters.forEach((btn) => btn.addEventListener('click', () => {
-    const key = btn.dataset.filter;
-    items.forEach((item) => (item.style.display = key === 'all' || item.dataset.itemType === key ? 'block' : 'none'));
+    const filterBtn = btn as HTMLElement;
+    const key = filterBtn.dataset.filter;
+    items.forEach((i) => {
+      const item = i as HTMLElement;
+      item.style.display = key === 'all' || item.dataset.itemType === key ? 'block' : 'none';
+    });
   }));
   document.querySelectorAll('[data-gallery-trigger]').forEach((card) =>
     card.addEventListener('click', () => {
-      const p = card.closest('[data-title]');
-      document.getElementById('gm-title').textContent = p?.dataset.title || '';
-      document.getElementById('gm-desc').textContent = p?.dataset.desc || '';
-      document.getElementById('gm-type').textContent = card.getAttribute('data-type-label') || '';
-      document.getElementById('gm-owner').textContent = `作者：${card.getAttribute('data-owner') || ''}`;
-      document.getElementById('gm-preview').textContent = card.querySelector('.emoji')?.textContent || '🖼️';
+      const p = card.closest('[data-title]') as HTMLElement;
+      const titleElem = document.getElementById('gm-title');
+      const descElem = document.getElementById('gm-desc');
+      const typeElem = document.getElementById('gm-type');
+      const ownerElem = document.getElementById('gm-owner');
+      const previewElem = document.getElementById('gm-preview');
+      if (titleElem) titleElem.textContent = p?.dataset.title || '';
+      if (descElem) descElem.textContent = p?.dataset.desc || '';
+      if (typeElem) typeElem.textContent = card.getAttribute('data-type-label') || '';
+      if (ownerElem) ownerElem.textContent = `作者：${card.getAttribute('data-owner') || ''}`;
+      if (previewElem) previewElem.textContent = card.querySelector('.emoji')?.textContent || '🖼️';
       modal?.showModal();
     })
   );

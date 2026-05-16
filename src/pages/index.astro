@@ -6,13 +6,13 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
   <section class="hero hero-home">
     <div>
-      <p class="eyebrow">實體工作坊操作平台</p>
+      <p class="eyebrow">✈️ AI 行程出發點</p>
       <h1>AI 旅遊規劃師工作坊</h1>
-      <p>今天不是只聽課，而是跟著網站一步步完成公仔、旅遊研究與 LINE 貼圖素材，把 AI 變成回家也能重做的生活工具。</p>
+      <p>今天不是只聽課，而是跟著網站一步步完成公仔、旅遊研究與 LINE 貼圖素材，把 AI 變成回家也能帶上的生活旅伴。</p>
       <div class="actions">
-        <a class="btn" href="/prep">先完成課前準備</a>
-        <a class="btn alt" href="/doll-maker">開始第一個作品</a>
-        <a class="btn ghost" href="/voting">查看投票頁</a>
+        <a class="btn" href="/prep">開始我的 AI 旅行</a>
+        <a class="btn alt" href="/doll-maker">前往第一站：紀念品製作</a>
+        <a class="btn ghost" href="/voting">前往頒獎舞台</a>
       </div>
     </div>
     <div class="hero-mockups">
@@ -35,7 +35,7 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
   </section>
 
   <section class="section-heading">
-    <p class="eyebrow">今天你會完成 3 個 AI 成果</p>
+    <p class="eyebrow">🎒 你的行李清單：今天會帶走的 3 個成果</p>
     <h2>先做出作品，再理解方法</h2>
   </section>
   <section class="feature-grid">
@@ -48,8 +48,8 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
   </section>
 
   <section class="two-col">
-    <div class="card">
-      <p class="eyebrow">正式 3.5 小時時間表</p>
+    <div class="card itinerary-card">
+      <p class="eyebrow">🗺️ 3.5 小時 AI 旅行路線</p>
       <h2>13:30-17:00</h2>
       <div class="timeline">
         {schedule.map(([time,item]) => (
@@ -57,10 +57,10 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
         ))}
       </div>
     </div>
-    <div class="card">
-      <p class="eyebrow">互動預告</p>
+    <div class="card notice-card">
+      <p class="eyebrow">💡 旅程互動預告</p>
       <h2>現場會一起完成</h2>
-      <ul>{homeInteractions.map((item) => <li>{item}</li>)}</ul>
+      <ul class="example-list">{homeInteractions.map((item) => <li>{item}</li>)}</ul>
     </div>
   </section>
 

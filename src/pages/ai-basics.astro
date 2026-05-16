@@ -6,19 +6,19 @@ import { aiExplainCards, aiLifeHelps, aiToolCompare, aiQuiz } from '../content/a
 ---
 <WorkshopLayout title="AI 入門" currentPath="/ai-basics">
   <section class="hero">
-    <p class="eyebrow">先懂怎麼用，不急著懂所有原理</p>
-    <h1>AI 是什麼？</h1>
-    <p>把 AI 想成一位很快的助手：你給它目標、素材、限制與語氣，它就能幫你產出第一版，再由你判斷與修正。</p>
+    <p class="eyebrow">🗺️ 啟程導覽：不用懂引擎，懂方向盤就好</p>
+    <h1>認識你的 AI 旅伴</h1>
+    <p>把 AI 想成一位行動力極強的旅伴：你給它目的地、偏好與限制，它就能幫你規劃出第一版行程，再由你來決定去哪裡。</p>
   </section>
 
-  <section class="tool-grid">{aiExplainCards.map((card) => <article class="card"><h2>{card.title}</h2><p>{card.text}</p></article>)}</section>
-  <section class="card"><p class="eyebrow">生活化應用</p><h2>AI 可以幫我們做什麼？</h2><div class="help-grid">{aiLifeHelps.map((item) => <span class="chip">{item}</span>)}</div></section>
-  <section class="card"><p class="eyebrow">工具定位</p><h2>今天會用到的三大工具</h2><ul>{aiToolCompare.map((t) => <li><strong>{t.tool}</strong>｜{t.fit}（{t.note}）</li>)}</ul></section>
+  <section class="tool-grid">{aiExplainCards.map((card) => <article class="card glass-card"><h2>{card.title}</h2><p>{card.text}</p></article>)}</section>
+  <section class="card postcard-card"><p class="eyebrow">🌟 生活化旅行應用</p><h2>這位旅伴還能幫我們做什麼？</h2><div class="help-grid">{aiLifeHelps.map((item) => <span class="chip">{item}</span>)}</div></section>
+  <section class="card itinerary-card"><p class="eyebrow">🤝 三位旅行助手定位</p><h2>今天會派上用場的旅伴角色卡</h2><ul>{aiToolCompare.map((t) => <li><strong>{t.tool}</strong>｜{t.fit}（{t.note}）</li>)}</ul></section>
   <section class="section-heading">
-    <p class="eyebrow">有獎問答</p>
-    <h2>答完就可以開始第一個作品</h2>
+    <p class="eyebrow">🎫 入關小測驗</p>
+    <h2>蓋滿通關章就可以開始第一個作品</h2>
   </section>
-  {aiQuiz.map((quiz, idx) => <QuizCard quiz={quiz} index={idx + 1} />)}
-  <section class="card notice"><h2>小禮物互動提示卡</h2><p>答對 2 題可舉手領取現場小禮物，快和旁邊同學互相討論。</p></section>
-  <CTASection title="現在開始做第一張 AI 成果" text="接下來會用照片生成 3D 公仔，先讓大家看到 AI 最直覺的驚喜。" primaryLabel="前往 3D 公仔頁" primaryHref="/doll-maker" />
+  {aiQuiz.map((quiz, idx) => <div class="card boarding-pass-card" style="padding:0; border:none; margin-bottom: 20px; box-shadow:none;"><QuizCard quiz={quiz} index={idx + 1} /></div>)}
+  <section class="card notice-card"><p class="eyebrow">🎁 免稅店驚喜</p><h2>通關禮物互動提示卡</h2><p>答對 2 題可舉手領取現場通關紀念品，快和旁邊的旅伴互相討論。</p></section>
+  <CTASection title="護照確認無誤，前往第一站" text="接下來會用照片生成 3D 公仔，先讓大家感受到這趟旅行最直覺的驚喜。" primaryLabel="前往紀念品店：3D 公仔" primaryHref="/doll-maker" />
 </WorkshopLayout>

@@ -11,35 +11,51 @@ import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
   <section class="hero">
-    <p class="eyebrow">第一個 Wow Moment</p>
-    <h1>把照片變成專屬 3D 可愛公仔</h1>
-    <p>這一關的目標很單純：選一張照片、複製提示詞、生成一張可以立刻分享到 LINE 群組的 3D 公仔成果。</p>
-    <div class="actions">
-      <a class="btn" href="#prompts">選提示詞</a>
-      <a class="btn alt" href="/travel-planner">完成後前往旅遊規劃</a>
+    <div class="hero-home">
+      <div>
+        <p class="eyebrow">✨ 第一個 Wow Moment</p>
+        <h1>把照片變成專屬 3D 可愛公仔</h1>
+        <p>這一站的目標很單純：選一張照片、複製魔法咒語、生成一張可以立刻做為旅行明信片分享的 3D 公仔成果。</p>
+        <div class="actions">
+          <a class="btn" href="#prompts">挑選風格</a>
+          <a class="btn alt" href="/travel-planner">完成後前往下一站</a>
+        </div>
+      </div>
+      <div class="hero-mockups">
+        <article class="hero-mockup-card" style="padding-bottom:20px; border-radius:12px;">
+          <p class="eyebrow" style="background:#f3fbff; color:#35b7d4;">Before</p>
+          <div style="background:#eee; height:120px; border-radius:8px; margin-bottom:8px; display:grid; place-items:center; color:#999;">你的原始照片</div>
+          <p class="muted" style="margin:0;">生活照 / 寵物照</p>
+        </article>
+        <article class="hero-mockup-card" style="padding-bottom:20px; border-radius:12px;">
+          <p class="eyebrow">After</p>
+          <div style="background:linear-gradient(135deg, #ffb4b0, #70c6ff); height:120px; border-radius:8px; margin-bottom:8px; display:grid; place-items:center; color:#fff; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.2);">✨ 3D 化 ✨</div>
+          <p class="muted" style="margin:0;">精緻質感盲盒公仔</p>
+        </article>
+      </div>
     </div>
   </section>
 
   <section class="feature-grid">
-    <article class="card">
-      <p class="eyebrow">這一關你會完成</p>
+    <article class="card postcard-card">
+      <p class="eyebrow">📸 紀念品清單</p>
       <h2>一張專屬公仔圖</h2>
-      <p>適合放進 LINE 群組、現場快閃秀與後續成果牆。</p>
+      <p>適合放進 LINE 群組、現場快閃秀與後續成果明信片牆。</p>
     </article>
-    <article class="card notice">
-      <p class="eyebrow">免費額度提醒</p>
-      <h2>先求完成，再微調</h2>
+    <article class="card notice-card">
+      <p class="eyebrow">💡 免費額度提醒</p>
+      <h2>先求有，再求精緻</h2>
       <p>第一次生成不完美很正常，優先用短指令修正表情、構圖與背景。</p>
     </article>
-    <article class="card">
-      <p class="eyebrow">備援路線</p>
+    <article class="card itinerary-card">
+      <p class="eyebrow">🛟 備援路線</p>
       <h2>ChatGPT 卡住就切 Gemini</h2>
-      <p>每張提示詞卡都準備了 Gemini 版本，現場不用因額度停下來。</p>
+      <p>每張提示詞卡都為你準備了 Gemini 版本，行程不用因額度停下來。</p>
     </article>
   </section>
 
   <section class="section-heading">
-    <p class="eyebrow">操作步驟</p>
+    <p class="eyebrow">🛠️ 紀念品製作流程</p>
     <h2>照著 6 步走</h2>
   </section>
   <section class="step-grid">
@@ -47,15 +63,15 @@ import { siteConfig } from '../content/siteConfig';
   </section>
 
   <section id="prompts" class="section-heading">
-    <p class="eyebrow">選一張最接近你照片類型的卡</p>
-    <h2>3 種公仔提示詞</h2>
+    <p class="eyebrow">🏪 紀念品商店風格架</p>
+    <h2>3 種公仔提示詞盲盒</h2>
   </section>
   {dollPrompts.map((item) => <PromptGroup title={item.title} description={item.description} prompts={item.prompts} />)}
 
-  <section class="asset-grid">
-    <AssetPlaceholder title="公仔成果範例圖" text="建議放個人、親子、寵物各一張 before/after 或完成圖。" />
-    <AssetPlaceholder title="上傳照片流程截圖" text="放 ChatGPT 上傳照片與貼上提示詞的截圖。" />
-    <AssetPlaceholder title="30-60 秒操作短影片" text="示範從上傳照片到下載圖片的完整流程。" type="影片" />
+  <section class="asset-grid" style="margin-top: 32px;">
+    <AssetPlaceholder title="公仔成果展示櫥窗" text="建議放個人、親子、寵物各一張 before/after 或完成圖。" type="圖片" />
+    <AssetPlaceholder title="照片上傳流程圖" text="放 ChatGPT 上傳照片與貼上提示詞的截圖。" type="圖片" />
+    <AssetPlaceholder title="30-60 秒魔法實況" text="示範從上傳照片到下載圖片的完整短片。" type="影片" />
   </section>
   <CompleteTaskButton 
     taskId="doll-maker-complete" 

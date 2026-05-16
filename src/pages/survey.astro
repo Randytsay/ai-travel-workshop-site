@@ -8,15 +8,15 @@ import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
   <section class="hero">
-    <p class="eyebrow">課後延續</p>
-    <h1>感謝參與今天的 AI 旅遊規劃師工作坊</h1>
-    <p>最後一步請完成問卷，並加入 LINE 官方 AI 助教。你會收到互動式網頁講義與 PDF 重點版，方便回家複習。</p>
+    <p class="eyebrow">🛍️ 歸國紀念與免稅店</p>
+    <h1>感謝參與今天的 AI 旅行</h1>
+    <p>最後一站，請完成旅客意見表（問卷），並加入 LINE 官方旅行管家。你會收到完整的數位旅遊手冊（網頁講義）與隨身版（PDF 重點），方便日後隨時出發。</p>
   </section>
 
   <section class="feature-grid survey-reward-grid">
-    <article class="card"><h2>為什麼要填問卷</h2><ul>{surveyReasons.map((r)=> <li>{r}</li>)}</ul></article>
-    <article class="card survey-reward-card"><h2>完成問卷可獲得</h2><ul>{surveyRewards.map((r)=> <li>{r}</li>)}</ul></article>
-    <article class="card notice"><h2>關鍵字提醒</h2><p>加入 LINE 官方 AI 助教後，請輸入「我要講義」。</p></article>
+    <article class="card"><h2>為什麼要填意見表</h2><ul class="example-list">{surveyReasons.map((r)=> <li>{r}</li>)}</ul></article>
+    <article class="card survey-reward-card boarding-pass-card"><h2>🎁 歸國紀念禮包解鎖</h2><ul class="example-list">{surveyRewards.map((r)=> <li>{r}</li>)}</ul></article>
+    <article class="card notice-card"><h2>🔑 通關密語提醒</h2><p>加入 LINE 官方旅行管家後，請輸入通關密語：<strong>「我要講義」</strong>。</p></article>
   </section>
 
   {siteConfig.featureFlags.enableCashbackBridgeCard && (
@@ -28,34 +28,33 @@ import { siteConfig } from '../content/siteConfig';
     </section>
   )}
 
-  <section class="two-col">
-    <section class="card survey-entry-card">
-      <p class="eyebrow">問卷入口</p>
-      <h2>前往課後問卷</h2>
-      <!-- 提醒：正式活動前請確認 siteConfig.surveyUrl 已設定 -->
-      <a class="btn" href={siteConfig.surveyUrl} target="_blank" rel="noreferrer">前往課後問卷</a>
+  <section class="two-col" style="margin-top:24px;">
+    <section class="card survey-entry-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+      <p class="eyebrow">📝 旅客意見表</p>
+      <h2>前往填寫問卷</h2>
+      <a class="btn" href={siteConfig.surveyUrl} target="_blank" rel="noreferrer" style="margin-top:16px;">前往課後問卷</a>
     </section>
-    <section class="card line-task-card">
-      <p class="eyebrow">講義領取流程</p>
+    <section class="card line-task-card itinerary-card">
+      <p class="eyebrow">📲 紀念品領取流程</p>
       <h2>「我要講義」三步驟</h2>
-      <ol>{lineSteps.map((s)=> <li>{s}</li>)}</ol>
-      <div class="actions">
-        <a class="btn ghost" href={siteConfig.officialLineUrl} target="_blank" rel="noreferrer">加入 LINE 官方 AI 助教</a>
-        <a class="btn ghost" href={siteConfig.workshopGroupUrl} target="_blank" rel="noreferrer">工作坊群組（選填）</a>
+      <ol class="example-list" style="margin-bottom:16px;">{lineSteps.map((s)=> <li>{s}</li>)}</ol>
+      <div class="actions" style="margin-top:auto;">
+        <a class="btn ghost" href={siteConfig.officialLineUrl} target="_blank" rel="noreferrer">加入 LINE 官方管家</a>
+        <a class="btn ghost" href={siteConfig.workshopGroupUrl} target="_blank" rel="noreferrer">工作坊旅行團 (LINE)</a>
       </div>
     </section>
   </section>
 
-  <section class="asset-grid">
-    <AssetPlaceholder title="問卷 QR Code" text="正式活動前替換成 Google Form 或其他問卷工具的 QR Code。" />
-    <AssetPlaceholder title="LINE 官方 AI 助教 QR Code" text="正式活動前替換成官方帳號加入 QR Code。" />
-    <AssetPlaceholder title="講義領取流程圖" text="可放三步驟圖解或現場投影片同款圖。" />
+  <section class="asset-grid" style="margin-top: 32px;">
+    <AssetPlaceholder title="旅客意見表 QR Code" text="正式活動前替換成問卷工具的 QR Code。" type="QR Code" />
+    <AssetPlaceholder title="LINE 官方管家 QR Code" text="正式活動前替換成官方帳號加入 QR Code。" type="QR Code" />
+    <AssetPlaceholder title="紀念品領取圖解" text="可放三步驟圖解或現場投影片同款圖。" type="圖片" />
   </section>
 
-  <section class="card">
-    <p class="eyebrow">講義形式說明</p>
-    <h2>主體是網頁講義，PDF 是重點整理</h2>
-    <p>網頁講義可保留一鍵複製提示詞、操作影片、更新版流程與成果牆；PDF 則適合列印與快速回顧。</p>
+  <section class="card" style="margin-top:32px;">
+    <p class="eyebrow">📖 手冊形式說明</p>
+    <h2>主體是數位導覽，PDF 是隨身小冊</h2>
+    <p>數位導覽（網頁）可保留一鍵複製提示詞、操作影片、更新版流程與成果明信片牆；隨身小冊（PDF）則適合快速回顧重點。</p>
   </section>
 
   <CompleteTaskButton 
@@ -64,5 +63,5 @@ import { siteConfig } from '../content/siteConfig';
     successMessage="恭喜！你已完成所有流程，講義已在 LINE 等著你。"
   />
 
-  <CTASection title="回到首頁持續練習" text="課後可以依照網站順序重新操作一次，把今天的流程變成自己的 AI 工作方法。" primaryLabel="返回首頁" primaryHref="/" secondaryLabel="查看成果牆" secondaryHref="/gallery" />
+  <CTASection title="下段旅程見" text="課後可以依照網站導航重新操作一次，把今天的魔法變成自己的日常裝備。" primaryLabel="回到旅行入口 (首頁)" primaryHref="/" secondaryLabel="查看明信片牆" secondaryHref="/gallery" />
 </WorkshopLayout>
