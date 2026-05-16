@@ -6,6 +6,7 @@ import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
 import { travelPrompts } from '../content/prompts';
 import { travelFlow } from '../content/workshopPages';
+import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
   <section class="hero">
@@ -19,19 +20,22 @@ import { travelFlow } from '../content/workshopPages';
       <p class="eyebrow">方法 1｜推薦方式</p>
       <h2>開啟專屬 GPT</h2>
       <p>照著回答 3 輪問題，就能得到需求摘要與 NotebookLM 接力內容。</p>
-      <a class="btn" target="_blank" rel="noreferrer" href="https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban">開啟 GPT</a>
+      <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl}>開啟 GPT</a>
     </article>
     <article class="card">
       <p class="eyebrow">方法 2｜GPT 額度不足</p>
       <h2>貼到一般 ChatGPT</h2>
-      <p>如果專屬 GPT 受限，展開下方 ChatGPT 備援提示詞，複製到一般聊天框。</p>
-      <a class="btn ghost" href="#fallback-prompts">複製備援提示詞</a>
+      <p>如果專屬 GPT 受限，直接一鍵複製備援提示詞到一般聊天框。</p>
+      <div class="actions">
+        <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.chatgpt}>複製備援提示詞</button>
+        <a class="btn alt" href="#fallback-prompts">查看完整提示詞</a>
+      </div>
     </article>
     <article class="card">
       <p class="eyebrow">方法 3｜ChatGPT 也受限</p>
       <h2>改用 Gemini</h2>
       <p>使用 Gemini 備援版完成需求訪談，先把成果做出來。</p>
-      <a class="btn alt" target="_blank" rel="noreferrer" href="https://gemini.google.com/">開啟 Gemini</a>
+      <a class="btn alt" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.geminiUrl}>開啟 Gemini</a>
     </article>
   </section>
 

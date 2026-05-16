@@ -1,12 +1,34 @@
 ---
 const { items = [] } = Astro.props;
+
+const typeLabel = {
+  doll: '3D 公仔',
+  sticker: '貼圖素材',
+  planner: '旅遊規劃'
+} as const;
+
+const typeTag = {
+  doll: '#公仔成果',
+  sticker: '#旅行貼圖',
+  planner: '#行程草案'
+} as const;
 ---
 <div class="gallery-grid">
-  {items.map((item:any) => (
-    <article class="card gallery-card" data-gallery-trigger={item.id}>
-      <div class="emoji">{item.preview}</div>
+  {items.map((item: any) => (
+    <article
+      class="card gallery-card"
+      data-gallery-trigger={item.id}
+      data-type-label={typeLabel[item.type as keyof typeof typeLabel]}
+      data-owner={item.owner}
+      data-tag={typeTag[item.type as keyof typeof typeTag]}
+    >
+      <div class="gallery-thumb">
+        <span class="gallery-badge">{typeLabel[item.type as keyof typeof typeLabel]}</span>
+        <div class="emoji">{item.preview}</div>
+      </div>
       <h3>{item.title}</h3>
-      <p>{item.owner}</p>
+      <p class="muted">{item.owner}</p>
+      <p class="gallery-tag">{typeTag[item.type as keyof typeof typeTag]}</p>
     </article>
   ))}
 </div>

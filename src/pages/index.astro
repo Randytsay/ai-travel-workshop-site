@@ -1,17 +1,36 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import { schedule } from '../content/schedule';
-import { homeInteractions, homeOutcomes } from '../content/workshopPages';
+import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
 ---
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
-  <section class="hero">
-    <p class="eyebrow">實體工作坊操作平台</p>
-    <h1>AI 旅遊規劃師工作坊</h1>
-    <p>今天不是只聽課，而是跟著網站一步步完成公仔、旅遊研究與 LINE 貼圖素材，把 AI 變成回家也能重做的生活工具。</p>
-    <div class="actions">
-      <a class="btn" href="/prep">先完成課前準備</a>
-      <a class="btn alt" href="/doll-maker">開始第一個作品</a>
-      <a class="btn ghost" href="/voting">查看投票頁</a>
+  <section class="hero hero-home">
+    <div>
+      <p class="eyebrow">實體工作坊操作平台</p>
+      <h1>AI 旅遊規劃師工作坊</h1>
+      <p>今天不是只聽課，而是跟著網站一步步完成公仔、旅遊研究與 LINE 貼圖素材，把 AI 變成回家也能重做的生活工具。</p>
+      <div class="actions">
+        <a class="btn" href="/prep">先完成課前準備</a>
+        <a class="btn alt" href="/doll-maker">開始第一個作品</a>
+        <a class="btn ghost" href="/voting">查看投票頁</a>
+      </div>
+    </div>
+    <div class="hero-mockups">
+      <article class="hero-mockup-card">
+        <p class="eyebrow">3D 公仔成果</p>
+        <h3>個人 / 親子 / 寵物</h3>
+        <p class="muted">先做出第一張可分享成果</p>
+      </article>
+      <article class="hero-mockup-card">
+        <p class="eyebrow">AI 旅遊規劃卡</p>
+        <h3>需求摘要 + 研究接力</h3>
+        <p class="muted">把靈感整理成可行計畫</p>
+      </article>
+      <article class="hero-mockup-card">
+        <p class="eyebrow">LINE 貼圖卡</p>
+        <h3>旅行主題 8 格素材</h3>
+        <p class="muted">帶走可延伸創作的素材包</p>
+      </article>
     </div>
   </section>
 
@@ -44,4 +63,18 @@ import { homeInteractions, homeOutcomes } from '../content/workshopPages';
       <ul>{homeInteractions.map((item) => <li>{item}</li>)}</ul>
     </div>
   </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">這場工作坊適合誰參加</p>
+    <h2>不論你在哪個起點，都能帶走可重做的方法</h2>
+  </section>
+  <section class="feature-grid">
+    {homeAudience.map((item) => (
+      <article class="card">
+        <h3>{item.title}</h3>
+        <p>{item.text}</p>
+      </article>
+    ))}
+  </section>
+
 </WorkshopLayout>

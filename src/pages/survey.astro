@@ -3,6 +3,7 @@ import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
+import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
   <section class="hero">
@@ -11,23 +12,36 @@ import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
     <p>最後一步請完成問卷，並加入 LINE 官方 AI 助教。你會收到互動式網頁講義與 PDF 重點版，方便回家複習。</p>
   </section>
 
-  <section class="feature-grid">
+  <section class="feature-grid survey-reward-grid">
     <article class="card"><h2>為什麼要填問卷</h2><ul>{surveyReasons.map((r)=> <li>{r}</li>)}</ul></article>
-    <article class="card"><h2>完成問卷可獲得</h2><ul>{surveyRewards.map((r)=> <li>{r}</li>)}</ul></article>
+    <article class="card survey-reward-card"><h2>完成問卷可獲得</h2><ul>{surveyRewards.map((r)=> <li>{r}</li>)}</ul></article>
     <article class="card notice"><h2>關鍵字提醒</h2><p>加入 LINE 官方 AI 助教後，請輸入「我要講義」。</p></article>
   </section>
 
+  {siteConfig.featureFlags.enableCashbackBridgeCard && (
+    <section class="card cashback-bridge-card">
+      <p class="eyebrow">旅行消費小啟發</p>
+      <h2>旅行花得多，回饋能不能慢慢累積？</h2>
+      <p>一趟旅行花費不低，如果日常消費能逐步累積回饋，長期會是什麼感覺？這裡先不談產品，先從機制與思維開始理解。</p>
+      <a class="btn" href={siteConfig.cashbackInterestUrl}>我想了解這個機制</a>
+    </section>
+  )}
+
   <section class="two-col">
-    <section class="card">
+    <section class="card survey-entry-card">
       <p class="eyebrow">問卷入口</p>
       <h2>前往課後問卷</h2>
       <p>正式活動前請替換成你的問卷連結或 QR Code。</p>
-      <a class="btn" href="#">前往課後問卷（待替換）</a>
+      <a class="btn" href={siteConfig.surveyUrl}>前往課後問卷（待替換）</a>
     </section>
-    <section class="card">
+    <section class="card line-task-card">
       <p class="eyebrow">講義領取流程</p>
       <h2>「我要講義」三步驟</h2>
       <ol>{lineSteps.map((s)=> <li>{s}</li>)}</ol>
+      <div class="actions">
+        <a class="btn ghost" href={siteConfig.officialLineUrl}>加入 LINE 官方 AI 助教</a>
+        <a class="btn ghost" href={siteConfig.workshopGroupUrl}>工作坊群組（選填）</a>
+      </div>
     </section>
   </section>
 
