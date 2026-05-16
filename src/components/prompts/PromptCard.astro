@@ -1,0 +1,8 @@
+---
+const { title, platform, prompt } = Astro.props;
+---
+<div class="card">
+  <p><strong>{title}</strong> <small>({platform})</small></p>
+  <pre style="white-space: pre-wrap;">{prompt}</pre>
+  <button class="btn copy-btn" data-text={prompt}>一鍵複製</button>
+</div>
