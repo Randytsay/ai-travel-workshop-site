@@ -1,0 +1,10 @@
+---
+const { works = [] } = Astro.props;
+const top = [...works].sort((a:any,b:any)=>b.votes-a.votes).slice(0,5);
+---
+<section class="card">
+  <h2>TOP 5 排行榜</h2>
+  <ol>
+    {top.map((item:any, idx:number) => <li>{idx + 1}. {item.title}（{item.votes}票）</li>)}
+  </ol>
+</section>

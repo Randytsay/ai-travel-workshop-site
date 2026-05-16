@@ -1,8 +1,14 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import QuizCard from '../components/learning/QuizCard.astro';
+import { aiExplainCards, aiLifeHelps, aiToolCompare, aiQuiz } from '../content/aiBasicsPage';
 ---
-<WorkshopLayout title="AI 旅遊規劃師入門" currentPath="/ai-basics">
-  <section class="card"><h1>AI 旅遊規劃師入門</h1><p>你不需要工程背景，也能把 AI 變成旅行助理。</p></section>
-  <section class="card"><h2>三大工具定位</h2><ul><li>ChatGPT：對話整理與產出</li><li>Gemini：備援與多角度補充</li><li>NotebookLM：研究、整理、簡報化</li></ul></section>
-  <section class="card"><h2>有獎問答（Placeholder）</h2><p>現場將提供互動題與即時揭曉。</p></section>
+<WorkshopLayout title="AI 入門" currentPath="/ai-basics">
+  <section class="card"><h1>AI 是什麼？</h1></section>
+  <section class="tool-grid">{aiExplainCards.map((card) => <article class="card"><h2>{card.title}</h2><p>{card.text}</p></article>)}</section>
+  <section class="card"><h2>AI 對生活的幫助</h2><div class="help-grid">{aiLifeHelps.map((item) => <span class="chip">{item}</span>)}</div></section>
+  <section class="card"><h2>工具比較卡</h2><ul>{aiToolCompare.map((t) => <li><strong>{t.tool}</strong>｜{t.fit}（{t.note}）</li>)}</ul></section>
+  {aiQuiz.map((quiz, idx) => <QuizCard quiz={quiz} index={idx + 1} />)}
+  <section class="card"><h2>小禮物互動提示卡</h2><p>答對 2 題可舉手領取現場小禮物，快和旁邊同學互相討論！</p></section>
+  <a class="btn" href="/doll-maker">前往 3D 公仔頁</a>
 </WorkshopLayout>
