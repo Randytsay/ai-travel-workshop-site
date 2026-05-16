@@ -22,17 +22,48 @@ import { voteTabs, voteWorks } from '../data/voting';
 <script>
   const tabs = document.querySelectorAll('.vote-tab');
   const cards = document.querySelectorAll('[data-work-type]');
+  const list = document.querySelector('[data-leaderboard-list]');
+
+  const voteState = Array.from(document.querySelectorAll('.vote-card')).map((card) => {
+    const voteCountNode = card.querySelector('[data-vote-count]');
+    return {
+      id: card.getAttribute('data-work-id') || '',
+      title: card.querySelector('h3')?.textContent || '',
+      votes: Number(voteCountNode?.textContent || '0')
+    };
+  });
+
+  const renderLeaderboard = () => {
+    if (!list) return;
+    const topFive = [...voteState].sort((a, b) => b.votes - a.votes).slice(0, 5);
+    list.innerHTML = topFive
+      .map((item, index) => {
+        const rankClass = index < 3 ? `rank rank-${index + 1}` : 'rank';
+        const rankLabel = index === 0 ? '👑 第 1 名' : `第 ${index + 1} 名`;
+        return `<li class="${rankClass}" data-work-id="${item.id}"><span class="rank-label">${rankLabel}</span><span>${item.title}</span><strong>${item.votes} 票</strong></li>`;
+      })
+      .join('');
+  };
+
   tabs.forEach((tab) => tab.addEventListener('click', () => {
     const type = tab.dataset.type;
-    cards.forEach((card) => card.style.display = type === 'all' || card.dataset.workType === type ? 'block' : 'none');
+    cards.forEach((card) => {
+      card.style.display = type === 'all' || card.dataset.workType === type ? 'block' : 'none';
+    });
   }));
 
   document.querySelectorAll('.vote-card').forEach((card) => {
     const button = card.querySelector('.vote-button');
     const count = card.querySelector('[data-vote-count]');
     const feedback = card.querySelector('[data-vote-feedback]');
+    const workId = card.getAttribute('data-work-id');
+
     button?.addEventListener('click', () => {
-      count.textContent = String(Number(count.textContent || '0') + 1);
+      const nextVotes = Number(count?.textContent || '0') + 1;
+      if (count) count.textContent = String(nextVotes);
+      const target = voteState.find((item) => item.id === workId);
+      if (target) target.votes = nextVotes;
+      renderLeaderboard();
       button.textContent = '已投票';
       button.setAttribute('disabled', 'true');
       if (feedback) feedback.hidden = false;
