@@ -19,6 +19,7 @@ import { voteTabs, voteWorks } from '../data/voting';
     <article class="card"><h2>獎項說明</h2><ul><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團票選）</li><li>最暖故事獎（主持人特選）</li></ul></article>
     <article class="card notice"><h2>主持人控制區（預留）</h2><p>正式版可加入開始投票、暫停投票、公布得獎者、重設場次。</p></article>
   </section>
+  <p class="disclaimer-text" style="margin-top: 12px;">上傳作品代表同意於本次工作坊成果展示與現場票選使用；若不希望公開展示，請告知講師或助教。</p>
   <CompleteTaskButton 
     taskId="voting-complete" 
     buttonLabel="我已完成投票"
@@ -54,17 +55,22 @@ import { voteTabs, voteWorks } from '../data/voting';
       .join('');
   };
 
-  tabs.forEach((tab) => tab.addEventListener('click', () => {
-    const type = tab.dataset.type;
-    cards.forEach((card) => {
-      card.style.display = type === 'all' || card.dataset.workType === type ? 'block' : 'none';
+  tabs.forEach((t) => {
+    const tab = t as HTMLElement;
+    tab.addEventListener('click', () => {
+      const type = tab.dataset.type;
+      cards.forEach((c) => {
+        const card = c as HTMLElement;
+        card.style.display = type === 'all' || card.dataset.workType === type ? 'block' : 'none';
+      });
     });
-  }));
+  });
 
-  document.querySelectorAll('.vote-card').forEach((card) => {
-    const button = card.querySelector('.vote-button');
-    const count = card.querySelector('[data-vote-count]');
-    const feedback = card.querySelector('[data-vote-feedback]');
+  document.querySelectorAll('.vote-card').forEach((c) => {
+    const card = c as HTMLElement;
+    const button = card.querySelector('.vote-button') as HTMLButtonElement;
+    const count = card.querySelector('[data-vote-count]') as HTMLElement;
+    const feedback = card.querySelector('[data-vote-feedback]') as HTMLElement;
     const workId = card.getAttribute('data-work-id');
 
     button?.addEventListener('click', () => {
@@ -73,8 +79,10 @@ import { voteTabs, voteWorks } from '../data/voting';
       const target = voteState.find((item) => item.id === workId);
       if (target) target.votes = nextVotes;
       renderLeaderboard();
-      button.textContent = '已投票';
-      button.setAttribute('disabled', 'true');
+      if (button) {
+        button.textContent = '已投票';
+        button.setAttribute('disabled', 'true');
+      }
       if (feedback) feedback.hidden = false;
     });
   });

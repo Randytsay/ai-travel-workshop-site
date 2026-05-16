@@ -33,18 +33,19 @@ const { title, currentPath } = Astro.props;
       toast.className = 'copy-toast';
       toast.setAttribute('role', 'status');
       document.body.appendChild(toast);
-      let toastTimer;
-      const showToast = (message) => {
+      let toastTimer: number | undefined;
+      const showToast = (message: string) => {
         toast.textContent = message;
         toast.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = window.setTimeout(() => toast.classList.remove('show'), 1400);
       };
 
-      document.querySelectorAll('.copy-btn').forEach((btn) => {
+      document.querySelectorAll('.copy-btn').forEach((b) => {
+        const btn = b as HTMLElement;
         btn.addEventListener('click', async () => {
           const text = btn.dataset.text || '';
-          const raw = btn.textContent;
+          const raw = btn.textContent || '';
           let copied = false;
 
           try {

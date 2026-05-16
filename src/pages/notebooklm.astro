@@ -7,6 +7,7 @@ import PromptCard from '../components/prompts/PromptCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { notebookContent } from '../content/prompts';
 import { notebookSteps } from '../content/workshopPages';
+import { siteConfig } from '../content/siteConfig';
 
 const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-research')?.prompts.chatgpt || '';
 ---
@@ -16,7 +17,7 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
     <h1>讓 NotebookLM 接手旅遊研究</h1>
     <p>上一頁整理出的需求不是終點。把它轉成 NotebookLM 的來源後，就能查證資訊、比較方案、產出行程、簡報與資訊圖表。</p>
     <div class="actions">
-      <a class="btn" target="_blank" rel="noreferrer" href="https://notebooklm.google.com/">開啟 NotebookLM</a>
+      <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.notebookLmUrl}>開啟 NotebookLM</a>
       <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製 Deep Research 提示詞</button>
       <a class="btn ghost" href="#notebook-prompts">查看完整提示詞</a>
     </div>
@@ -34,7 +35,7 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
     <article class="card notice" style="grid-column: 1 / -1;">
       <p class="eyebrow">研究流程圖</p>
       <h2>從聊天到簡報，AI 幫你處理資訊</h2>
-      <p style="font-weight:700; color:var(--sky);">需求總表 → NotebookLM 筆記 (Note) → 轉為來源 (Source) → Deep Research → 產生研究報告 → 轉化為簡報與資訊圖表</p>
+      <p class="flow-highlight">需求總表 → NotebookLM 筆記 (Note) → 轉為來源 (Source) → Deep Research → 產生研究報告 → 轉化為簡報與資訊圖表</p>
     </article>
   </section>
 

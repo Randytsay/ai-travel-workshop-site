@@ -1,5 +1,14 @@
 ---
-const { title, text, primaryLabel, primaryHref, secondaryLabel, secondaryHref } = Astro.props;
+const { 
+  title, 
+  text, 
+  primaryLabel, 
+  primaryHref, 
+  primaryExternal = false,
+  secondaryLabel, 
+  secondaryHref,
+  secondaryExternal = false
+} = Astro.props;
 ---
 <section class="cta-band">
   <div>
@@ -8,7 +17,11 @@ const { title, text, primaryLabel, primaryHref, secondaryLabel, secondaryHref } 
     <p>{text}</p>
   </div>
   <div class="actions">
-    {primaryLabel && primaryHref && <a class="btn" href={primaryHref}>{primaryLabel}</a>}
-    {secondaryLabel && secondaryHref && <a class="btn alt" href={secondaryHref}>{secondaryLabel}</a>}
+    {primaryLabel && primaryHref && (
+      <a class="btn" href={primaryHref} target={primaryExternal ? "_blank" : undefined} rel={primaryExternal ? "noreferrer" : undefined}>{primaryLabel}</a>
+    )}
+    {secondaryLabel && secondaryHref && (
+      <a class="btn alt" href={secondaryHref} target={secondaryExternal ? "_blank" : undefined} rel={secondaryExternal ? "noreferrer" : undefined}>{secondaryLabel}</a>
+    )}
   </div>
 </section>

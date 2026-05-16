@@ -2,14 +2,15 @@
 const { title, text, type = '圖片', hint = '' } = Astro.props;
 
 const typeMeta = {
-  圖片: { icon: '🖼️', ratio: '4:3', usage: '適合成果示意、步驟截圖' },
-  影片: { icon: '🎬', ratio: '16:9', usage: '適合流程示範短片' },
-  'QR Code': { icon: '📱', ratio: '1:1', usage: '適合掃碼入口與快速導流' }
+  圖片: { icon: '🖼️', ratio: '4:3', usage: '適合成果示意、步驟截圖', cssClass: 'asset-image' },
+  影片: { icon: '🎬', ratio: '16:9', usage: '適合流程示範短片', cssClass: 'asset-video' },
+  'QR Code': { icon: '📱', ratio: '1:1', usage: '適合掃碼入口與快速導流', cssClass: 'asset-qrcode' }
 } as const;
 
-const meta = typeMeta[type as keyof typeof typeMeta] ?? { icon: '🧩', ratio: '4:3', usage: '可放活動素材' };
+const meta = typeMeta[type as keyof typeof typeMeta] ?? { icon: '🧩', ratio: '4:3', usage: '可放活動素材', cssClass: 'asset-misc' };
 ---
-<article class="asset-placeholder media-slot-card">
+<!-- 正式上線前，請將此 <article> 替換為真實的 <img>, <video> 或 iframe 元件 -->
+<article class={`asset-placeholder media-slot-card ${meta.cssClass}`} data-asset-type={type}>
   <div class="media-slot-head">
     <p class="eyebrow">{type}</p>
     <span class="slot-icon" aria-hidden="true">{meta.icon}</span>

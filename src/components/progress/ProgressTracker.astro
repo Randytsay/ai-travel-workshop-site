@@ -54,8 +54,8 @@ const total = progressTasks.length;
     const total = progressTasks.length;
     const percentage = (count / total) * 100;
 
-    const fill = document.getElementById('progress-fill');
-    const text = document.getElementById('progress-count');
+    const fill = document.getElementById('progress-fill') as HTMLElement;
+    const text = document.getElementById('progress-count') as HTMLElement;
 
     if (fill) fill.style.width = `${percentage}%`;
     if (text) text.textContent = String(count);

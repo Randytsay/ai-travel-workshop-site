@@ -47,7 +47,8 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
 <script>
   import { markTaskComplete, isTaskComplete } from '../../utils/progressStore';
 
-  document.querySelectorAll('.task-completion-zone').forEach((zone) => {
+  document.querySelectorAll('.task-completion-zone').forEach((z) => {
+    const zone = z as HTMLElement;
     const taskId = zone.getAttribute('data-task-id');
     const initial = zone.querySelector('.task-status-initial');
     const complete = zone.querySelector('.task-status-complete');
