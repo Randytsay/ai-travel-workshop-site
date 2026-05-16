@@ -6,9 +6,10 @@ const total = progressTasks.length;
   <div class="progress-bar-bg">
     <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
   </div>
-  <p class="progress-text">
-    <span class="progress-count" id="progress-count">0</span> / {total} 已完成
+  <p class="progress-text" id="progress-text-container">
+    <span class="progress-count" id="progress-count">0</span> / <span id="progress-total">{total}</span> 已完成
   </p>
+  <p class="progress-celebration" id="progress-celebration" hidden>太棒了，今天的工作坊任務全完成！</p>
 </div>
 
 <style>
@@ -42,6 +43,18 @@ const total = progressTasks.length;
   .progress-count {
     color: var(--coral);
   }
+  .progress-celebration {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--teal);
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 
 <script>
@@ -55,10 +68,20 @@ const total = progressTasks.length;
     const percentage = (count / total) * 100;
 
     const fill = document.getElementById('progress-fill') as HTMLElement;
-    const text = document.getElementById('progress-count') as HTMLElement;
+    const countText = document.getElementById('progress-count') as HTMLElement;
+    const textContainer = document.getElementById('progress-text-container') as HTMLElement;
+    const celebration = document.getElementById('progress-celebration') as HTMLElement;
 
     if (fill) fill.style.width = `${percentage}%`;
-    if (text) text.textContent = String(count);
+    if (countText) countText.textContent = String(count);
+
+    if (count === total && total > 0) {
+      if (textContainer) textContainer.hidden = true;
+      if (celebration) celebration.hidden = false;
+    } else {
+      if (textContainer) textContainer.hidden = false;
+      if (celebration) celebration.hidden = true;
+    }
   };
 
   // Initial update

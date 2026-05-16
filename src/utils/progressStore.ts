@@ -3,7 +3,13 @@ export const PROGRESS_KEY = 'workshop_progress';
 export const getProgress = (): string[] => {
   if (typeof window === 'undefined') return [];
   const stored = localStorage.getItem(PROGRESS_KEY);
-  return stored ? JSON.parse(stored) : [];
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    localStorage.removeItem(PROGRESS_KEY);
+    return [];
+  }
 };
 
 export const markTaskComplete = (taskId: string) => {
