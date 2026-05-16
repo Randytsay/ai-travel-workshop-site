@@ -1,10 +1,57 @@
 ---
 const { quiz, index = 1 } = Astro.props;
+const cardId = `quiz-${index}`;
 ---
-<section class="card">
+<section class="card quiz-card" data-quiz-card={cardId} data-answer={String(quiz.answer)}>
   <h3>Q{index}. {quiz.question}</h3>
-  <ol>
-    {quiz.options.map((opt:string, i:number) => <li>{String.fromCharCode(65 + i)}. {opt}</li>)}
-  </ol>
-  <p><strong>答案：</strong>{String.fromCharCode(65 + quiz.answer)}｜{quiz.explain}</p>
+  <div class="quiz-options">
+    {quiz.options.map((opt:string, i:number) => (
+      <button class="btn alt quiz-option" type="button" data-option={String(i)}>
+        {String.fromCharCode(65 + i)}. {opt}
+      </button>
+    ))}
+  </div>
+
+  <div class="quiz-feedback" hidden>
+    <p class="quiz-result"></p>
+    <p><strong>正確答案：</strong><span class="quiz-correct"></span></p>
+    <p><strong>解析：</strong>{quiz.explain}</p>
+  </div>
 </section>
+
+<script>
+  document.querySelectorAll('[data-quiz-card]').forEach((card) => {
+    if (card.dataset.bound === 'true') return;
+    card.dataset.bound = 'true';
+
+    const answer = Number(card.dataset.answer || -1);
+    const feedback = card.querySelector('.quiz-feedback');
+    const result = card.querySelector('.quiz-result');
+    const correct = card.querySelector('.quiz-correct');
+    const optionButtons = card.querySelectorAll('.quiz-option');
+
+    optionButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selected = Number(button.dataset.option || -1);
+        const isCorrect = selected === answer;
+
+        if (feedback && result && correct) {
+          feedback.hidden = false;
+          result.textContent = isCorrect ? '✅ 答對！' : '💡 再想想～';
+          correct.textContent = String.fromCharCode(65 + answer);
+        }
+
+        optionButtons.forEach((btn) => btn.classList.remove('is-selected'));
+        button.classList.add('is-selected');
+      });
+    });
+  });
+</script>
+
+<style>
+  .quiz-options { display: grid; gap: 8px; }
+  .quiz-option { text-align: left; border: 0; cursor: pointer; }
+  .quiz-option.is-selected { outline: 2px solid var(--indigo); }
+  .quiz-feedback { margin-top: 12px; background: #fff3ee; border-radius: 14px; padding: 10px 12px; }
+  .quiz-result { font-weight: 700; }
+</style>
