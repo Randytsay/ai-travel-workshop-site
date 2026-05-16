@@ -1,6 +1,14 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
 ---
 <WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
-  <section class="card"><h1>課後問卷與講義領取</h1><ol><li>完成課後問卷</li><li>加入 LINE 官方 AI 助教</li><li>輸入關鍵字「我要講義」</li><li>領取互動式網頁講義與 PDF 重點版</li></ol><a class="btn" href="#">前往問卷（Placeholder）</a></section>
+  <section class="card"><h1>感謝參與今天的 AI 旅遊規劃師工作坊！</h1><p>你的回饋，會讓下一場更好。</p></section>
+  <section class="card"><h2>為什麼要填問卷</h2><ul>{surveyReasons.map((r)=> <li>{r}</li>)}</ul></section>
+  <section class="card"><h2>完成問卷可獲得</h2><ul>{surveyRewards.map((r)=> <li>{r}</li>)}</ul></section>
+  <section class="card"><h2>問卷按鈕區</h2><a class="btn" href="#">前往課後問卷（Placeholder）</a></section>
+  <section class="card"><h2>加入 LINE 官方 AI 助教</h2><p>課後更新、講義補充與延伸練習會由 LINE 官方帳號推送。</p></section>
+  <section class="card"><h2>「我要講義」三步驟</h2><ol>{lineSteps.map((s)=> <li>{s}</li>)}</ol></section>
+  <section class="card"><h2>講義形式說明</h2><p>你會收到互動式網頁講義完整版 + PDF 重點版，方便回家複習與分享。</p></section>
+  <a class="btn alt" href="/">返回首頁，持續練習 AI 工具</a>
 </WorkshopLayout>

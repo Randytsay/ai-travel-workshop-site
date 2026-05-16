@@ -1,6 +1,29 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import GalleryGrid from '../components/gallery/GalleryGrid.astro';
+import GalleryModal from '../components/gallery/GalleryModal.astro';
+import { galleryFilters, galleryItems } from '../data/gallery';
 ---
-<WorkshopLayout title="gallery" currentPath="/gallery">
-  <section class="card"><h1>gallery</h1><p>Phase 1 Placeholder：已建立頁面骨架與後續擴充位置。</p></section>
+<WorkshopLayout title="成果牆" currentPath="/gallery">
+  <section class="card"><h1>成果牆 Gallery</h1><p>看看大家今天完成的公仔、貼圖與旅遊規劃成果。</p></section>
+  <section class="card"><h2>篩選</h2><div>{galleryFilters.map((f) => <button class="btn alt filter-btn" data-filter={f.key}>{f.label}</button>)}</div></section>
+  <section id="gallery-wrap">{galleryItems.map((item) => <div data-item-type={item.type} data-title={item.title} data-desc={item.desc}><GalleryGrid items={[item]} /></div>)}</section>
+  <GalleryModal />
+  <section class="card"><h2>成果來源說明</h2><p>目前為 mock data 展示；後續將從學員授權提交素材同步至成果牆。</p><p><strong>TODO:</strong> 後續串接 Google Drive / Apps Script 資料源。</p></section>
+  <a class="btn" href="/survey">前往問卷領講義</a>
 </WorkshopLayout>
+<script>
+  const filters = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('[data-item-type]');
+  const modal = document.getElementById('gallery-modal');
+  filters.forEach((btn) => btn.addEventListener('click', () => {
+    const key = btn.dataset.filter;
+    items.forEach((item) => item.style.display = key === 'all' || item.dataset.itemType === key ? 'block' : 'none');
+  }));
+  document.querySelectorAll('[data-gallery-trigger]').forEach((card) => card.addEventListener('click', () => {
+    const p = card.closest('[data-title]');
+    document.getElementById('gm-title').textContent = p?.dataset.title || '';
+    document.getElementById('gm-desc').textContent = p?.dataset.desc || '';
+    modal?.showModal();
+  }));
+</script>

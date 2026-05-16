@@ -27,3 +27,11 @@ main { padding: 24px 24px 88px; max-width: 1100px; }
   .mobile-nav { display: grid; grid-template-columns: repeat(4,1fr); position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #ececec; }
   .mobile-nav a { padding: 10px 6px; text-align: center; font-size: 12px; }
 }
+.tool-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 12px; }
+.help-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; }
+.chip { background:#fff3ee; padding:10px 12px; border-radius:999px; text-align:center; font-weight:700; }
+.faq-item summary { font-weight:700; cursor:pointer; }
+.emoji { font-size:42px; }
+.gallery-grid { display:grid; grid-template-columns:1fr; gap:12px; }
+.gallery-card { cursor:pointer; }
+@media (min-width: 700px){ .gallery-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }

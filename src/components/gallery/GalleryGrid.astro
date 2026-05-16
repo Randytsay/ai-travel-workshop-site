@@ -1,0 +1,12 @@
+---
+const { items = [] } = Astro.props;
+---
+<div class="gallery-grid">
+  {items.map((item:any) => (
+    <article class="card gallery-card" data-gallery-trigger={item.id}>
+      <div class="emoji">{item.preview}</div>
+      <h3>{item.title}</h3>
+      <p>{item.owner}</p>
+    </article>
+  ))}
+</div>

@@ -1,6 +1,22 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import VoteWorkCard from '../components/voting/VoteWorkCard.astro';
+import LeaderboardPanel from '../components/voting/LeaderboardPanel.astro';
+import { voteTabs, voteWorks } from '../data/voting';
 ---
-<WorkshopLayout title="voting" currentPath="/voting">
-  <section class="card"><h1>voting</h1><p>Phase 1 Placeholder：已建立頁面骨架與後續擴充位置。</p></section>
+<WorkshopLayout title="現場互動投票" currentPath="/voting">
+  <section class="card"><h1>現場人氣票選</h1><p>選出你最喜歡的作品，給創作者一個掌聲！</p></section>
+  <section class="card"><h2>分類</h2><div>{voteTabs.map((t) => <button class="btn alt vote-tab" data-type={t.key}>{t.label}</button>)}</div></section>
+  <section id="vote-list" class="tool-grid">{voteWorks.map((w) => <div data-work-type={w.type}><VoteWorkCard work={w} /></div>)}</section>
+  <LeaderboardPanel works={voteWorks} />
+  <section class="card"><h2>獎項說明</h2><ul><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團票選）</li><li>最暖故事獎（主持人特選）</li></ul></section>
+  <section class="card"><p><strong>TODO:</strong> 未來串接 Firebase Realtime Database 即時票數與排行榜刷新。</p></section>
 </WorkshopLayout>
+<script>
+  const tabs = document.querySelectorAll('.vote-tab');
+  const cards = document.querySelectorAll('[data-work-type]');
+  tabs.forEach((tab) => tab.addEventListener('click', () => {
+    const type = tab.dataset.type;
+    cards.forEach((card) => card.style.display = card.dataset.workType === type ? 'block' : 'none');
+  }));
+</script>

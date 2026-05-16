@@ -1,0 +1,9 @@
+---
+const { work } = Astro.props;
+---
+<article class="card vote-card">
+  <div class="emoji">{work.image}</div>
+  <h3>{work.title}</h3>
+  <p>{work.author} · {work.votes} 票</p>
+  <button class="btn" type="button">投一票（MVP 假互動）</button>
+</article>

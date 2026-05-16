@@ -1,8 +1,13 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import FAQAccordion from '../components/common/FAQAccordion.astro';
+import { prepChecklist, prepTools, prepFaqs } from '../content/prepPage';
 ---
 <WorkshopLayout title="課前準備" currentPath="/prep">
-  <section class="card"><h1>課前準備</h1><p>先完成以下檢查，現場才不會卡住。</p><ul><li>登入 ChatGPT 與 Gemini</li><li>可開啟 NotebookLM</li><li>手機安裝 LINE 拍貼</li><li>加入工作坊 LINE 群組</li></ul></section>
-  <section class="card"><h2>免費版額度提醒</h2><p>本次只安排少量高價值生圖任務；若受限，請改用備援提示詞。</p></section>
-  <section class="card"><h2>FAQ（Phase 1 Placeholder）</h2><p>Q: 登入失敗怎麼辦？A: 先改用備援工具，並請助教協助。</p></section>
+  <section class="card"><h1>課前 Checklist</h1><ul>{prepChecklist.map((item) => <li>{item}</li>)}</ul></section>
+  <section class="tool-grid">{prepTools.map((tool) => <article class="card"><h2>{tool.name}</h2><p>{tool.desc}</p></article>)}</section>
+  <section class="card"><h2>免費版額度提醒卡</h2><p>本次流程已設計為免費版可完成，但請優先完成關鍵任務，避免重複生圖消耗額度。</p></section>
+  <section class="card"><h2>QR Code / 登入教學素材（Placeholder）</h2><p>此區將放 ChatGPT、Gemini、NotebookLM、LINE 拍貼與群組 QR Code。</p></section>
+  <section><h2>FAQ</h2><FAQAccordion items={prepFaqs} /></section>
+  <a class="btn" href="/ai-basics">前往 AI 入門頁</a>
 </WorkshopLayout>

@@ -1,0 +1,10 @@
+---
+const { quiz, index = 1 } = Astro.props;
+---
+<section class="card">
+  <h3>Q{index}. {quiz.question}</h3>
+  <ol>
+    {quiz.options.map((opt:string, i:number) => <li>{String.fromCharCode(65 + i)}. {opt}</li>)}
+  </ol>
+  <p><strong>答案：</strong>{String.fromCharCode(65 + quiz.answer)}｜{quiz.explain}</p>
+</section>
