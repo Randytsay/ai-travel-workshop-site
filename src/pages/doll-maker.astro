@@ -1,6 +1,14 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import PromptCard from '../components/prompts/PromptCard.astro';
+import { dollPrompts } from '../content/prompts';
 ---
-<WorkshopLayout title="doll-maker" currentPath="/doll-maker">
-  <section class="card"><h1>doll-maker</h1><p>Phase 1 Placeholder：已建立頁面骨架與後續擴充位置。</p></section>
+<WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
+  <section class="card"><h1>我的 3D 可愛公仔</h1><p>上傳照片 → 複製提示詞 → 產出公仔 → 分享到 LINE 群組。</p></section>
+  {dollPrompts.map((item) => (
+    <div>
+      <PromptCard title={item.title} platform="ChatGPT" prompt={item.prompts.chatgpt} />
+      <PromptCard title={item.title} platform="Gemini" prompt={item.prompts.gemini} />
+    </div>
+  ))}
 </WorkshopLayout>

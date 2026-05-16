@@ -1,6 +1,18 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import PromptCard from '../components/prompts/PromptCard.astro';
+import { stickerLabContent } from '../content/prompts';
 ---
-<WorkshopLayout title="sticker-lab" currentPath="/sticker-lab">
-  <section class="card"><h1>sticker-lab</h1><p>Phase 1 Placeholder：已建立頁面骨架與後續擴充位置。</p></section>
+<WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
+  <section class="card"><h1>做出專屬旅行主題 LINE 貼圖素材</h1></section>
+  {stickerLabContent.packs.map((pack) => (
+    <section class="card">
+      <h2>{pack.title}</h2>
+      <p>{pack.style}</p>
+      <p>適合照片：{pack.photoFit.join('、')}</p>
+      <ol>{pack.scenarios.map((s) => <li>{s}</li>)}</ol>
+      <PromptCard title={`${pack.title}｜ChatGPT`} platform="ChatGPT" prompt={pack.prompts.chatgpt} />
+      <PromptCard title={`${pack.title}｜Gemini`} platform="Gemini" prompt={pack.prompts.gemini} />
+    </section>
+  ))}
 </WorkshopLayout>

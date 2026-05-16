@@ -1,11 +1,11 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
-import { travelFallbackPrompts } from '../content/prompts';
+import { travelPrompts } from '../content/prompts';
 ---
 <WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
   <section class="card"><h1>AI 旅遊規劃師</h1><p>三軌入口，避免工具額度限制造成中斷。</p>
   <p><a class="btn" target="_blank" href="https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban">開啟專屬 GPT</a></p></section>
-  <PromptCard title="ChatGPT 備援提示詞" platform="ChatGPT" prompt={travelFallbackPrompts.chatgpt} />
-  <PromptCard title="Gemini 備援提示詞" platform="Gemini" prompt={travelFallbackPrompts.gemini} />
+  <PromptCard title="ChatGPT 備援提示詞（完整）」" platform="ChatGPT" prompt={travelPrompts.chatgpt} />
+  <PromptCard title="Gemini 備援提示詞（完整）」" platform="Gemini" prompt={travelPrompts.gemini} />
 </WorkshopLayout>
