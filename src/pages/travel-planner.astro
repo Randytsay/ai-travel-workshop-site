@@ -4,6 +4,7 @@ import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { travelPrompts } from '../content/prompts';
 import { travelFlow } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
@@ -64,6 +65,13 @@ import { siteConfig } from '../content/siteConfig';
     <AssetPlaceholder title="需求摘要示意圖" text="放最終輸出的旅客需求總表示例。" />
     <AssetPlaceholder title="60-90 秒示範短影片" text="示範從開啟 GPT 到取得 NotebookLM prompt 的流程。" type="影片" />
   </section>
+
+  <CompleteTaskButton 
+    taskId="travel-planner-complete" 
+    nextLabel="NotebookLM 研究報告" 
+    nextHref="/notebooklm"
+    successMessage="需求整理完成！這份摘要是下一關研究的關鍵，記得複製好喔。"
+  />
 
   <CTASection
     title="請保留 NotebookLM 研究提示詞"

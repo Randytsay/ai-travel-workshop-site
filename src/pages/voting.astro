@@ -2,6 +2,7 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import VoteWorkCard from '../components/voting/VoteWorkCard.astro';
 import LeaderboardPanel from '../components/voting/LeaderboardPanel.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { voteTabs, voteWorks } from '../data/voting';
 ---
 <WorkshopLayout title="現場互動投票" currentPath="/voting">
@@ -18,6 +19,12 @@ import { voteTabs, voteWorks } from '../data/voting';
     <article class="card"><h2>獎項說明</h2><ul><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團票選）</li><li>最暖故事獎（主持人特選）</li></ul></article>
     <article class="card notice"><h2>主持人控制區（預留）</h2><p>正式版可加入開始投票、暫停投票、公布得獎者、重設場次。</p></article>
   </section>
+  <CompleteTaskButton 
+    taskId="voting-complete" 
+    nextLabel="填問卷領講義" 
+    nextHref="/survey"
+    successMessage="投票完成！看看誰會是今天的人氣王？"
+  />
   <section class="card"><p><strong>待串接：</strong>Firebase Realtime Database、裝置投票限制、即時排行榜刷新與投影模式。</p></section>
 </WorkshopLayout>
 <script>

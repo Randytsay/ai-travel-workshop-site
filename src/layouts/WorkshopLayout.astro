@@ -2,6 +2,7 @@
 import '../styles/theme.css';
 import DesktopSidebar from '../components/navigation/DesktopSidebar.astro';
 import MobileBottomNav from '../components/navigation/MobileBottomNav.astro';
+import ProgressTracker from '../components/progress/ProgressTracker.astro';
 const { title, currentPath } = Astro.props;
 ---
 <html lang="zh-Hant">
@@ -13,9 +14,20 @@ const { title, currentPath } = Astro.props;
   <body>
     <div class="shell">
       <DesktopSidebar currentPath={currentPath} />
-      <main><slot /></main>
+      <main>
+        <div class="mobile-progress-wrap">
+          <ProgressTracker />
+        </div>
+        <slot />
+      </main>
     </div>
     <MobileBottomNav currentPath={currentPath} />
+    <style>
+      .mobile-progress-wrap { display: none; margin-bottom: 16px; }
+      @media (max-width: 900px) {
+        .mobile-progress-wrap { display: block; }
+      }
+    </style>
     <script>
       const toast = document.createElement('div');
       toast.className = 'copy-toast';

@@ -4,8 +4,10 @@ import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import PromptGroup from '../components/prompts/PromptGroup.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { dollPrompts } from '../content/prompts';
 import { dollSteps } from '../content/workshopPages';
+import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
   <section class="hero">
@@ -56,12 +58,19 @@ import { dollSteps } from '../content/workshopPages';
     <AssetPlaceholder title="30-60 秒操作短影片" text="示範從上傳照片到下載圖片的完整流程。" type="影片" />
   </section>
 
+  <CompleteTaskButton 
+    taskId="doll-maker-complete" 
+    nextLabel="旅遊需求整理" 
+    nextHref="/travel-planner"
+    successMessage="太棒了！你已完成第一個 Wow Moment。記得把公仔圖下載下來喔！"
+  />
+
   <CTASection
     title="完成後請先分享到 LINE 群組"
     text="還不用等到作品完美。先上傳，講師與助教才能挑選快閃展示，也方便後面投票。"
-    primaryLabel="前往 AI 旅遊規劃師"
-    primaryHref="/travel-planner"
-    secondaryLabel="查看現場投票"
-    secondaryHref="/voting"
+    primaryLabel="上傳至 LINE 工作坊群組"
+    primaryHref={siteConfig.workshopGroupUrl}
+    secondaryLabel="前往旅遊需求規劃"
+    secondaryHref="/travel-planner"
   />
 </WorkshopLayout>

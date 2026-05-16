@@ -1,9 +1,13 @@
 ---
 import { navItems } from '../../content/navigation';
+import ProgressTracker from '../progress/ProgressTracker.astro';
 const { currentPath } = Astro.props;
 ---
 <aside class="sidebar">
   <h3>AI 旅遊規劃師</h3>
+  
+  <ProgressTracker />
+
   {navItems.map((item) => <a class={`nav-link ${currentPath === item.path ? 'active' : ''}`} href={item.path}>{item.label}</a>)}
   <div class="nav-meta">
     <strong>現場模式</strong>

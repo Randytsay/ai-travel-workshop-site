@@ -4,8 +4,10 @@ import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import StylePackCard from '../components/prompts/StylePackCard.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { stickerLabContent } from '../content/prompts';
 import { stickerSteps } from '../content/workshopPages';
+import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
   <section class="hero">
@@ -51,12 +53,19 @@ import { stickerSteps } from '../content/workshopPages';
     <AssetPlaceholder title="LINE 拍貼操作短影片" text="拆成下載、匯入裁切、整理貼圖、送審四段。" type="影片" />
   </section>
 
+  <CompleteTaskButton 
+    taskId="sticker-lab-complete" 
+    nextLabel="參與人氣投票" 
+    nextHref="/voting"
+    successMessage="貼圖素材總圖完成了！記得分享到群組，讓大家為你的創意投票喔。"
+  />
+
   <CTASection
     title="先把 8 格素材總圖上傳到群組"
     text="還沒裁切也沒關係。先讓大家看到你的作品，後續就能參加人氣票選。"
-    primaryLabel="前往現場投票頁"
-    primaryHref="/voting"
-    secondaryLabel="查看成果牆"
-    secondaryHref="/gallery"
+    primaryLabel="上傳至 LINE 工作坊群組"
+    primaryHref={siteConfig.workshopGroupUrl}
+    secondaryLabel="前往參與人氣投票"
+    secondaryHref="/voting"
   />
 </WorkshopLayout>

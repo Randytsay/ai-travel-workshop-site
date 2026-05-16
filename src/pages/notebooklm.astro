@@ -4,8 +4,11 @@ import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { notebookContent } from '../content/prompts';
 import { notebookSteps } from '../content/workshopPages';
+
+const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-research')?.prompts.chatgpt || '';
 ---
 <WorkshopLayout title="NotebookLM 研究升級" currentPath="/notebooklm">
   <section class="hero">
@@ -14,7 +17,7 @@ import { notebookSteps } from '../content/workshopPages';
     <p>上一頁整理出的需求不是終點。把它轉成 NotebookLM 的來源後，就能查證資訊、比較方案、產出行程、簡報與資訊圖表。</p>
     <div class="actions">
       <a class="btn" target="_blank" rel="noreferrer" href="https://notebooklm.google.com/">開啟 NotebookLM</a>
-      <a class="btn alt" href="#notebook-prompts">複製研究提示詞</a>
+      <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製研究提示詞 A</button>
     </div>
   </section>
 
@@ -40,6 +43,13 @@ import { notebookSteps } from '../content/workshopPages';
     <AssetPlaceholder title="Deep Research 操作截圖" text="放貼入研究提示詞與匯入來源的畫面。" />
     <AssetPlaceholder title="旅遊簡報與資訊圖表範例" text="放課後可延伸產出的成果示意。" />
   </section>
+
+  <CompleteTaskButton 
+    taskId="notebooklm-complete" 
+    nextLabel="貼圖實驗室" 
+    nextHref="/sticker-lab"
+    successMessage="研究報告完成！這份資料可以幫你產出簡報與資訊圖表，之後複習超方便。"
+  />
 
   <CTASection
     title="接下來，把 AI 帶回日常聊天"

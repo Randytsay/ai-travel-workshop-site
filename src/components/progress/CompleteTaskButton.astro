@@ -1,0 +1,77 @@
+---
+const { taskId, nextLabel, nextHref, successMessage = '太棒了！這項任務已完成。' } = Astro.props;
+---
+<div class="task-completion-zone" data-task-id={taskId}>
+  <div class="task-status-initial">
+    <button class="btn complete-task-btn" type="button">
+      我已完成這項任務
+    </button>
+  </div>
+  <div class="task-status-complete" hidden>
+    <div class="notice" style="margin-bottom:12px;">
+      <p><strong>✨ {successMessage}</strong></p>
+      {nextLabel && nextHref && <p>接下來：<a href={nextHref} class="link-next">{nextLabel} →</a></p>}
+    </div>
+    {nextLabel && nextHref && (
+      <a href={nextHref} class="btn alt">
+        前往下一關：{nextLabel}
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .task-completion-zone {
+    margin: 24px 0;
+    padding: 24px;
+    background: #fff;
+    border: 2px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+  }
+  .complete-task-btn {
+    min-width: 200px;
+  }
+  .link-next {
+    color: var(--coral);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  .task-status-complete .notice {
+    text-align: left;
+    background: linear-gradient(145deg, #f0f9ff, #ffffff);
+    border-left: 4px solid var(--sky);
+  }
+</style>
+
+<script>
+  import { markTaskComplete, isTaskComplete } from '../../utils/progressStore';
+
+  document.querySelectorAll('.task-completion-zone').forEach((zone) => {
+    const taskId = zone.getAttribute('data-task-id');
+    const initial = zone.querySelector('.task-status-initial');
+    const complete = zone.querySelector('.task-status-complete');
+    const btn = zone.querySelector('.complete-task-btn');
+
+    const setCompleted = () => {
+      initial?.setAttribute('hidden', 'true');
+      complete?.removeAttribute('hidden');
+      zone.style.borderStyle = 'solid';
+      zone.style.borderColor = 'var(--sky)';
+      zone.style.background = '#f7fcff';
+    };
+
+    if (taskId && isTaskComplete(taskId)) {
+      setCompleted();
+    }
+
+    btn?.addEventListener('click', () => {
+      if (taskId) {
+        markTaskComplete(taskId);
+        setCompleted();
+        // Trigger a custom event for local UI feedback if needed
+        window.dispatchEvent(new CustomEvent('task-completed-ui', { detail: { taskId } }));
+      }
+    });
+  });
+</script>

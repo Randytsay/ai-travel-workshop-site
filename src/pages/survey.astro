@@ -2,6 +2,7 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
 import { siteConfig } from '../content/siteConfig';
 ---
@@ -56,6 +57,11 @@ import { siteConfig } from '../content/siteConfig';
     <h2>主體是網頁講義，PDF 是重點整理</h2>
     <p>網頁講義可保留一鍵複製提示詞、操作影片、更新版流程與成果牆；PDF 則適合列印與快速回顧。</p>
   </section>
+
+  <CompleteTaskButton 
+    taskId="survey-complete" 
+    successMessage="恭喜！你已完成所有流程，講義已在 LINE 等著你。"
+  />
 
   <CTASection title="回到首頁持續練習" text="課後可以依照網站順序重新操作一次，把今天的流程變成自己的 AI 工作方法。" primaryLabel="返回首頁" primaryHref="/" secondaryLabel="查看成果牆" secondaryHref="/gallery" />
 </WorkshopLayout>
