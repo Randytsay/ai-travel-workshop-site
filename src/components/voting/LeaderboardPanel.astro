@@ -1,10 +1,18 @@
 ---
 const { works = [] } = Astro.props;
-const top = [...works].sort((a:any,b:any)=>b.votes-a.votes).slice(0,5);
+const top = [...works].sort((a: any, b: any) => b.votes - a.votes).slice(0, 5);
 ---
-<section class="card">
+<section class="card leaderboard" data-leaderboard>
   <h2>TOP 5 排行榜</h2>
-  <ol>
-    {top.map((item:any, idx:number) => <li>{idx + 1}. {item.title}（{item.votes}票）</li>)}
+  <ol data-leaderboard-list>
+    {top.map((item: any, idx: number) => (
+      <li class={idx < 3 ? `rank rank-${idx + 1}` : 'rank'} data-work-id={item.id}>
+        <span class="rank-label">
+          {idx === 0 ? '👑 第 1 名' : `第 ${idx + 1} 名`}
+        </span>
+        <span>{item.title}</span>
+        <strong>{item.votes} 票</strong>
+      </li>
+    ))}
   </ol>
 </section>

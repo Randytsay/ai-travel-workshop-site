@@ -1,7 +1,7 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import { schedule } from '../content/schedule';
-import { homeInteractions, homeOutcomes } from '../content/workshopPages';
+import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
 ---
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
   <section class="hero">
@@ -44,4 +44,18 @@ import { homeInteractions, homeOutcomes } from '../content/workshopPages';
       <ul>{homeInteractions.map((item) => <li>{item}</li>)}</ul>
     </div>
   </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">這場工作坊適合誰參加</p>
+    <h2>不論你在哪個起點，都能帶走可重做的方法</h2>
+  </section>
+  <section class="feature-grid">
+    {homeAudience.map((item) => (
+      <article class="card">
+        <h3>{item.title}</h3>
+        <p>{item.text}</p>
+      </article>
+    ))}
+  </section>
+
 </WorkshopLayout>
