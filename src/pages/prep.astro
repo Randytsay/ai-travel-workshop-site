@@ -1,13 +1,52 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import FAQAccordion from '../components/common/FAQAccordion.astro';
+import CTASection from '../components/common/CTASection.astro';
+import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import { prepChecklist, prepTools, prepFaqs } from '../content/prepPage';
 ---
 <WorkshopLayout title="課前準備" currentPath="/prep">
-  <section class="card"><h1>課前 Checklist</h1><ul>{prepChecklist.map((item) => <li>{item}</li>)}</ul></section>
+  <section class="hero">
+    <p class="eyebrow">上課前 5 分鐘檢查</p>
+    <h1>課前準備</h1>
+    <p>先確認帳號、工具與照片素材都準備好，正式操作時就能把注意力放在作品與旅遊規劃上。</p>
+  </section>
+
+  <section class="two-col">
+    <section class="card">
+      <p class="eyebrow">Checklist</p>
+      <h2>請逐項確認</h2>
+      <ul>{prepChecklist.map((item) => <li>{item}</li>)}</ul>
+    </section>
+    <section class="card notice">
+      <p class="eyebrow">免費版額度提醒</p>
+      <h2>少量但高價值地使用生圖</h2>
+      <p>本次流程已設計為免費版可完成，但請優先完成關鍵任務，避免重複生圖消耗額度。</p>
+    </section>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">本次會用到的工具</p>
+    <h2>主力工具與備援工具都先打開</h2>
+  </section>
   <section class="tool-grid">{prepTools.map((tool) => <article class="card"><h2>{tool.name}</h2><p>{tool.desc}</p></article>)}</section>
-  <section class="card"><h2>免費版額度提醒卡</h2><p>本次流程已設計為免費版可完成，但請優先完成關鍵任務，避免重複生圖消耗額度。</p></section>
-  <section class="card"><h2>QR Code / 登入教學素材（Placeholder）</h2><p>此區將放 ChatGPT、Gemini、NotebookLM、LINE 拍貼與群組 QR Code。</p></section>
-  <section><h2>FAQ</h2><FAQAccordion items={prepFaqs} /></section>
-  <a class="btn" href="/ai-basics">前往 AI 入門頁</a>
+
+  <section class="section-heading">
+    <p class="eyebrow">待補素材插槽</p>
+    <h2>正式活動前替換成你的 QR Code 與截圖</h2>
+  </section>
+  <section class="asset-grid">
+    <AssetPlaceholder title="ChatGPT 登入截圖" text="放登入、切換帳號與上傳照片的操作畫面。" />
+    <AssetPlaceholder title="Gemini / NotebookLM 開啟截圖" text="放備援工具入口與建立 Notebook 的畫面。" />
+    <AssetPlaceholder title="LINE 拍貼下載 QR Code" text="正式活動前替換為可掃描 QR Code。" />
+    <AssetPlaceholder title="工作坊 LINE 群組 QR Code" text="正式活動前替換為群組或報到用 QR Code。" />
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">FAQ</p>
+    <h2>卡住時先看這裡</h2>
+  </section>
+  <FAQAccordion items={prepFaqs} />
+
+  <CTASection title="準備好了就進入 AI 入門" text="接下來先用幾分鐘建立共同語言，再開始做第一個公仔作品。" primaryLabel="前往 AI 入門頁" primaryHref="/ai-basics" />
 </WorkshopLayout>

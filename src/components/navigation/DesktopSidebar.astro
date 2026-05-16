@@ -5,8 +5,8 @@ const { currentPath } = Astro.props;
 <aside class="sidebar">
   <h3>AI 旅遊規劃師</h3>
   {navItems.map((item) => <a class={`nav-link ${currentPath === item.path ? 'active' : ''}`} href={item.path}>{item.label}</a>)}
-  <div class="card" style="margin-top:12px;">
-    <strong>Phase 1</strong>
-    <p style="margin:8px 0 0;">已建立可擴充 MVP 骨架</p>
+  <div class="nav-meta">
+    <strong>現場模式</strong>
+    <p style="margin:8px 0 0;">依序完成公仔、旅遊需求、NotebookLM 研究與貼圖素材。</p>
   </div>
 </aside>

@@ -5,7 +5,11 @@ import MobileBottomNav from '../components/navigation/MobileBottomNav.astro';
 const { title, currentPath } = Astro.props;
 ---
 <html lang="zh-Hant">
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>{title}</title></head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+  </head>
   <body>
     <div class="shell">
       <DesktopSidebar currentPath={currentPath} />
@@ -15,10 +19,37 @@ const { title, currentPath } = Astro.props;
     <script>
       document.querySelectorAll('.copy-btn').forEach((btn) => {
         btn.addEventListener('click', async () => {
-          await navigator.clipboard.writeText(btn.dataset.text || '');
+          const text = btn.dataset.text || '';
           const raw = btn.textContent;
-          btn.textContent = '已複製';
-          setTimeout(() => (btn.textContent = raw), 1000);
+          let copied = false;
+
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+              copied = true;
+            }
+          } catch {
+            copied = false;
+          }
+
+          if (!copied) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            copied = document.execCommand('copy');
+            textarea.remove();
+          }
+
+          btn.textContent = copied ? '已複製' : '請手動複製';
+          btn.classList.toggle('is-copied', copied);
+          setTimeout(() => {
+            btn.textContent = raw;
+            btn.classList.remove('is-copied');
+          }, 1200);
         });
       });
     </script>

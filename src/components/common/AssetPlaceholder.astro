@@ -1,0 +1,8 @@
+---
+const { title, text, type = '素材' } = Astro.props;
+---
+<article class="asset-placeholder">
+  <p class="eyebrow">{type}</p>
+  <h3>{title}</h3>
+  <p>{text}</p>
+</article>

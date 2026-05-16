@@ -1,0 +1,27 @@
+---
+import PromptGroup from './PromptGroup.astro';
+const { pack } = Astro.props;
+---
+<section class="style-pack card">
+  <div class="style-pack-head">
+    <div>
+      <p class="eyebrow">貼圖風格包</p>
+      <h2>{pack.title}</h2>
+      <p>{pack.style}</p>
+    </div>
+    <div class="mini-panel">
+      <strong>適合照片</strong>
+      <ul>
+        {pack.photoFit.map((item:string) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="scenario-grid">
+    {pack.scenarios.map((scenario:string, index:number) => (
+      <span>{index + 1}. {scenario}</span>
+    ))}
+  </div>
+
+  <PromptGroup title={pack.title} description="選好照片後，依照平台複製對應版本。" prompts={pack.prompts} />
+</section>

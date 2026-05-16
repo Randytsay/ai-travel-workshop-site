@@ -1,0 +1,11 @@
+---
+const { index, title, text, note } = Astro.props;
+---
+<article class="step-card">
+  <div class="step-index">{String(index).padStart(2, '0')}</div>
+  <div>
+    <h3>{title}</h3>
+    <p>{text}</p>
+    {note && <p class="muted">{note}</p>}
+  </div>
+</article>

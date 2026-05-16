@@ -1,11 +1,69 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import StepCard from '../components/common/StepCard.astro';
+import CTASection from '../components/common/CTASection.astro';
+import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
 import { travelPrompts } from '../content/prompts';
+import { travelFlow } from '../content/workshopPages';
 ---
 <WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
-  <section class="card"><h1>AI 旅遊規劃師</h1><p>三軌入口，避免工具額度限制造成中斷。</p>
-  <p><a class="btn" target="_blank" href="https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban">開啟專屬 GPT</a></p></section>
-  <PromptCard title="ChatGPT 備援提示詞（完整）" platform="ChatGPT" prompt={travelPrompts.chatgpt} />
-  <PromptCard title="Gemini 備援提示詞（完整）" platform="Gemini" prompt={travelPrompts.gemini} />
+  <section class="hero">
+    <p class="eyebrow">第二個核心成果</p>
+    <h1>讓 AI 幫你規劃一場說走就走的旅行</h1>
+    <p>本頁提供三軌入口：專屬 GPT、一般 ChatGPT 備援、Gemini 備援。目標是在短時間內取得旅遊需求摘要與 NotebookLM 研究提示詞。</p>
+  </section>
+
+  <section class="feature-grid">
+    <article class="card">
+      <p class="eyebrow">方法 1｜推薦方式</p>
+      <h2>開啟專屬 GPT</h2>
+      <p>照著回答 3 輪問題，就能得到需求摘要與 NotebookLM 接力內容。</p>
+      <a class="btn" target="_blank" rel="noreferrer" href="https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban">開啟 GPT</a>
+    </article>
+    <article class="card">
+      <p class="eyebrow">方法 2｜GPT 額度不足</p>
+      <h2>貼到一般 ChatGPT</h2>
+      <p>如果專屬 GPT 受限，展開下方 ChatGPT 備援提示詞，複製到一般聊天框。</p>
+      <a class="btn ghost" href="#fallback-prompts">複製備援提示詞</a>
+    </article>
+    <article class="card">
+      <p class="eyebrow">方法 3｜ChatGPT 也受限</p>
+      <h2>改用 Gemini</h2>
+      <p>使用 Gemini 備援版完成需求訪談，先把成果做出來。</p>
+      <a class="btn alt" target="_blank" rel="noreferrer" href="https://gemini.google.com/">開啟 Gemini</a>
+    </article>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">你會拿到什麼</p>
+    <h2>4 步完成旅遊研究接力</h2>
+  </section>
+  <section class="step-grid">
+    {travelFlow.map(([title, text], index) => <StepCard index={index + 1} title={title} text={text} />)}
+  </section>
+
+  <section id="fallback-prompts" class="section-heading">
+    <p class="eyebrow">備援提示詞</p>
+    <h2>無論工具額度如何，都有路能走</h2>
+  </section>
+  <div class="prompt-grid">
+    <PromptCard title="ChatGPT 備援提示詞（完整）" platform="ChatGPT" prompt={travelPrompts.chatgpt} />
+    <PromptCard title="Gemini 備援提示詞（完整）" platform="Gemini" prompt={travelPrompts.gemini} />
+  </div>
+
+  <section class="asset-grid">
+    <AssetPlaceholder title="GPT 問答示意截圖" text="放 3 輪訪談與需求摘要確認的示意畫面。" />
+    <AssetPlaceholder title="需求摘要示意圖" text="放最終輸出的旅客需求總表示例。" />
+    <AssetPlaceholder title="60-90 秒示範短影片" text="示範從開啟 GPT 到取得 NotebookLM prompt 的流程。" type="影片" />
+  </section>
+
+  <CTASection
+    title="請保留 NotebookLM 研究提示詞"
+    text="下一頁會把剛剛整理好的旅遊需求交給 NotebookLM，做更深入的資料查證與行程研究。"
+    primaryLabel="前往 NotebookLM 研究升級"
+    primaryHref="/notebooklm"
+    secondaryLabel="回到 3D 公仔頁"
+    secondaryHref="/doll-maker"
+  />
 </WorkshopLayout>
