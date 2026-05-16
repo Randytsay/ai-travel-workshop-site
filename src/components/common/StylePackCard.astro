@@ -1,0 +1,13 @@
+---
+import PromptCard from '../prompts/PromptCard.astro';
+const { pack } = Astro.props;
+const basicPrompt = `請根據我上傳的照片製作 2x4 共 8 格旅行貼圖素材總圖，保持角色相似度與風格一致，背景簡潔、不要文字/Logo/浮水印。`;
+---
+<section class="card">
+  <h3>{pack.name}</h3>
+  <p><strong>適合照片：</strong>{pack.fit}</p>
+  <p><strong>風格說明：</strong>{pack.style}</p>
+  <ol>{pack.scenes.map((s:string)=><li>{s}</li>)}</ol>
+  <PromptCard title="ChatGPT 提示詞" platform="ChatGPT" prompt={basicPrompt + '\n情境：' + pack.scenes.join('、')} />
+  <PromptCard title="Gemini 備援提示詞" platform="Gemini" prompt={basicPrompt + '\n情境：' + pack.scenes.join('、')} />
+</section>

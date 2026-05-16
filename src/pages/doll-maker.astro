@@ -1,6 +1,13 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import StepCard from '../components/common/StepCard.astro';
+import PromptGroup from '../components/prompts/PromptGroup.astro';
+import { dollMakerContent, dollPrompts } from '../content/phase2Content';
 ---
-<WorkshopLayout title="doll-maker" currentPath="/doll-maker">
-  <section class="card"><h1>doll-maker</h1><p>Phase 1 Placeholder：已建立頁面骨架與後續擴充位置。</p></section>
+<WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
+  <section class="card"><h1>{dollMakerContent.title}</h1><p>{dollMakerContent.subtitle}</p></section>
+  <section class="card"><h2>這一關你會完成</h2><ul>{dollMakerContent.outcomes.map(i => <li>{i}</li>)}</ul></section>
+  {dollMakerContent.steps.map((s,i)=><StepCard index={i+1} text={s} />)}
+  {dollPrompts.map((p)=><PromptGroup title={p.name} fit={p.fit} chatgpt={p.chatgpt} gemini={p.gemini} fixes={p.fixes} />)}
+  <section class="card"><p>做好了嗎？請把你的 3D 公仔圖上傳到工作坊 LINE 群組。</p><p><a class="btn" href="#">我已完成公仔圖</a> <a class="btn" href="/travel-planner">前往下一關：AI 旅遊規劃師</a></p></section>
 </WorkshopLayout>

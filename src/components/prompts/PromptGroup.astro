@@ -1,0 +1,10 @@
+---
+import PromptCard from './PromptCard.astro';
+const { title, fit, chatgpt, gemini, fixes=[] } = Astro.props;
+---
+<section class="card">
+  <h3>{title}</h3><p><strong>適合使用者：</strong>{fit}</p>
+  <PromptCard title="ChatGPT 版提示詞" platform="ChatGPT" prompt={chatgpt} />
+  <PromptCard title="Gemini 備援提示詞" platform="Gemini" prompt={gemini} />
+  {fixes.length > 0 && <ul>{fixes.map((f:string)=><li>{f}</li>)}</ul>}
+</section>
