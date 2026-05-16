@@ -35,7 +35,10 @@ import { siteConfig } from '../content/siteConfig';
       <p class="eyebrow">方法 3｜ChatGPT 也受限</p>
       <h2>改用 Gemini</h2>
       <p>使用 Gemini 備援版完成需求訪談，先把成果做出來。</p>
-      <a class="btn alt" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.geminiUrl}>開啟 Gemini</a>
+      <div class="actions">
+        <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.gemini}>複製 Gemini 備援提示詞</button>
+        <a class="btn alt" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.geminiUrl}>開啟 Gemini</a>
+      </div>
     </article>
   </section>
 
