@@ -1,10 +1,10 @@
 ---
-const { taskId, nextLabel, nextHref, successMessage = '太棒了！這項任務已完成。' } = Astro.props;
+const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, successMessage = '太棒了！這項任務已完成。' } = Astro.props;
 ---
 <div class="task-completion-zone" data-task-id={taskId}>
   <div class="task-status-initial">
     <button class="btn complete-task-btn" type="button">
-      我已完成這項任務
+      {buttonLabel}
     </button>
   </div>
   <div class="task-status-complete" hidden>

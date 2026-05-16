@@ -57,9 +57,9 @@ import { siteConfig } from '../content/siteConfig';
     <AssetPlaceholder title="上傳照片流程截圖" text="放 ChatGPT 上傳照片與貼上提示詞的截圖。" />
     <AssetPlaceholder title="30-60 秒操作短影片" text="示範從上傳照片到下載圖片的完整流程。" type="影片" />
   </section>
-
   <CompleteTaskButton 
     taskId="doll-maker-complete" 
+    buttonLabel="我已完成公仔圖"
     nextLabel="旅遊需求整理" 
     nextHref="/travel-planner"
     successMessage="太棒了！你已完成第一個 Wow Moment。記得把公仔圖下載下來喔！"
@@ -68,9 +68,9 @@ import { siteConfig } from '../content/siteConfig';
   <CTASection
     title="完成後請先分享到 LINE 群組"
     text="還不用等到作品完美。先上傳，講師與助教才能挑選快閃展示，也方便後面投票。"
-    primaryLabel="上傳至 LINE 工作坊群組"
+    primaryLabel="上傳到工作坊 LINE 群組"
     primaryHref={siteConfig.workshopGroupUrl}
-    secondaryLabel="前往旅遊需求規劃"
+    secondaryLabel="前往下一關"
     secondaryHref="/travel-planner"
   />
 </WorkshopLayout>

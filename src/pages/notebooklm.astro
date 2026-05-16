@@ -17,7 +17,8 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
     <p>上一頁整理出的需求不是終點。把它轉成 NotebookLM 的來源後，就能查證資訊、比較方案、產出行程、簡報與資訊圖表。</p>
     <div class="actions">
       <a class="btn" target="_blank" rel="noreferrer" href="https://notebooklm.google.com/">開啟 NotebookLM</a>
-      <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製研究提示詞 A</button>
+      <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製 Deep Research 提示詞</button>
+      <a class="btn ghost" href="#notebook-prompts">查看完整提示詞</a>
     </div>
   </section>
 
@@ -27,6 +28,32 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
   </section>
   <section class="step-grid">
     {notebookSteps.map(([title, text], index) => <StepCard index={index + 1} title={title} text={text} />)}
+  </section>
+
+  <section class="feature-grid">
+    <article class="card notice" style="grid-column: 1 / -1;">
+      <p class="eyebrow">研究流程圖</p>
+      <h2>從聊天到簡報，AI 幫你處理資訊</h2>
+      <p style="font-weight:700; color:var(--sky);">需求總表 → NotebookLM 筆記 (Note) → 轉為來源 (Source) → Deep Research → 產生研究報告 → 轉化為簡報與資訊圖表</p>
+    </article>
+  </section>
+
+  <section class="feature-grid">
+    <article class="card">
+      <p class="eyebrow">範例成果 1</p>
+      <h2>深度研究報告</h2>
+      <p>透過多方來源交叉比對，產出具備事實查核的旅遊景點歷史與交通分析。</p>
+    </article>
+    <article class="card">
+      <p class="eyebrow">範例成果 2</p>
+      <h2>行程規劃簡報</h2>
+      <p>將研究報告整理成每日行程大綱，適合與旅伴開會討論時直接投影。</p>
+    </article>
+    <article class="card">
+      <p class="eyebrow">範例成果 3</p>
+      <h2>行前準備資訊圖表</h2>
+      <p>行李清單、天氣提醒、緊急聯絡方式，一目了然的行前懶人包。</p>
+    </article>
   </section>
 
   <section id="notebook-prompts" class="section-heading">
