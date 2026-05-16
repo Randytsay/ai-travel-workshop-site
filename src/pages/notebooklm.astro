@@ -1,6 +1,9 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import PromptCard from '../components/prompts/PromptCard.astro';
+import { notebookContent } from '../content/prompts';
 ---
-<WorkshopLayout title="notebooklm" currentPath="/notebooklm">
-  <section class="card"><h1>notebooklm</h1><p>Phase 1 Placeholder：已建立頁面骨架與後續擴充位置。</p></section>
+<WorkshopLayout title="NotebookLM 研究升級" currentPath="/notebooklm">
+  <section class="card"><h1>讓 NotebookLM 接手旅遊研究</h1><p>貼入需求總表、轉為來源、執行 Deep Research、再追問產出最終方案。</p></section>
+  {notebookContent.prompts.map((item) => <PromptCard title={item.title} platform="NotebookLM" prompt={item.prompts.chatgpt} />)}
 </WorkshopLayout>
