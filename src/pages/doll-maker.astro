@@ -1,0 +1,23 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import StepCard from '../components/learning/StepCard.astro';
+import PromptSection from '../components/prompts/PromptSection.astro';
+import CTACard from '../components/common/CTACard.astro';
+import { dollPromptPacks, dollSteps } from '../content/dollMakerContent';
+---
+<WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
+  <section class="card">
+    <h1>我的 3D 可愛公仔</h1>
+    <p>用一張照片，快速生成你的旅行風格 AI 公仔，完成第一個成果。</p>
+  </section>
+  <section class="card">
+    <h2>成果提醒</h2>
+    <p>本關目標：至少完成 1 張你滿意的 3D 公仔圖，並下載保存。</p>
+  </section>
+  <h2>6 步驟操作流程</h2>
+  {dollSteps.map((s, i) => <StepCard index={i + 1} text={s} />)}
+  <h2>3 種公仔提示詞</h2>
+  {dollPromptPacks.map((pack) => <PromptSection title={pack.title} audience={pack.audience} chatgptPrompt={pack.chatgptPrompt} geminiPrompt={pack.geminiPrompt} refinePrompt={pack.refinePrompt} />)}
+  <CTACard title="完成後請分享到 LINE 群組" description="把你最滿意的公仔圖貼到群組，方便助教協助與後續成果展示。" href="#" buttonText="我已分享到 LINE 群組" />
+  <CTACard title="下一關：AI 旅遊規劃師" description="帶著你的旅行想法，進入三軌規劃流程。" href="/travel-planner" buttonText="前往 AI 旅遊規劃師" />
+</WorkshopLayout>

@@ -1,0 +1,11 @@
+---
+import PromptSection from '../prompts/PromptSection.astro';
+const { pack } = Astro.props;
+---
+<section class="card">
+  <h3>{pack.name}</h3>
+  <p><strong>適合照片：</strong>{pack.photoGuide}</p>
+  <p><strong>風格說明：</strong>{pack.styleNote}</p>
+  <p><strong>8 個貼圖情境：</strong>{pack.scenes.join('、')}</p>
+</section>
+<PromptSection title={`${pack.name} 提示詞`} chatgptPrompt={pack.chatgptPrompt} geminiPrompt={pack.geminiPrompt} />

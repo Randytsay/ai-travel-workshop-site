@@ -1,0 +1,18 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import StepCard from '../components/learning/StepCard.astro';
+import PromptCard from '../components/prompts/PromptCard.astro';
+import CTACard from '../components/common/CTACard.astro';
+import { notebookSteps, notebookPrompts } from '../content/notebooklmContent';
+---
+<WorkshopLayout title="NotebookLM 研究升級" currentPath="/notebooklm">
+  <section class="card">
+    <h1>NotebookLM 研究升級</h1>
+    <p>把旅遊需求變成可查證、可比較、可產出的研究流程，做出更可靠的行程方案。</p>
+  </section>
+  <h2>6 步驟流程</h2>
+  {notebookSteps.map((s, i) => <StepCard index={i + 1} text={s} />)}
+  <h2>正式提示詞</h2>
+  {notebookPrompts.map((item) => <PromptCard title={item.title} platform={item.platform} prompt={item.prompt} />)}
+  <CTACard title="下一關：LINE 貼圖工坊" description="把旅程靈感轉成 8 格聊天貼圖素材。" href="/sticker-lab" buttonText="前往 LINE 貼圖工坊" />
+</WorkshopLayout>

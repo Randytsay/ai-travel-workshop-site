@@ -1,0 +1,20 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import PromptSection from '../components/prompts/PromptSection.astro';
+import CTACard from '../components/common/CTACard.astro';
+import { officialGptUrl, travelPlannerIntro, travelChatgptFallback, travelGeminiFallback } from '../content/travelPlannerContent';
+---
+<WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
+  <section class="card">
+    <h1>{travelPlannerIntro.title}</h1>
+    <p>{travelPlannerIntro.subtitle}</p>
+    <ol>
+      <li>先開啟專屬 GPT（最快）。</li>
+      <li>若 GPT 額度不足，改貼到一般 ChatGPT。</li>
+      <li>若 ChatGPT 也受限，立即切換 Gemini。</li>
+    </ol>
+    <a class="btn" target="_blank" href={officialGptUrl}>1) 開啟專屬 GPT</a>
+  </section>
+  <PromptSection title="2) GPT 額度不足時：一般 ChatGPT 正式備援提示詞" chatgptPrompt={travelChatgptFallback} geminiPrompt={travelGeminiFallback} />
+  <CTACard title="完成需求整理後，前往 NotebookLM" description="把旅客需求總表帶去做深入研究、簡報與資訊圖表。" href="/notebooklm" buttonText="前往 NotebookLM" />
+</WorkshopLayout>

@@ -1,0 +1,18 @@
+---
+const { title, audience, chatgptPrompt, geminiPrompt, refinePrompt } = Astro.props;
+---
+<section class="card">
+  <h3>{title}</h3>
+  {audience && <p><strong>適合使用者：</strong>{audience}</p>}
+  <details>
+    <summary>ChatGPT 提示詞（展開）</summary>
+    <pre style="white-space: pre-wrap;">{chatgptPrompt}</pre>
+    <button class="btn copy-btn" data-text={chatgptPrompt}>複製 ChatGPT 提示詞</button>
+  </details>
+  <details style="margin-top:12px;">
+    <summary>Gemini 備援提示詞（展開）</summary>
+    <pre style="white-space: pre-wrap;">{geminiPrompt}</pre>
+    <button class="btn alt copy-btn" data-text={geminiPrompt}>複製 Gemini 提示詞</button>
+  </details>
+  {refinePrompt && <details style="margin-top:12px;"><summary>補充修正指令（展開）</summary><pre style="white-space: pre-wrap;">{refinePrompt}</pre><button class="btn copy-btn" data-text={refinePrompt}>複製修正指令</button></details>}
+</section>

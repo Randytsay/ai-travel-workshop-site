@@ -1,0 +1,9 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import { schedule } from '../content/schedule';
+---
+<WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
+  <section class="card"><h1>AI 旅遊規劃師工作坊</h1><p>溫暖旅行感 × 輕盈 AI 未來感的互動教學平台。</p><a class="btn" href="/prep">先完成課前準備</a></section>
+  <section class="card"><h2>今天你會完成 3 個成果</h2><ul><li>專屬 AI 3D 可愛公仔圖</li><li>個人化旅遊需求整理</li><li>旅行主題 LINE 貼圖素材</li></ul></section>
+  <section class="card"><h2>正式 3.5 小時時間表</h2>{schedule.map(([time,item]) => <p><strong>{time}</strong>｜{item}</p>)}</section>
+</WorkshopLayout>

@@ -1,0 +1,23 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import StepCard from '../components/learning/StepCard.astro';
+import StylePackCard from '../components/sticker/StylePackCard.astro';
+import CTACard from '../components/common/CTACard.astro';
+import { lineStickerSteps, stickerOutcomeLevels, stickerPacks } from '../content/stickerLabContent';
+---
+<WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
+  <section class="card">
+    <h1>LINE 貼圖工坊</h1>
+    <p>把人物／親子／毛孩旅遊回憶轉成可聊天使用的貼圖素材。</p>
+  </section>
+  <section class="card">
+    <h2>成果層級</h2>
+    {stickerOutcomeLevels.map((level) => <p><strong>{level.title}：</strong>{level.description}</p>)}
+  </section>
+  <h2>6 款完整貼圖風格包</h2>
+  {stickerPacks.map((pack) => <StylePackCard pack={pack} />)}
+  <h2>LINE 拍貼 6 步驟教學</h2>
+  {lineStickerSteps.map((step, i) => <StepCard index={i + 1} text={step} />)}
+  <CTACard title="上傳作品參加人氣票選" description="將你的 8 格貼圖分享到 LINE 群組，參加現場人氣投票。" href="#" buttonText="我已上傳到 LINE 群組" />
+  <CTACard title="前往現場投票頁" description="查看作品、投票、一起揭曉人氣作品。" href="/voting" buttonText="前往投票頁" />
+</WorkshopLayout>

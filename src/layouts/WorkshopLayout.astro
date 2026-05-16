@@ -1,0 +1,26 @@
+---
+import '../styles/theme.css';
+import DesktopSidebar from '../components/navigation/DesktopSidebar.astro';
+import MobileBottomNav from '../components/navigation/MobileBottomNav.astro';
+const { title, currentPath } = Astro.props;
+---
+<html lang="zh-Hant">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>{title}</title></head>
+  <body>
+    <div class="shell">
+      <DesktopSidebar currentPath={currentPath} />
+      <main><slot /></main>
+    </div>
+    <MobileBottomNav currentPath={currentPath} />
+    <script>
+      document.querySelectorAll('.copy-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(btn.dataset.text || '');
+          const raw = btn.textContent;
+          btn.textContent = '已複製';
+          setTimeout(() => (btn.textContent = raw), 1000);
+        });
+      });
+    </script>
+  </body>
+</html>
