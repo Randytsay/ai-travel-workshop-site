@@ -17,6 +17,18 @@ const { title, currentPath } = Astro.props;
     </div>
     <MobileBottomNav currentPath={currentPath} />
     <script>
+      const toast = document.createElement('div');
+      toast.className = 'copy-toast';
+      toast.setAttribute('role', 'status');
+      document.body.appendChild(toast);
+      let toastTimer;
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.remove('show'), 1400);
+      };
+
       document.querySelectorAll('.copy-btn').forEach((btn) => {
         btn.addEventListener('click', async () => {
           const text = btn.dataset.text || '';
@@ -44,6 +56,7 @@ const { title, currentPath } = Astro.props;
             textarea.remove();
           }
 
+          if (copied) showToast('已複製，可直接貼上使用');
           btn.textContent = copied ? '已複製' : '請手動複製';
           btn.classList.toggle('is-copied', copied);
           setTimeout(() => {

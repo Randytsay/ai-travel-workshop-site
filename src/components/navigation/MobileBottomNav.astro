@@ -1,8 +1,9 @@
 ---
 import { navItems } from '../../content/navigation';
 const { currentPath } = Astro.props;
-const quick = [navItems[0], navItems[1], navItems[4], navItems[7]];
+const workshopQuickPaths = ['/doll-maker', '/travel-planner', '/notebooklm', '/sticker-lab', '/voting'];
+const quick = workshopQuickPaths.map((path) => navItems.find((item) => item.path === path)).filter(Boolean);
 ---
 <nav class="mobile-nav">
-  {quick.map((item) => <a href={item.path} style={currentPath === item.path ? 'font-weight:700;color:#ff7f6a;' : ''}>{item.short}</a>)}
+  {quick.map((item) => <a href={item?.path} style={currentPath === item?.path ? 'font-weight:700;color:#ff7f6a;' : ''}>{item?.short}</a>)}
 </nav>

@@ -1,7 +1,7 @@
 ---
 const { work } = Astro.props;
 ---
-<article class="card vote-card">
+<article class="card vote-card" data-work-id={work.id}>
   <div class="emoji">{work.image}</div>
   <h3>{work.title}</h3>
   <p>{work.author} · <span data-vote-count>{work.votes}</span> 票</p>

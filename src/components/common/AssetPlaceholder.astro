@@ -1,8 +1,25 @@
 ---
-const { title, text, type = '素材' } = Astro.props;
+const { title, text, type = '圖片', hint = '' } = Astro.props;
+
+const typeMeta = {
+  圖片: { icon: '🖼️', ratio: '4:3', usage: '適合成果示意、步驟截圖' },
+  影片: { icon: '🎬', ratio: '16:9', usage: '適合流程示範短片' },
+  'QR Code': { icon: '📱', ratio: '1:1', usage: '適合掃碼入口與快速導流' }
+} as const;
+
+const meta = typeMeta[type as keyof typeof typeMeta] ?? { icon: '🧩', ratio: '4:3', usage: '可放活動素材' };
 ---
-<article class="asset-placeholder">
-  <p class="eyebrow">{type}</p>
+<article class="asset-placeholder media-slot-card">
+  <div class="media-slot-head">
+    <p class="eyebrow">{type}</p>
+    <span class="slot-icon" aria-hidden="true">{meta.icon}</span>
+  </div>
+  <div class="media-ratio-box">
+    <div class="media-ratio-inner">
+      <strong>{meta.ratio}</strong>
+      <small>{hint || meta.usage}</small>
+    </div>
+  </div>
   <h3>{title}</h3>
   <p>{text}</p>
 </article>
