@@ -3,6 +3,8 @@ import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import ImageCard from '../components/common/ImageCard.astro';
 import { schedule } from '../content/schedule';
 import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
+import { navItems } from '../content/navigation';
+const journeyStops = navItems.slice(1, 7);
 ---
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
   <section class="hero hero-home">
@@ -15,10 +17,24 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
         <a class="btn alt" href="/doll-maker">前往第一站：紀念品製作</a>
         <a class="btn ghost" href="/voting">前往頒獎舞台</a>
       </div>
+      <div class="hero-stats" aria-label="工作坊重點">
+        <span><strong>3.5h</strong> 現場實作</span>
+        <span><strong>6</strong> 個任務章</span>
+        <span><strong>3</strong> 種可帶走成果</span>
+      </div>
     </div>
     <div class="hero-media">
       <img src="/images/home/hero-slide-01.webp" alt="旅行桌面上有筆電、手機、地圖與旅行小物，呈現 AI 旅遊工作坊出發情境" loading="eager" decoding="async" />
     </div>
+  </section>
+
+  <section class="journey-strip" aria-label="工作坊路線">
+    {journeyStops.map((item, index) => (
+      <a href={item.path} class="journey-stop">
+        <span>{String(index + 1).padStart(2, '0')}</span>
+        <strong>{item.short}</strong>
+      </a>
+    ))}
   </section>
 
   <section class="section-heading">
@@ -35,8 +51,8 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
   </section>
 
   <section class="hero-gallery" style="margin: 32px 0;">
-    <ImageCard src="/images/home/hero-slide-02.webp" alt="3D 公仔、旅遊規劃卡與旅行貼圖三種 AI 成果排成展示卡" title="今天帶走 3 個 AI 成果" text="先用可分享的作品建立信心，再回頭理解提示詞與工具分工。" ratio="16 / 9" />
-    <ImageCard src="/images/home/outcomes-collage-01.webp" alt="旅遊工作坊成果拼貼，包含行程卡、公仔與貼圖素材" title="把學習變成可保存的旅行紀念" text="每一站都會留下能下載、分享與延伸的素材。" ratio="16 / 9" />
+    <ImageCard src="/images/home/hero-slide-02.webp" alt="3D 公仔、旅遊規劃卡與旅行貼圖三種 AI 成果排成展示卡" eyebrow="成果預覽" title="今天帶走 3 個 AI 成果" text="先用可分享的作品建立信心，再回頭理解提示詞與工具分工。" ratio="16 / 9" tone="featured" />
+    <ImageCard src="/images/home/outcomes-collage-01.webp" alt="旅遊工作坊成果拼貼，包含行程卡、公仔與貼圖素材" eyebrow="旅程收藏" title="把學習變成可保存的旅行紀念" text="每一站都會留下能下載、分享與延伸的素材。" ratio="16 / 9" tone="warm" />
   </section>
 
   <section class="two-col">

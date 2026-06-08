@@ -3,7 +3,12 @@ import '../styles/theme.css';
 import DesktopSidebar from '../components/navigation/DesktopSidebar.astro';
 import MobileBottomNav from '../components/navigation/MobileBottomNav.astro';
 import ProgressTracker from '../components/progress/ProgressTracker.astro';
+import { navItems } from '../content/navigation';
 const { title, currentPath } = Astro.props;
+const currentIndex = navItems.findIndex((item) => item.path === currentPath);
+const currentItem = navItems[currentIndex] ?? navItems[0];
+const previousItem = currentIndex > 0 ? navItems[currentIndex - 1] : null;
+const nextItem = currentIndex >= 0 && currentIndex < navItems.length - 1 ? navItems[currentIndex + 1] : null;
 ---
 <html lang="zh-Hant">
   <head>
@@ -18,6 +23,16 @@ const { title, currentPath } = Astro.props;
         <div class="mobile-progress-wrap">
           <ProgressTracker />
         </div>
+        <nav class="route-compass" aria-label="目前旅程位置">
+          <div>
+            <span class="route-kicker">現在位置</span>
+            <strong>{currentItem.label}</strong>
+          </div>
+          <div class="route-actions">
+            {previousItem && <a class="route-link" href={previousItem.path}>上一站</a>}
+            {nextItem && <a class="route-link is-next" href={nextItem.path}>下一站：{nextItem.short}</a>}
+          </div>
+        </nav>
         <slot />
       </main>
     </div>

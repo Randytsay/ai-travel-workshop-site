@@ -7,7 +7,7 @@ const { title, platform, prompt, defaultOpen = false } = Astro.props;
       <strong>{title}</strong>
       <small>{platform}</small>
     </span>
-    <span class="summary-hint">展開</span>
+    <span class="summary-hint">查看提示詞</span>
   </summary>
   <pre>{prompt}</pre>
   <button class="btn copy-btn" type="button" data-text={prompt}>一鍵複製</button>

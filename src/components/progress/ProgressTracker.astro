@@ -2,29 +2,46 @@
 import { progressTasks } from '../../content/progressTasks';
 const total = progressTasks.length;
 ---
-<div class="progress-tracker" id="progress-tracker">
-  <div class="progress-bar-bg">
-    <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+<div class="progress-tracker" data-progress-tracker>
+  <div class="progress-head">
+    <span>旅程進度</span>
+    <strong data-progress-percent>0%</strong>
   </div>
-  <p class="progress-text" id="progress-text-container">
-    <span class="progress-count" id="progress-count">0</span> / <span id="progress-total">{total}</span> 已完成
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" data-progress-fill style="width: 0%"></div>
+  </div>
+  <p class="progress-text" data-progress-text-container>
+    <span class="progress-count" data-progress-count>0</span> / <span>{total}</span> 已完成
   </p>
-  <p class="progress-celebration" id="progress-celebration" hidden>太棒了，今天的工作坊任務全完成！</p>
+  <p class="progress-celebration" data-progress-celebration hidden>太棒了，今天的工作坊任務全完成！</p>
 </div>
 
 <style>
   .progress-tracker {
-    padding: 12px;
+    padding: 14px;
     background: #fff;
     border: 1px solid var(--line);
     border-radius: 12px;
     margin-bottom: 12px;
     box-shadow: var(--shadow-soft);
   }
+  .progress-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    color: var(--night);
+    font-size: 0.86rem;
+    font-weight: 900;
+  }
+  .progress-head strong {
+    color: var(--coral);
+  }
   .progress-bar-bg {
-    height: 8px;
+    height: 10px;
     background: #f0f4f8;
-    border-radius: 4px;
+    border-radius: 999px;
     overflow: hidden;
     margin-bottom: 6px;
   }
@@ -38,7 +55,7 @@ const total = progressTasks.length;
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--ink-soft);
-    text-align: right;
+    text-align: left;
   }
   .progress-count {
     color: var(--coral);
@@ -67,21 +84,26 @@ const total = progressTasks.length;
     const total = progressTasks.length;
     const percentage = (count / total) * 100;
 
-    const fill = document.getElementById('progress-fill') as HTMLElement;
-    const countText = document.getElementById('progress-count') as HTMLElement;
-    const textContainer = document.getElementById('progress-text-container') as HTMLElement;
-    const celebration = document.getElementById('progress-celebration') as HTMLElement;
+    document.querySelectorAll('[data-progress-tracker]').forEach((tracker) => {
+      const container = tracker as HTMLElement;
+      const fill = container.querySelector('[data-progress-fill]') as HTMLElement | null;
+      const countText = container.querySelector('[data-progress-count]') as HTMLElement | null;
+      const percentText = container.querySelector('[data-progress-percent]') as HTMLElement | null;
+      const textContainer = container.querySelector('[data-progress-text-container]') as HTMLElement | null;
+      const celebration = container.querySelector('[data-progress-celebration]') as HTMLElement | null;
 
-    if (fill) fill.style.width = `${percentage}%`;
-    if (countText) countText.textContent = String(count);
+      if (fill) fill.style.width = `${percentage}%`;
+      if (countText) countText.textContent = String(count);
+      if (percentText) percentText.textContent = `${Math.round(percentage)}%`;
 
-    if (count === total && total > 0) {
-      if (textContainer) textContainer.hidden = true;
-      if (celebration) celebration.hidden = false;
-    } else {
-      if (textContainer) textContainer.hidden = false;
-      if (celebration) celebration.hidden = true;
-    }
+      if (count === total && total > 0) {
+        if (textContainer) textContainer.hidden = true;
+        if (celebration) celebration.hidden = false;
+      } else {
+        if (textContainer) textContainer.hidden = false;
+        if (celebration) celebration.hidden = true;
+      }
+    });
   };
 
   // Initial update
