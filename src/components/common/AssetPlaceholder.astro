@@ -1,5 +1,5 @@
 ---
-const { title, text, type = '圖片', hint = '' } = Astro.props;
+const { title, text, type = '圖片', hint = '', filename = '' } = Astro.props;
 
 const typeMeta = {
   圖片: { icon: '🖼️', ratio: '4:3', usage: '適合成果示意、步驟截圖', cssClass: 'asset-image' },
@@ -23,4 +23,5 @@ const meta = typeMeta[type as keyof typeof typeMeta] ?? { icon: '🧩', ratio: '
   </div>
   <h3>{title}</h3>
   <p>{text}</p>
+  {filename && <p class="asset-filename">建議檔名：<code>{filename}</code></p>}
 </article>

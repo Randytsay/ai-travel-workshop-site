@@ -1,0 +1,184 @@
+export const setupSummary = [
+  {
+    title: 'iPhone / iPad',
+    text: '先把 App Store 地區切到中國大陸，再搜尋下載「即夢AI」與「抖音」，完成手機驗證登入。'
+  },
+  {
+    title: 'Android',
+    text: '用手機瀏覽器開啟官方網站下載 APK，安裝「即夢AI」與「抖音」，允許一次性的安裝權限後登入。'
+  },
+  {
+    title: '課堂體驗',
+    text: '從即夢或抖音找到想模仿的範例，點「做同款」，替換照片或提示詞，產出自己的短影音。'
+  }
+];
+
+export const iosSteps = [
+  {
+    title: '確認 Apple 帳號狀態',
+    text: '先確認沒有未結束的訂閱、預購、租借或帳戶餘額。Apple 官方說明指出，這些項目可能會阻止你更改國家或地區。',
+    shot: '設定 App > 你的姓名 > 媒體與購買項目，拍下進入帳號設定前的畫面。',
+    filename: 'ios-region-01-account.webp'
+  },
+  {
+    title: '進入國家 / 地區',
+    text: '打開「設定」App，點自己的姓名，進入「媒體與購買項目」，選「檢視帳號」，再點「國家 / 地區」。',
+    shot: '拍「媒體與購買項目」與「國家 / 地區」兩張截圖。',
+    filename: 'ios-region-02-country.webp'
+  },
+  {
+    title: '切換成中國大陸',
+    text: '選「更改國家或地區」，找到「中國大陸」，同意條款後依畫面填寫付款方式與帳單地址。若只是短期上課使用，建議先準備一個教學用 Apple 帳號。',
+    shot: '拍「中國大陸」選項與條款同意頁。注意不要露出完整個資。',
+    filename: 'ios-region-03-china-mainland.webp'
+  },
+  {
+    title: '下載即夢AI與抖音',
+    text: '回到 App Store，搜尋「即夢AI」與「抖音」。即夢AI 的 App Store 頁面標示為「抖音旗下AI圖片和視頻工具」，抖音頁面標示為「記錄美好生活」。',
+    shot: '拍 App Store 搜尋結果、即夢AI 下載頁、抖音下載頁。',
+    filename: 'ios-download-04-app-store.webp'
+  },
+  {
+    title: '用手機號登入',
+    text: '開啟即夢AI與抖音，選手機號登入，國碼可依學員手機號碼所在地選擇，輸入簡訊驗證碼完成登入。',
+    shot: '拍登入方式選擇頁與國碼選擇頁，驗證碼畫面請遮住號碼。',
+    filename: 'ios-login-05-phone.webp'
+  }
+];
+
+export const androidSteps = [
+  {
+    title: '開啟官方入口',
+    text: '用 Android 手機瀏覽器開啟即夢官方網站與抖音官方下載頁。優先使用官方入口，不建議從來路不明的第三方 APK 站下載。',
+    shot: '拍瀏覽器打開 jimeng.com 與 douyin.com 下載頁的畫面。',
+    filename: 'android-download-01-official-site.webp'
+  },
+  {
+    title: '下載 APK',
+    text: '點頁面上的下載或立即下載。若瀏覽器提醒「可能有風險」，先確認網址是官方網域，再繼續下載。',
+    shot: '拍下載按鈕與瀏覽器下載提示。',
+    filename: 'android-download-02-apk.webp'
+  },
+  {
+    title: '允許安裝未知來源',
+    text: '第一次安裝 APK 時，Android 會要求允許此瀏覽器安裝應用程式。只對目前瀏覽器開啟權限，安裝完成後可再關閉。',
+    shot: '拍 Android「允許來自此來源」設定頁。',
+    filename: 'android-install-03-permission.webp'
+  },
+  {
+    title: '完成安裝與登入',
+    text: '依序安裝即夢AI與抖音，開啟後用手機號登入並完成簡訊驗證。如果安裝被擋，檢查系統版本、儲存空間與安全掃描設定。',
+    shot: '拍安裝完成頁、桌面 App 圖示、登入首頁。',
+    filename: 'android-login-04-complete.webp'
+  }
+];
+
+export const sameStyleSteps = [
+  {
+    title: '找範例',
+    text: '在即夢AI的「探索」或抖音影片中找到想跟做的短影音範例。課堂建議先選畫面簡單、人物少、時長短的範例。',
+    shot: '拍探索頁或範例作品頁，畫面中能看到作品封面與入口。',
+    filename: 'same-style-01-template.webp'
+  },
+  {
+    title: '點做同款',
+    text: '在作品頁找到「做同款」或相近按鈕，進入範本頁。即夢AI的 App Store 介紹也列出「做同款」作為功能之一。',
+    shot: '拍「做同款」按鈕或進入同款流程的頁面。',
+    filename: 'same-style-02-button.webp'
+  },
+  {
+    title: '換成自己的素材',
+    text: '依畫面提示上傳照片、替換文字或調整提示詞。人物照片建議用正面、光線充足、背景簡單的照片。',
+    shot: '拍上傳照片、替換素材或提示詞設定畫面，照片請用測試素材。',
+    filename: 'same-style-03-replace.webp'
+  },
+  {
+    title: '生成與保存',
+    text: '送出生成後等待完成，先保存到手機相簿，再決定是否分享到抖音或其他平台。上課時不需要公開發布。',
+    shot: '拍生成等待頁與完成作品頁，避免露出個人帳號資訊。',
+    filename: 'same-style-04-export.webp'
+  }
+];
+
+export const screenshotChecklist = [
+  'iOS：ios-region-01-account.webp 到 ios-login-05-phone.webp。',
+  'Android：android-download-01-official-site.webp 到 android-login-04-complete.webp。',
+  '做同款：same-style-01-template.webp 到 same-style-04-export.webp。',
+  '截圖請放在 public/images/jimeng/，並遮住完整手機號、驗證碼、付款資料、Apple ID 信箱與個人照片原圖。'
+];
+
+export const screenshotAssetFolder = '/images/jimeng/';
+
+export const faqItems = [
+  {
+    q: 'iPhone 一定要把自己的 Apple ID 改到中國大陸嗎？',
+    a: '不一定。若學員擔心訂閱、付款或 iCloud 內容受到影響，課堂更穩的做法是準備一個只用來下載 App 的教學用 Apple 帳號。'
+  },
+  {
+    q: 'Android 可以從第三方 APK 站下載嗎？',
+    a: '不建議。工作坊面向一般學員，優先走官方網站或手機品牌商店；第三方 APK 站可能有版本、簽章與安全風險。'
+  },
+  {
+    q: '沒有中國大陸手機號可以登入嗎？',
+    a: '登入頁通常可以切換國碼，但實際可用性會隨平台政策變動。課前最好用主辦方準備的測試手機完整走一次。'
+  },
+  {
+    q: '可以直接使用別人教學網站的截圖嗎？',
+    a: '建議不要。最安全的方式是依照本頁的截圖清單，用自己的手機重拍流程圖，再放進工作坊頁面。'
+  }
+];
+
+export const tutorialReferences = [
+  {
+    label: '即夢 AI 完整操作手冊',
+    href: 'https://runyoung0613.github.io/jimeng-tutorial/',
+    source: '外部圖文教學',
+    note: '包含即夢平台簡介、快速上手、影片生成、動作模仿、提示詞與運鏡等完整章節。'
+  },
+  {
+    label: 'Dreamina AI / 即夢 AI 教學',
+    href: 'https://futureweb.pro/tools/ai/dreamina-ai/',
+    source: '外部圖文教學',
+    note: '適合補充說明即夢 / Dreamina 的圖片與影片生成能力、基本功能與使用場景。'
+  },
+  {
+    label: '即夢AI | 視頻生成 V1.2 全站教程',
+    href: 'https://articles.waytoagi.com/docs/S2rAwESKkiK1DkkCmglcGRU9nAg/',
+    source: '外部知識庫',
+    note: '可作為助教備課參考，補充圖生影片、首尾幀與影片模型設定的操作概念。'
+  },
+  {
+    label: '抖音官方：如何拍同款',
+    href: 'https://www.douyin.com/video/6946396406894710024',
+    source: '抖音影片',
+    note: '抖音官方帳號的拍同款教學影片，適合放給學員自行點開觀看。'
+  }
+];
+
+export const officialLinks = [
+  {
+    label: 'Apple 官方：更改 Apple 帳戶國家或地區',
+    href: 'https://support.apple.com/zh-cn/118283',
+    note: 'Apple 說明更改地區前需處理帳戶餘額、訂閱、付款方式等限制。'
+  },
+  {
+    label: '即夢AI App Store 中國大陸頁',
+    href: 'https://apps.apple.com/cn/app/%E5%8D%B3%E6%A2%A6ai-%E6%8A%96%E9%9F%B3%E6%97%97%E4%B8%8Bai%E5%9B%BE%E7%89%87%E5%92%8C%E8%A7%86%E9%A2%91%E5%B7%A5%E5%85%B7/id6503676563',
+    note: '確認 iOS 需求、開發者、功能描述與「做同款」功能。'
+  },
+  {
+    label: '即夢AI 官方網站',
+    href: 'https://www.jimeng.com/',
+    note: '官方介紹文 / 圖生影片、中文創作、首尾幀控制與 AI 繪圖功能。'
+  },
+  {
+    label: '抖音 App Store 中國大陸頁',
+    href: 'https://apps.apple.com/cn/app/%E6%8A%96%E9%9F%B3/id1142110895',
+    note: '確認 iOS / iPadOS 需求、開發者與 App 介紹。'
+  },
+  {
+    label: '抖音官方下載頁',
+    href: 'https://www.douyin.com/downloadpage/app',
+    note: '官方列出 iOS、Android 行動端下載入口與執行環境。'
+  }
+];
