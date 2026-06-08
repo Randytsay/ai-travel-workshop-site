@@ -1,0 +1,167 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import {
+  androidSteps,
+  faqItems,
+  iosSteps,
+  officialLinks,
+  sameStyleSteps,
+  screenshotAssetFolder,
+  screenshotChecklist,
+  setupSummary,
+  tutorialReferences
+} from '../content/jimengShortVideoPage';
+---
+<WorkshopLayout title="即夢短影音體驗" currentPath="/jimeng-short-video">
+  <section class="hero jimeng-hero">
+    <div>
+      <p class="eyebrow">短影音實作</p>
+      <h1>用即夢做出自己的同款影片</h1>
+      <p>這一站先把手機安裝、登入驗證與素材準備整理好，再用「做同款」把範例短影音變成自己的作品。截圖區保留給課前實機補拍，避免拿假的 App 畫面教學。</p>
+      <div class="actions">
+        <a class="btn" href="#ios-flow">iOS 流程</a>
+        <a class="btn alt" href="#android-flow">Android 流程</a>
+        <a class="btn ghost" href="#screenshot-list">截圖清單</a>
+      </div>
+    </div>
+    <div class="jimeng-hero-media" aria-label="短影音工作坊情境示意">
+      <img src="/images/jimeng/hero-workshop-scene-01.webp" alt="手機短影音創作工作坊情境，桌面上有手機、筆電與分鏡素材" loading="eager" decoding="async" />
+      <div class="phone-demo" aria-hidden="true">
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <span>AI Video</span>
+            <strong>做同款</strong>
+            <p>範例 / 素材 / 生成</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-grid">{setupSummary.map((item) => <article class="card setup-card"><h2>{item.title}</h2><p>{item.text}</p></article>)}</section>
+
+  <section class="jimeng-classroom-strip" aria-label="課堂安全流程">
+    <span>1. 先確認帳號與下載來源</span>
+    <span>2. 用測試素材練習做同款</span>
+    <span>3. 生成後先保存，不急著公開發布</span>
+  </section>
+
+  <section class="section-heading" id="ios-flow">
+    <p class="eyebrow">iPhone / iOS</p>
+    <h2>先切換 App Store 地區，再下載即夢AI與抖音</h2>
+  </section>
+  <section class="guide-flow">
+    {iosSteps.map((step, index) => (
+      <article class="guide-step">
+        <div class="step-index">{String(index + 1).padStart(2, '0')}</div>
+        <div class="guide-copy">
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+          <p class="shot-note">建議截圖：{step.shot}</p>
+        </div>
+        <AssetPlaceholder title={step.title} text={step.shot} type="圖片" filename={`${screenshotAssetFolder}${step.filename}`} />
+      </article>
+    ))}
+  </section>
+
+  <section class="section-heading" id="android-flow">
+    <p class="eyebrow">Android</p>
+    <h2>從官方入口下載 APK，安裝後完成登入</h2>
+  </section>
+  <section class="guide-flow">
+    {androidSteps.map((step, index) => (
+      <article class="guide-step">
+        <div class="step-index">{String(index + 1).padStart(2, '0')}</div>
+        <div class="guide-copy">
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+          <p class="shot-note">建議截圖：{step.shot}</p>
+        </div>
+        <AssetPlaceholder title={step.title} text={step.shot} type="圖片" filename={`${screenshotAssetFolder}${step.filename}`} />
+      </article>
+    ))}
+  </section>
+
+  <section class="section-heading" id="same-style-flow">
+    <p class="eyebrow">課堂體驗</p>
+    <h2>用「做同款」完成第一支短影音</h2>
+  </section>
+  <section class="guide-flow">
+    {sameStyleSteps.map((step, index) => (
+      <article class="guide-step">
+        <div class="step-index">{String(index + 1).padStart(2, '0')}</div>
+        <div class="guide-copy">
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+          <p class="shot-note">建議截圖：{step.shot}</p>
+        </div>
+        <AssetPlaceholder title={step.title} text={step.shot} type="圖片" filename={`${screenshotAssetFolder}${step.filename}`} />
+      </article>
+    ))}
+  </section>
+
+  <section class="two-col screenshot-section" id="screenshot-list">
+    <section class="card postcard-card">
+      <p class="eyebrow">拍圖清單</p>
+      <h2>上課前請補拍這些畫面</h2>
+      <p>圖檔統一放在 <code>{screenshotAssetFolder}</code>，檔名照下方占位符即可。</p>
+      <ul class="example-list">{screenshotChecklist.map((item) => <li>{item}</li>)}</ul>
+    </section>
+    <section class="card notice-card">
+      <p class="eyebrow">隱私提醒</p>
+      <h2>截圖前先保護個資</h2>
+      <p>截圖不放完整手機號、驗證碼、付款資料、Apple ID 信箱與個人照片原圖。需要展示登入時，建議用測試帳號與測試手機。</p>
+    </section>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">外部教學</p>
+    <h2>可點開對照的圖文與影片參考</h2>
+  </section>
+  <section class="reference-grid">
+    {tutorialReferences.map((item) => (
+      <a class="reference-card" href={item.href} target="_blank" rel="noreferrer">
+        <span>{item.source}</span>
+        <h3>{item.label}</h3>
+        <p>{item.note}</p>
+      </a>
+    ))}
+  </section>
+  <p class="disclaimer-text">外部教學內容以連結方式提供；頁面截圖建議以自己的手機重拍後替換，避免使用他人網站或影片畫面。</p>
+
+  <section class="section-heading">
+    <p class="eyebrow">常見卡關</p>
+    <h2>現場助教可以照這裡排除</h2>
+  </section>
+  <section class="faq-grid">
+    {faqItems.map((item) => (
+      <article class="card faq-lite">
+        <h3>{item.q}</h3>
+        <p>{item.a}</p>
+      </article>
+    ))}
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">官方來源</p>
+    <h2>頁面內容依這些入口整理</h2>
+  </section>
+  <section class="source-list">
+    {officialLinks.map((link) => (
+      <a class="source-item" href={link.href} target="_blank" rel="noreferrer">
+        <strong>{link.label}</strong>
+        <span>{link.note}</span>
+      </a>
+    ))}
+  </section>
+
+  <CompleteTaskButton
+    taskId="jimeng-short-video-complete"
+    buttonLabel="我已完成即夢短影音體驗"
+    nextLabel="3D 公仔"
+    nextHref="/doll-maker"
+    successMessage="太棒了！你已經完成短影音暖身，接下來可以進入 3D 公仔創作。"
+  />
+</WorkshopLayout>
