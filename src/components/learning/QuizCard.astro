@@ -21,18 +21,20 @@ const cardId = `quiz-${index}`;
 
 <script>
   document.querySelectorAll('[data-quiz-card]').forEach((card) => {
-    if (card.dataset.bound === 'true') return;
-    card.dataset.bound = 'true';
+    const quizCard = card as HTMLElement;
+    if (quizCard.dataset.bound === 'true') return;
+    quizCard.dataset.bound = 'true';
 
-    const answer = Number(card.dataset.answer || -1);
-    const feedback = card.querySelector('.quiz-feedback');
-    const result = card.querySelector('.quiz-result');
-    const correct = card.querySelector('.quiz-correct');
-    const optionButtons = card.querySelectorAll('.quiz-option');
+    const answer = Number(quizCard.dataset.answer || -1);
+    const feedback = quizCard.querySelector('.quiz-feedback') as HTMLElement | null;
+    const result = quizCard.querySelector('.quiz-result') as HTMLElement | null;
+    const correct = quizCard.querySelector('.quiz-correct') as HTMLElement | null;
+    const optionButtons = quizCard.querySelectorAll('.quiz-option');
 
     optionButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const selected = Number(button.dataset.option || -1);
+      const optionButton = button as HTMLElement;
+      optionButton.addEventListener('click', () => {
+        const selected = Number(optionButton.dataset.option || -1);
         const isCorrect = selected === answer;
 
         if (feedback && result && correct) {
@@ -42,7 +44,7 @@ const cardId = `quiz-${index}`;
         }
 
         optionButtons.forEach((btn) => btn.classList.remove('is-selected'));
-        button.classList.add('is-selected');
+        optionButton.classList.add('is-selected');
       });
     });
   });

@@ -2,15 +2,21 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
 import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
-  <section class="hero">
-    <p class="eyebrow">🛍️ 歸國紀念與免稅店</p>
-    <h1>感謝參與今天的 AI 旅行</h1>
-    <p>最後一站，請完成旅客意見表（問卷），並加入 LINE 官方旅行管家。你會收到完整的數位旅遊手冊（網頁講義）與隨身版（PDF 重點），方便日後隨時出發。</p>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">🛍️ 歸國紀念與免稅店</p>
+      <h1>感謝參與今天的 AI 旅行</h1>
+      <p>最後一站，請完成旅客意見表（問卷），並加入 LINE 官方旅行管家。你會收到完整的數位旅遊手冊（網頁講義）與隨身版（PDF 重點），方便日後隨時出發。</p>
+    </div>
+    <div class="hero-media">
+      <img src="/images/survey/hero-finish-journey-01.webp" alt="工作坊結尾的旅行桌面與講義領取情境，呈現完成旅程的溫暖感" loading="eager" decoding="async" />
+    </div>
   </section>
 
   <section class="feature-grid survey-reward-grid">
@@ -48,7 +54,7 @@ import { siteConfig } from '../content/siteConfig';
   <section class="asset-grid" style="margin-top: 32px;">
     <AssetPlaceholder title="旅客意見表 QR Code" text="正式活動前替換成問卷工具的 QR Code。" type="QR Code" />
     <AssetPlaceholder title="LINE 官方管家 QR Code" text="正式活動前替換成官方帳號加入 QR Code。" type="QR Code" />
-    <AssetPlaceholder title="紀念品領取圖解" text="可放三步驟圖解或現場投影片同款圖。" type="圖片" />
+    <ImageCard src="/images/survey/workbook-preview-01.webp" alt="數位講義與 PDF 小冊預覽，呈現課後領取成果" title="講義領取預覽" text="完成問卷與 LINE 任務後，可依指引取得數位導覽與隨身 PDF。" />
   </section>
 
   <section class="card" style="margin-top:32px;">

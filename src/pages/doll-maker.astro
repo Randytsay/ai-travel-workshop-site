@@ -2,7 +2,7 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
-import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import PromptGroup from '../components/prompts/PromptGroup.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { dollPrompts } from '../content/prompts';
@@ -21,17 +21,8 @@ import { siteConfig } from '../content/siteConfig';
           <a class="btn alt" href="/travel-planner">完成後前往下一站</a>
         </div>
       </div>
-      <div class="hero-mockups">
-        <article class="hero-mockup-card" style="padding-bottom:20px; border-radius:12px;">
-          <p class="eyebrow" style="background:#f3fbff; color:#35b7d4;">Before</p>
-          <div style="background:#eee; height:120px; border-radius:8px; margin-bottom:8px; display:grid; place-items:center; color:#999;">你的原始照片</div>
-          <p class="muted" style="margin:0;">生活照 / 寵物照</p>
-        </article>
-        <article class="hero-mockup-card" style="padding-bottom:20px; border-radius:12px;">
-          <p class="eyebrow">After</p>
-          <div style="background:linear-gradient(135deg, #ffb4b0, #70c6ff); height:120px; border-radius:8px; margin-bottom:8px; display:grid; place-items:center; color:#fff; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.2);">✨ 3D 化 ✨</div>
-          <p class="muted" style="margin:0;">精緻質感盲盒公仔</p>
-        </article>
+      <div class="hero-media">
+        <img src="/images/doll-maker/hero-before-after-01.webp" alt="照片轉換成 3D 可愛公仔的前後對照示意" loading="eager" decoding="async" />
       </div>
     </div>
   </section>
@@ -69,9 +60,9 @@ import { siteConfig } from '../content/siteConfig';
   {dollPrompts.map((item) => <PromptGroup title={item.title} description={item.description} prompts={item.prompts} />)}
 
   <section class="asset-grid" style="margin-top: 32px;">
-    <AssetPlaceholder title="公仔成果展示櫥窗" text="建議放個人、親子、寵物各一張 before/after 或完成圖。" type="圖片" />
-    <AssetPlaceholder title="照片上傳流程圖" text="放 ChatGPT 上傳照片與貼上提示詞的截圖。" type="圖片" />
-    <AssetPlaceholder title="30-60 秒魔法實況" text="示範從上傳照片到下載圖片的完整短片。" type="影片" />
+    <ImageCard src="/images/doll-maker/doll-sample-personal-01.webp" alt="個人旅行者 3D 公仔成果示意" title="個人版公仔" text="適合作為活動頭像、旅遊明信片或群組分享圖。" />
+    <ImageCard src="/images/doll-maker/doll-sample-family-01.webp" alt="親子或家庭旅行主題 3D 公仔成果示意" title="親子版公仔" text="把同行旅伴一起變成輕鬆可愛的旅行紀念。" />
+    <ImageCard src="/images/doll-maker/doll-sample-pet-01.webp" alt="寵物旅行主題 3D 公仔成果示意" title="寵物版公仔" text="毛孩也能一起登上這趟 AI 旅行。" />
   </section>
   <CompleteTaskButton 
     taskId="doll-maker-complete" 

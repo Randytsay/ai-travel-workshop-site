@@ -2,7 +2,7 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
-import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { notebookContent } from '../content/prompts';
@@ -12,14 +12,19 @@ import { siteConfig } from '../content/siteConfig';
 const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-research')?.prompts.chatgpt || '';
 ---
 <WorkshopLayout title="NotebookLM 研究升級" currentPath="/notebooklm">
-  <section class="hero">
-    <p class="eyebrow">📚 第三站：深度研究</p>
-    <h1>旅遊研究資料室 (NotebookLM)</h1>
-    <p>上一站整理出的簽證清單不是終點。把它交給這間研究室後，就能查證資訊、比較方案、產出行程、簡報與行前清單。</p>
-    <div class="actions">
-      <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.notebookLmUrl}>開啟 NotebookLM</a>
-      <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製 Deep Research 提示詞</button>
-      <a class="btn ghost" href="#notebook-prompts">查看完整提示詞</a>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">📚 第三站：深度研究</p>
+      <h1>旅遊研究資料室 (NotebookLM)</h1>
+      <p>上一站整理出的簽證清單不是終點。把它交給這間研究室後，就能查證資訊、比較方案、產出行程、簡報與行前清單。</p>
+      <div class="actions">
+        <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.notebookLmUrl}>開啟 NotebookLM</a>
+        <button class="btn alt copy-btn" type="button" data-text={deepResearchPrompt}>複製 Deep Research 提示詞</button>
+        <a class="btn ghost" href="#notebook-prompts">查看完整提示詞</a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img src="/images/notebooklm/hero-research-studio-01.webp" alt="NotebookLM 旅遊研究工作桌，包含地圖、資料卡與研究報告示意" loading="eager" decoding="async" />
     </div>
   </section>
 
@@ -73,10 +78,9 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
   </div>
 
   <section class="asset-grid" style="margin-top: 32px;">
-    <AssetPlaceholder title="NotebookLM 報到截圖" text="放建立筆記本與貼入 Note 的畫面。" type="圖片" />
-    <AssetPlaceholder title="Note 轉 Source 截圖" text="讓學員知道需求總表要先成為來源。" type="圖片" />
-    <AssetPlaceholder title="Deep Research 操作截圖" text="放貼入研究提示詞與匯入來源的畫面。" type="圖片" />
-    <AssetPlaceholder title="旅遊簡報展示" text="放課後可延伸產出的成果示意。" type="圖片" />
+    <ImageCard src="/images/notebooklm/notebooklm-sources-01.webp" alt="NotebookLM 來源資料整理示意，包含文件、卡片與地圖素材" title="把需求變成來源" text="先讓 NotebookLM 擁有你的旅遊背景，再請它做深入研究。" />
+    <ImageCard src="/images/notebooklm/research-output-01.webp" alt="NotebookLM 旅遊研究報告成果，包含比較卡、地圖與檢查清單" title="研究報告成果" text="資訊查證、景點比較與交通規劃可以集中在同一份報告裡。" />
+    <ImageCard src="/images/notebooklm/presentation-output-01.webp" alt="旅遊研究延伸成簡報與資訊圖表的成果展示" title="簡報與圖表延伸" text="課後可再把研究內容改成簡報、懶人包或同行討論資料。" />
   </section>
 
   <CompleteTaskButton 

@@ -2,7 +2,7 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
-import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import StylePackCard from '../components/prompts/StylePackCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { stickerLabContent } from '../content/prompts';
@@ -21,11 +21,8 @@ import { siteConfig } from '../content/siteConfig';
           <a class="btn alt" href="#line-maker">LINE 手機上架流程</a>
         </div>
       </div>
-      <div class="hero-mockups" style="height: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px dashed #cbd5e1;">
-        {Array.from({length: 8}).map((_, i) => (
-          <div style="aspect-ratio: 1; background: #fff; border-radius: 8px; box-shadow: var(--shadow-soft); display: grid; place-items: center; font-size: 1.5rem; border: 1px solid #f0f0f0;">✨</div>
-        ))}
-        <p class="muted" style="grid-column: 1 / -1; text-align: center; margin: 8px 0 0; font-size: 0.8rem;">8 格素材總圖預覽</p>
+      <div class="hero-media">
+        <img src="/images/sticker-lab/hero-sticker-grid-01.webp" alt="旅行主題 8 格 LINE 貼圖素材總圖，角色呈現出發、拍照與回家等情境" loading="eager" decoding="async" />
       </div>
     </div>
   </section>
@@ -58,9 +55,9 @@ import { siteConfig } from '../content/siteConfig';
   </section>
 
   <section class="asset-grid" style="margin-top: 32px;">
-    <AssetPlaceholder title="6 款風格展示櫥窗" text="每款風格包建議放一張完成圖或 mockup。" type="圖片" />
-    <AssetPlaceholder title="手機裁切流程圖" text="放下載、匯入、裁切、送審流程截圖。" type="圖片" />
-    <AssetPlaceholder title="操作短影片" text="拆成下載、匯入裁切、整理貼圖、送審四段。" type="影片" />
+    <ImageCard src="/images/sticker-lab/sticker-pack-cute-01.webp" alt="可愛風旅行貼圖素材包示意" title="可愛旅行貼圖包" text="適合做成日常聊天裡常用的旅行情緒貼圖。" />
+    <ImageCard src="/images/sticker-lab/sticker-workflow-01.webp" alt="貼圖製作流程，包含下載、裁切與整理素材示意" title="手機裁切流程" text="總圖完成後，再依 LINE 送審需求拆成單張素材。" />
+    <ImageCard src="/images/sticker-lab/sticker-materials-01.webp" alt="旅行貼圖製作材料與角色表情素材示意" title="素材整理包" text="把表情、姿勢和旅行小物整理好，後續更容易延伸成系列。" />
   </section>
 
   <CompleteTaskButton 

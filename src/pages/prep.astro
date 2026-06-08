@@ -3,13 +3,19 @@ import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import FAQAccordion from '../components/common/FAQAccordion.astro';
 import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import { prepChecklist, prepTools, prepFaqs } from '../content/prepPage';
 ---
 <WorkshopLayout title="課前準備" currentPath="/prep">
-  <section class="hero">
-    <p class="eyebrow">🧳 上課前 5 分鐘檢查</p>
-    <h1>出發前行李檢查</h1>
-    <p>先確認帳號、工具與照片素材都準備好，正式旅程中就能把注意力放在享受創造與規劃的樂趣上。</p>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">🧳 上課前 5 分鐘檢查</p>
+      <h1>出發前行李檢查</h1>
+      <p>先確認帳號、工具與照片素材都準備好，正式旅程中就能把注意力放在享受創造與規劃的樂趣上。</p>
+    </div>
+    <div class="hero-media">
+      <img src="/images/prep/prep-tools-concept-01.webp" alt="課前準備桌面，包含筆電、旅行資料與工具檢查卡" loading="eager" decoding="async" />
+    </div>
   </section>
 
   <section class="two-col">
@@ -36,8 +42,8 @@ import { prepChecklist, prepTools, prepFaqs } from '../content/prepPage';
     <h2>正式出發前，會替換成你的專屬通行碼 (QR Code)</h2>
   </section>
   <section class="asset-grid">
-    <AssetPlaceholder title="ChatGPT 登入截圖" text="放登入、切換帳號與上傳照片的操作畫面。" type="圖片" />
-    <AssetPlaceholder title="Gemini / NotebookLM 開啟截圖" text="放備援工具入口與建立 Notebook 的畫面。" type="圖片" />
+    <ImageCard src="/images/prep/prep-chatgpt-demo-01.webp" alt="ChatGPT 操作示意畫面，呈現上傳照片與準備提示詞的流程" title="ChatGPT 登入與上傳準備" text="確認帳號可用，並準備好要轉成公仔的照片。" />
+    <ImageCard src="/images/prep/prep-tools-concept-01.webp" alt="Gemini 與 NotebookLM 等 AI 工具入口示意" title="備援工具先開好" text="ChatGPT 額度或連線不穩時，能快速切換到 Gemini 或 NotebookLM。" />
     <AssetPlaceholder title="LINE 拍貼下載 QR Code" text="正式活動前替換為可掃描 QR Code。" type="QR Code" />
     <AssetPlaceholder title="工作坊 LINE 群組 QR Code" text="正式活動前替換為群組或報到用 QR Code。" type="QR Code" />
   </section>

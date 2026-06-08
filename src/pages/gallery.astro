@@ -1,14 +1,24 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import GalleryGrid from '../components/gallery/GalleryGrid.astro';
 import GalleryModal from '../components/gallery/GalleryModal.astro';
 import { galleryFilters, galleryItems } from '../data/gallery';
 ---
 <WorkshopLayout title="成果牆" currentPath="/gallery">
-  <section class="hero">
-    <p class="eyebrow">🖼️ 旅程的尾聲</p>
-    <h1>旅行回憶明信片牆</h1>
-    <p>看看大家今天完成的紀念品、貼紙與旅遊規劃，這裡會逐步充滿每場工作坊的共創作品，就像一面寫滿故事的明信片牆。</p>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">🖼️ 旅程的尾聲</p>
+      <h1>旅行回憶明信片牆</h1>
+      <p>看看大家今天完成的紀念品、貼紙與旅遊規劃，這裡會逐步充滿每場工作坊的共創作品，就像一面寫滿故事的明信片牆。</p>
+    </div>
+    <div class="hero-media">
+      <img src="/images/gallery/postcard-wall-01.webp" alt="AI 旅行成果明信片牆，展示公仔、貼圖、行程卡與地圖作品" loading="eager" decoding="async" />
+    </div>
+  </section>
+  <section class="hero-gallery" style="margin-bottom:24px;">
+    <ImageCard src="/images/gallery/hero-postcard-wall-01.webp" alt="旅行回憶牆上的明信片、拍立得、地圖與貼紙" title="每張作品都是一張旅程郵戳" text="現場作品會逐步補進這面牆，形成可回看的共創紀錄。" ratio="16 / 9" />
+    <ImageCard src="/images/gallery/gallery-featured-01.webp" alt="3D 公仔、旅遊行程卡、貼圖卡與研究成果卡展示" title="精選成果展示" text="用示意圖先建立展示感，正式版可接表單或資料庫同步。" ratio="16 / 9" />
   </section>
   <section class="card" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--glass);">
     <h2 style="margin:0; font-size:1.1rem; color:var(--ink-soft);">分類郵戳：</h2>

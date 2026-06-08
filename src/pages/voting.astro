@@ -1,15 +1,24 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import VoteWorkCard from '../components/voting/VoteWorkCard.astro';
 import LeaderboardPanel from '../components/voting/LeaderboardPanel.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { voteTabs, voteWorks } from '../data/voting';
 ---
 <WorkshopLayout title="現場互動投票" currentPath="/voting">
-  <section class="hero">
-    <p class="eyebrow">🏆 壓軸互動</p>
-    <h1>現場頒獎舞台</h1>
-    <p>選出你最喜歡的紀念品與旅遊規劃，給旅伴們一個熱烈掌聲 👏 目前為可展示的本機互動版，正式版將串接即時資料庫。</p>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">🏆 壓軸互動</p>
+      <h1>現場頒獎舞台</h1>
+      <p>選出你最喜歡的紀念品與旅遊規劃，給旅伴們一個熱烈掌聲 👏 目前為可展示的本機互動版，正式版將串接即時資料庫。</p>
+    </div>
+    <div class="hero-media">
+      <img src="/images/voting/hero-award-stage-01.webp" alt="人氣票選頒獎舞台，作品展示架與獎盃在燈光下呈現" loading="eager" decoding="async" />
+    </div>
+  </section>
+  <section style="margin-bottom:24px;">
+    <ImageCard src="/images/voting/featured-works-collage-01.webp" alt="參與投票的公仔、旅遊行程卡與貼圖作品拼貼" title="先瀏覽精選作品，再投下你的一票" text="正式活動時可替換成當場學員作品，目前使用示意素材呈現投票情境。" ratio="16 / 9" />
   </section>
   <section class="card" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--glass);">
     <h2 style="margin:0; font-size:1.1rem; color:var(--ink-soft);">分類標籤：</h2>
