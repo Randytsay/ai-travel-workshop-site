@@ -25,3 +25,10 @@ export const markTaskComplete = (taskId: string) => {
 export const isTaskComplete = (taskId: string): boolean => {
   return getProgress().includes(taskId);
 };
+
+export const resetProgress = () => {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(PROGRESS_KEY);
+  window.dispatchEvent(new CustomEvent('progress-update', { detail: [] }));
+  window.dispatchEvent(new CustomEvent('progress-reset'));
+};
