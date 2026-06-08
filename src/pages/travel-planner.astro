@@ -1,8 +1,7 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
-import StepCard from '../components/common/StepCard.astro';
 import CTASection from '../components/common/CTASection.astro';
-import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import { travelPrompts } from '../content/prompts';
@@ -10,10 +9,15 @@ import { travelFlow } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
-  <section class="hero">
-    <p class="eyebrow">🗺️ 第二站：目的地規劃</p>
-    <h1>目的地規劃控制台</h1>
-    <p>這站我們開啟多軌並行的路線：不管你是搭乘專屬 GPT 航班、一般 ChatGPT 備援，或轉機 Gemini，目標都是在短時間內取得旅遊需求摘要與下一站的研究通行證（提示詞）。</p>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">🗺️ 第二站：目的地規劃</p>
+      <h1>目的地規劃控制台</h1>
+      <p>這站我們開啟多軌並行的路線：不管你是搭乘專屬 GPT 航班、一般 ChatGPT 備援，或轉機 Gemini，目標都是在短時間內取得旅遊需求摘要與下一站的研究通行證（提示詞）。</p>
+    </div>
+    <div class="hero-media">
+      <img src="/images/travel-planner/travel-planner-flow-01.webp" alt="AI 旅遊規劃流程，包含需求訪談、行程卡與地圖路線示意" loading="eager" decoding="async" />
+    </div>
   </section>
 
   <section class="feature-grid">
@@ -42,7 +46,6 @@ import { siteConfig } from '../content/siteConfig';
       </div>
     </article>
   </section>
-  <section class="feature-grid">
   <section class="feature-grid">
     <article class="card itinerary-card" style="grid-column: 1 / -1; margin-top: 24px; background: #fdfaf5;">
       <p class="eyebrow">🧭 新手上路指引</p>
@@ -82,9 +85,9 @@ import { siteConfig } from '../content/siteConfig';
   </div>
 
   <section class="asset-grid" style="margin-top: 32px;">
-    <AssetPlaceholder title="GPT 問答示意圖" text="放 3 輪訪談與需求摘要確認的示意畫面。" type="圖片" />
-    <AssetPlaceholder title="需求摘要簽證圖" text="放最終輸出的旅客需求總表示例。" type="圖片" />
-    <AssetPlaceholder title="60-90 秒登機示範" text="示範從開啟 GPT 到取得 NotebookLM prompt 的流程。" type="影片" />
+    <ImageCard src="/images/travel-planner/itinerary-result-01.webp" alt="AI 產出的旅遊行程成果，包含地圖、每日卡片與預算圖示" title="行程成果示意" text="把需求整理成可討論、可調整的第一版旅行計畫。" />
+    <ImageCard src="/images/travel-planner/travel-summary-card-01.webp" alt="旅遊需求摘要卡，使用圖示和線條呈現偏好與限制" title="需求摘要通行證" text="下一站研究會靠這份摘要接力，不必重新說明所有背景。" />
+    <ImageCard src="/images/travel-planner/travel-itinerary-cards-01.webp" alt="多張旅遊行程卡與目的地縮圖的成果展示" title="每日行程卡" text="用卡片方式快速掃描景點、交通、節奏與備案。" />
   </section>
 
   <CompleteTaskButton 

@@ -1,0 +1,24 @@
+---
+const {
+  src,
+  alt,
+  title,
+  text = '',
+  eyebrow = '',
+  ratio = '4 / 3',
+  loading = 'lazy',
+  class: className = ''
+} = Astro.props;
+---
+<article class={`image-card ${className}`}>
+  <div class="image-frame" style={`aspect-ratio:${ratio};`}>
+    <img src={src} alt={alt} loading={loading} decoding="async" />
+  </div>
+  {(eyebrow || title || text) && (
+    <div class="image-card-copy">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {title && <h3>{title}</h3>}
+      {text && <p>{text}</p>}
+    </div>
+  )}
+</article>

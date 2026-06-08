@@ -2,16 +2,25 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import QuizCard from '../components/learning/QuizCard.astro';
 import CTASection from '../components/common/CTASection.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import { aiExplainCards, aiLifeHelps, aiToolCompare, aiQuiz } from '../content/aiBasicsPage';
 ---
 <WorkshopLayout title="AI 入門" currentPath="/ai-basics">
-  <section class="hero">
-    <p class="eyebrow">🗺️ 啟程導覽：不用懂引擎，懂方向盤就好</p>
-    <h1>認識你的 AI 旅伴</h1>
-    <p>把 AI 想成一位行動力極強的旅伴：你給它目的地、偏好與限制，它就能幫你規劃出第一版行程，再由你來決定去哪裡。</p>
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">🗺️ 啟程導覽：不用懂引擎，懂方向盤就好</p>
+      <h1>認識你的 AI 旅伴</h1>
+      <p>把 AI 想成一位行動力極強的旅伴：你給它目的地、偏好與限制，它就能幫你規劃出第一版行程，再由你來決定去哪裡。</p>
+    </div>
+    <div class="hero-media">
+      <img src="/images/ai-basics/ai-buddy-hero-01.webp" alt="友善的 AI 旅伴與旅行規劃卡，象徵入門導覽" loading="eager" decoding="async" />
+    </div>
   </section>
 
   <section class="tool-grid">{aiExplainCards.map((card) => <article class="card glass-card"><h2>{card.title}</h2><p>{card.text}</p></article>)}</section>
+  <section style="margin:24px 0;">
+    <ImageCard src="/images/home/outcomes-collage-01.webp" alt="AI 旅行工作坊的多種成果展示拼貼" title="AI 不只是聊天，是把想法推進成作品" text="這堂課會用明確任務讓工具各自發揮：生成、整理、研究、展示。" ratio="16 / 9" />
+  </section>
   <section class="card postcard-card"><p class="eyebrow">🌟 生活化旅行應用</p><h2>這位旅伴還能幫我們做什麼？</h2><div class="help-grid">{aiLifeHelps.map((item) => <span class="chip">{item}</span>)}</div></section>
   <section class="card itinerary-card"><p class="eyebrow">🤝 三位旅行助手定位</p><h2>今天會派上用場的旅伴角色卡</h2><ul>{aiToolCompare.map((t) => <li><strong>{t.tool}</strong>｜{t.fit}（{t.note}）</li>)}</ul></section>
   <section class="section-heading">

@@ -1,5 +1,6 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import ImageCard from '../components/common/ImageCard.astro';
 import { schedule } from '../content/schedule';
 import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
 ---
@@ -15,22 +16,8 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
         <a class="btn ghost" href="/voting">前往頒獎舞台</a>
       </div>
     </div>
-    <div class="hero-mockups">
-      <article class="hero-mockup-card">
-        <p class="eyebrow">3D 公仔成果</p>
-        <h3>個人 / 親子 / 寵物</h3>
-        <p class="muted">先做出第一張可分享成果</p>
-      </article>
-      <article class="hero-mockup-card">
-        <p class="eyebrow">AI 旅遊規劃卡</p>
-        <h3>需求摘要 + 研究接力</h3>
-        <p class="muted">把靈感整理成可行計畫</p>
-      </article>
-      <article class="hero-mockup-card">
-        <p class="eyebrow">LINE 貼圖卡</p>
-        <h3>旅行主題 8 格素材</h3>
-        <p class="muted">帶走可延伸創作的素材包</p>
-      </article>
+    <div class="hero-media">
+      <img src="/images/home/hero-slide-01.webp" alt="旅行桌面上有筆電、手機、地圖與旅行小物，呈現 AI 旅遊工作坊出發情境" loading="eager" decoding="async" />
     </div>
   </section>
 
@@ -45,6 +32,11 @@ import { homeAudience, homeInteractions, homeOutcomes } from '../content/worksho
         <p>{item.text}</p>
       </article>
     ))}
+  </section>
+
+  <section class="hero-gallery" style="margin: 32px 0;">
+    <ImageCard src="/images/home/hero-slide-02.webp" alt="3D 公仔、旅遊規劃卡與旅行貼圖三種 AI 成果排成展示卡" title="今天帶走 3 個 AI 成果" text="先用可分享的作品建立信心，再回頭理解提示詞與工具分工。" ratio="16 / 9" />
+    <ImageCard src="/images/home/outcomes-collage-01.webp" alt="旅遊工作坊成果拼貼，包含行程卡、公仔與貼圖素材" title="把學習變成可保存的旅行紀念" text="每一站都會留下能下載、分享與延伸的素材。" ratio="16 / 9" />
   </section>
 
   <section class="two-col">
