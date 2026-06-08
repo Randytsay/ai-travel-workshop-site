@@ -72,6 +72,14 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
       zone.style.background = '#f7fcff';
     };
 
+    const setIncomplete = () => {
+      initial?.removeAttribute('hidden');
+      complete?.setAttribute('hidden', 'true');
+      zone.style.borderStyle = '';
+      zone.style.borderColor = '';
+      zone.style.background = '';
+    };
+
     if (taskId && isTaskComplete(taskId)) {
       setCompleted();
     }
@@ -84,5 +92,7 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
         window.dispatchEvent(new CustomEvent('task-completed-ui', { detail: { taskId } }));
       }
     });
+
+    window.addEventListener('progress-reset', setIncomplete);
   });
 </script>

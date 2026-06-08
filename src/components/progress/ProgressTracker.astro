@@ -14,6 +14,7 @@ const total = progressTasks.length;
     <span class="progress-count" data-progress-count>0</span> / <span>{total}</span> 已完成
   </p>
   <p class="progress-celebration" data-progress-celebration hidden>太棒了，今天的工作坊任務全完成！</p>
+  <button class="progress-reset-btn" type="button" data-progress-reset>重新開始</button>
 </div>
 
 <style>
@@ -68,6 +69,31 @@ const total = progressTasks.length;
     text-align: center;
     animation: fadeIn 0.5s ease-out;
   }
+  .progress-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 5px 9px;
+    border: 1px solid rgba(104, 121, 138, 0.24);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-soft);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+  }
+  .progress-reset-btn:hover {
+    border-color: rgba(255, 111, 97, 0.45);
+    background: rgba(255, 111, 97, 0.08);
+    color: var(--coral);
+  }
+  .progress-reset-btn:focus-visible {
+    outline: 3px solid rgba(53, 183, 212, 0.26);
+    outline-offset: 2px;
+  }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
@@ -75,7 +101,7 @@ const total = progressTasks.length;
 </style>
 
 <script>
-  import { getProgress } from '../../utils/progressStore';
+  import { getProgress, resetProgress } from '../../utils/progressStore';
   import { progressTasks } from '../../content/progressTasks';
 
   const updateUI = () => {
@@ -108,6 +134,10 @@ const total = progressTasks.length;
 
   // Initial update
   updateUI();
+
+  document.querySelectorAll('[data-progress-reset]').forEach((button) => {
+    button.addEventListener('click', () => resetProgress());
+  });
 
   // Listen for updates
   window.addEventListener('progress-update', updateUI);
