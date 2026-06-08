@@ -3,6 +3,7 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
 ---
 <div class="task-completion-zone" data-task-id={taskId}>
   <div class="task-status-initial">
+    <p class="task-kicker">完成這一站後再前進</p>
     <button class="btn complete-task-btn" type="button">
       {buttonLabel}
     </button>
@@ -23,11 +24,18 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
 <style>
   .task-completion-zone {
     margin: 24px 0;
-    padding: 24px;
-    background: #fff;
-    border: 2px dashed var(--line);
+    padding: 26px;
+    background: linear-gradient(135deg, #fff, #f7fcff);
+    border: 1px solid rgba(53,183,212,0.22);
     border-radius: 16px;
     text-align: center;
+    box-shadow: var(--shadow-card);
+  }
+  .task-kicker {
+    margin: 0 0 12px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-weight: 800;
   }
   .complete-task-btn {
     min-width: 200px;
@@ -41,6 +49,8 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
     text-align: left;
     background: linear-gradient(145deg, #f0f9ff, #ffffff);
     border-left: 4px solid var(--sky);
+    border-radius: 12px;
+    padding: 14px 16px;
   }
 </style>
 

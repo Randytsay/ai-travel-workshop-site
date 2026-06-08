@@ -5,5 +5,10 @@ const workshopQuickPaths = ['/doll-maker', '/travel-planner', '/notebooklm', '/s
 const quick = workshopQuickPaths.map((path) => navItems.find((item) => item.path === path)).filter(Boolean);
 ---
 <nav class="mobile-nav">
-  {quick.map((item) => <a href={item?.path} style={currentPath === item?.path ? 'font-weight:700;color:#ff7f6a;' : ''}>{item?.short}</a>)}
+  {quick.map((item, index) => (
+    <a href={item?.path} class={currentPath === item?.path ? 'active' : ''}>
+      <span class="mobile-nav-step">{index + 1}</span>
+      <span>{item?.short}</span>
+    </a>
+  ))}
 </nav>

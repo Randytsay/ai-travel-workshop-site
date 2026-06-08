@@ -7,10 +7,11 @@ const {
   eyebrow = '',
   ratio = '4 / 3',
   loading = 'lazy',
+  tone = '',
   class: className = ''
 } = Astro.props;
 ---
-<article class={`image-card ${className}`}>
+<article class={`image-card ${tone ? `image-card-${tone}` : ''} ${className}`}>
   <div class="image-frame" style={`aspect-ratio:${ratio};`}>
     <img src={src} alt={alt} loading={loading} decoding="async" />
   </div>
