@@ -1,6 +1,7 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
+import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import {
   androidSteps,
   faqItems,
@@ -18,19 +19,22 @@ import {
     <div>
       <p class="eyebrow">短影音實作</p>
       <h1>用即夢做出自己的同款影片</h1>
-      <p>這一站帶大家完成手機安裝、登入驗證，接著用「做同款」把範例短影音變成自己的作品。頁面中的截圖位置可先保留，課前用自己的 iPhone 與 Android 手機補拍即可。</p>
+      <p>這一站先把手機安裝、登入驗證與素材準備整理好，再用「做同款」把範例短影音變成自己的作品。截圖區保留給課前實機補拍，避免拿假的 App 畫面教學。</p>
       <div class="actions">
         <a class="btn" href="#ios-flow">iOS 流程</a>
         <a class="btn alt" href="#android-flow">Android 流程</a>
         <a class="btn ghost" href="#screenshot-list">截圖清單</a>
       </div>
     </div>
-    <div class="phone-demo" aria-label="即夢短影音流程示意">
-      <div class="phone-shell">
-        <div class="phone-screen">
-          <span>即夢AI</span>
-          <strong>做同款</strong>
-          <p>選範例 / 換照片 / 生成影片</p>
+    <div class="jimeng-hero-media" aria-label="短影音工作坊情境示意">
+      <img src="/images/jimeng/hero-workshop-scene-01.webp" alt="手機短影音創作工作坊情境，桌面上有手機、筆電與分鏡素材" loading="eager" decoding="async" />
+      <div class="phone-demo" aria-hidden="true">
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <span>AI Video</span>
+            <strong>做同款</strong>
+            <p>範例 / 素材 / 生成</p>
+          </div>
         </div>
       </div>
     </div>
@@ -38,8 +42,14 @@ import {
 
   <section class="tool-grid">{setupSummary.map((item) => <article class="card setup-card"><h2>{item.title}</h2><p>{item.text}</p></article>)}</section>
 
+  <section class="jimeng-classroom-strip" aria-label="課堂安全流程">
+    <span>1. 先確認帳號與下載來源</span>
+    <span>2. 用測試素材練習做同款</span>
+    <span>3. 生成後先保存，不急著公開發布</span>
+  </section>
+
   <section class="section-heading" id="ios-flow">
-    <p class="eyebrow">iOS / iPadOS</p>
+    <p class="eyebrow">iPhone / iOS</p>
     <h2>先切換 App Store 地區，再下載即夢AI與抖音</h2>
   </section>
   <section class="guide-flow">
@@ -146,52 +156,12 @@ import {
       </a>
     ))}
   </section>
-  <style>
-    .jimeng-hero { display:grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items:center; }
-    .phone-demo { display:grid; place-items:center; position: relative; z-index: 1; }
-    .phone-shell { width: 230px; min-height: 430px; padding: 14px; border-radius: 34px; background: #17213d; box-shadow: var(--shadow-float); border: 6px solid #fff; }
-    .phone-screen { min-height: 390px; display:flex; flex-direction:column; justify-content:flex-end; gap: 10px; padding: 24px; border-radius: 24px; background: linear-gradient(160deg, #f6fbff 0%, #fff7ea 48%, #ffe8df 100%); border: 1px solid rgba(255,255,255,0.7); }
-    .phone-screen span { color: var(--sunset); font-weight: 900; letter-spacing: 0.06em; }
-    .phone-screen strong { font-size: 2.1rem; line-height: 1.05; color: var(--night); }
-    .phone-screen p { margin: 0; font-weight: 800; color: var(--ink-soft); }
-    .setup-card { min-height: 170px; }
-    .guide-flow { display:grid; gap: 18px; }
-    .guide-step { display:grid; grid-template-columns: 56px minmax(0, 1fr) minmax(260px, 0.72fr); gap: 18px; align-items:stretch; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--line); background: rgba(255,255,255,0.78); box-shadow: var(--shadow-soft); }
-    .guide-step .asset-placeholder { margin: 0; min-height: 220px; display:flex; flex-direction:column; justify-content:center; }
-    .guide-copy { align-self:center; }
-    .guide-copy h3 { font-size: 1.25rem; }
-    .shot-note { margin: 14px 0 0; padding: 12px 14px; border-radius: var(--radius-sm); background: #f6fbff; border: 1px dashed rgba(53,183,212,0.35); color: var(--night); font-weight: 700; }
-    .asset-filename { margin: 12px 0 0; padding: 8px 10px; border-radius: var(--radius-sm); background: #fff; border: 1px solid var(--line); color: var(--ink-soft); font-size: 0.86rem; font-weight: 800; word-break: break-all; }
-    .asset-filename code { color: var(--night); font-weight: 900; }
-    .screenshot-section { margin-top: 36px; }
-    .faq-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 18px; }
-    .faq-lite { min-height: 180px; }
-    .reference-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 18px; margin-bottom: 14px; }
-    .reference-card { display:flex; flex-direction:column; gap: 8px; min-height: 210px; padding: 22px; border-radius: var(--radius-md); border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow-card); transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease; }
-    .reference-card:hover { transform: translateY(-3px); border-color: rgba(255,122,92,0.36); box-shadow: var(--shadow-float); }
-    .reference-card span { width: fit-content; border-radius: var(--radius-sm); border: 1px dashed rgba(255,122,92,0.32); background: #fff5f2; color: var(--sunset); padding: 5px 10px; font-size: 0.78rem; font-weight: 900; letter-spacing: 0.05em; }
-    .reference-card h3 { margin: 4px 0 2px; }
-    .reference-card p { margin: 0; }
-    .source-list { display:grid; gap: 12px; }
-    .source-item { display:grid; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; box-shadow: var(--shadow-soft); }
-    .source-item:hover { border-color: rgba(53,183,212,0.45); box-shadow: var(--shadow-card); }
-    .source-item strong { color: var(--night); }
-    .source-item span { color: var(--ink-soft); }
-    @media (max-width: 900px) {
-      .jimeng-hero { grid-template-columns: 1fr; }
-      .phone-demo { order: -1; }
-      .phone-shell { width: min(220px, 100%); min-height: 360px; }
-      .phone-screen { min-height: 320px; }
-      .guide-step { grid-template-columns: 44px 1fr; }
-      .guide-step .asset-placeholder { grid-column: 1 / -1; min-height: 190px; }
-    }
-    @media (max-width: 520px) {
-      .guide-step { grid-template-columns: 1fr; padding: 16px; }
-      .guide-step .step-index { width: 42px; height: 42px; }
-      .guide-step .asset-placeholder { grid-column: auto; }
-      .phone-shell { min-height: 320px; }
-      .phone-screen { min-height: 280px; padding: 20px; }
-      .phone-screen strong { font-size: 1.8rem; }
-    }
-  </style>
+
+  <CompleteTaskButton
+    taskId="jimeng-short-video-complete"
+    buttonLabel="我已完成即夢短影音體驗"
+    nextLabel="3D 公仔"
+    nextHref="/doll-maker"
+    successMessage="太棒了！你已經完成短影音暖身，接下來可以進入 3D 公仔創作。"
+  />
 </WorkshopLayout>

@@ -1,7 +1,7 @@
 export const setupSummary = [
   {
-    title: 'iPhone / iPad',
-    text: '先把 App Store 地區切到中國大陸，再搜尋下載「即夢AI」與「抖音」，完成手機驗證登入。'
+    title: 'iPhone',
+    text: '先確認 Apple 帳號是否適合切換地區，再到中國大陸 App Store 搜尋「即夢AI」與「抖音」，完成手機驗證登入。'
   },
   {
     title: 'Android',
@@ -9,14 +9,14 @@ export const setupSummary = [
   },
   {
     title: '課堂體驗',
-    text: '從即夢或抖音找到想模仿的範例，點「做同款」，替換照片或提示詞，產出自己的短影音。'
+    text: '從即夢或抖音找到想模仿的範例，點「做同款」，替換照片或提示詞，先產出一支可保存、不急著公開的短影音。'
   }
 ];
 
 export const iosSteps = [
   {
     title: '確認 Apple 帳號狀態',
-    text: '先確認沒有未結束的訂閱、預購、租借或帳戶餘額。Apple 官方說明指出，這些項目可能會阻止你更改國家或地區。',
+    text: '先確認沒有未結束的訂閱、預購、租借或帳戶餘額。Apple 官方說明指出，這些項目可能會影響你更改國家或地區。',
     shot: '設定 App > 你的姓名 > 媒體與購買項目，拍下進入帳號設定前的畫面。',
     filename: 'ios-region-01-account.webp'
   },
@@ -34,7 +34,7 @@ export const iosSteps = [
   },
   {
     title: '下載即夢AI與抖音',
-    text: '回到 App Store，搜尋「即夢AI」與「抖音」。即夢AI 的 App Store 頁面標示為「抖音旗下AI圖片和視頻工具」，抖音頁面標示為「記錄美好生活」。',
+    text: '回到 App Store，搜尋「即夢AI」與「抖音」。即夢AI 的中國大陸 App Store 頁面列出圖片創作、影片創作與「做同款」等功能，目前頁面也標示僅適用 iPhone。',
     shot: '拍 App Store 搜尋結果、即夢AI 下載頁、抖音下載頁。',
     filename: 'ios-download-04-app-store.webp'
   },
@@ -49,19 +49,19 @@ export const iosSteps = [
 export const androidSteps = [
   {
     title: '開啟官方入口',
-    text: '用 Android 手機瀏覽器開啟即夢官方網站與抖音官方下載頁。優先使用官方入口，不建議從來路不明的第三方 APK 站下載。',
+    text: '用 Android 手機瀏覽器開啟即夢官方網站與抖音官方下載頁。優先使用官方入口，不從來路不明的第三方 APK 站下載。',
     shot: '拍瀏覽器打開 jimeng.com 與 douyin.com 下載頁的畫面。',
     filename: 'android-download-01-official-site.webp'
   },
   {
     title: '下載 APK',
-    text: '點頁面上的下載或立即下載。若瀏覽器提醒「可能有風險」，先確認網址是官方網域，再繼續下載。',
+    text: '點頁面上的下載或立即下載。若瀏覽器提醒「可能有風險」，先確認網址是官方網域，再依主辦方課前測試結果決定是否繼續。',
     shot: '拍下載按鈕與瀏覽器下載提示。',
     filename: 'android-download-02-apk.webp'
   },
   {
     title: '允許安裝未知來源',
-    text: '第一次安裝 APK 時，Android 會要求允許此瀏覽器安裝應用程式。只對目前瀏覽器開啟權限，安裝完成後可再關閉。',
+    text: '第一次安裝 APK 時，Android 可能會要求允許此瀏覽器安裝應用程式。只對目前瀏覽器開啟權限，安裝完成後可再關閉。',
     shot: '拍 Android「允許來自此來源」設定頁。',
     filename: 'android-install-03-permission.webp'
   },
@@ -112,7 +112,7 @@ export const screenshotAssetFolder = '/images/jimeng/';
 export const faqItems = [
   {
     q: 'iPhone 一定要把自己的 Apple ID 改到中國大陸嗎？',
-    a: '不一定。若學員擔心訂閱、付款或 iCloud 內容受到影響，課堂更穩的做法是準備一個只用來下載 App 的教學用 Apple 帳號。'
+    a: '不一定。若學員擔心訂閱、付款或既有 App 受到影響，課堂更穩的做法是準備一個只用來下載 App 的教學用 Apple 帳號。'
   },
   {
     q: 'Android 可以從第三方 APK 站下載嗎？',
@@ -158,13 +158,13 @@ export const tutorialReferences = [
 export const officialLinks = [
   {
     label: 'Apple 官方：更改 Apple 帳戶國家或地區',
-    href: 'https://support.apple.com/zh-cn/118283',
+    href: 'https://support.apple.com/zh-tw/118283',
     note: 'Apple 說明更改地區前需處理帳戶餘額、訂閱、付款方式等限制。'
   },
   {
     label: '即夢AI App Store 中國大陸頁',
     href: 'https://apps.apple.com/cn/app/%E5%8D%B3%E6%A2%A6ai-%E6%8A%96%E9%9F%B3%E6%97%97%E4%B8%8Bai%E5%9B%BE%E7%89%87%E5%92%8C%E8%A7%86%E9%A2%91%E5%B7%A5%E5%85%B7/id6503676563',
-    note: '確認 iOS 需求、開發者、功能描述與「做同款」功能。'
+    note: '確認 iPhone 需求、開發者、功能描述與「做同款」功能。'
   },
   {
     label: '即夢AI 官方網站',
@@ -174,7 +174,7 @@ export const officialLinks = [
   {
     label: '抖音 App Store 中國大陸頁',
     href: 'https://apps.apple.com/cn/app/%E6%8A%96%E9%9F%B3/id1142110895',
-    note: '確認 iOS / iPadOS 需求、開發者與 App 介紹。'
+    note: '確認 iOS 需求、開發者與 App 介紹。'
   },
   {
     label: '抖音官方下載頁',
