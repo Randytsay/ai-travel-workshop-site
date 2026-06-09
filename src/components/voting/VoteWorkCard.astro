@@ -1,8 +1,14 @@
 ---
 const { work } = Astro.props;
+const typeLabels = {
+  doll: '公仔作品',
+  planner: '旅遊規劃',
+  sticker: '貼圖作品'
+};
 ---
 <article class="card vote-card" data-work-id={work.id}>
   <div class="emoji">{work.image}</div>
+  <p class="eyebrow">{typeLabels[work.type as keyof typeof typeLabels] ?? '作品'}</p>
   <h3>{work.title}</h3>
   <p>{work.author} · <span data-vote-count>{work.votes}</span> 票</p>
   <button class="btn vote-button" type="button">投一票</button>

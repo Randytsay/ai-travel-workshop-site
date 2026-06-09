@@ -4,8 +4,10 @@ import CTASection from '../components/common/CTASection.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import ImageCard from '../components/common/ImageCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
 import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
 import { siteConfig } from '../content/siteConfig';
+import { stationRoles } from '../content/journeyGuide';
 ---
 <WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
   <section class="hero with-image">
@@ -18,6 +20,8 @@ import { siteConfig } from '../content/siteConfig';
       <img src="/images/survey/hero-finish-journey-01.webp" alt="工作坊結尾的旅行桌面與講義領取情境，呈現完成旅程的溫暖感" loading="eager" decoding="async" />
     </div>
   </section>
+
+  <StationRole role={stationRoles['/survey']} />
 
   <section class="feature-grid survey-reward-grid">
     <article class="card"><h2>為什麼要填意見表</h2><ul class="example-list">{surveyReasons.map((r)=> <li>{r}</li>)}</ul></article>

@@ -4,9 +4,11 @@ import CTASection from '../components/common/CTASection.astro';
 import ImageCard from '../components/common/ImageCard.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
 import { travelPrompts } from '../content/prompts';
 import { travelFlow } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
+import { stationRoles } from '../content/journeyGuide';
 ---
 <WorkshopLayout title="AI 旅遊規劃師" currentPath="/travel-planner">
   <section class="hero with-image">
@@ -19,6 +21,8 @@ import { siteConfig } from '../content/siteConfig';
       <img src="/images/travel-planner/travel-planner-flow-01.webp" alt="AI 旅遊規劃流程，包含需求訪談、行程卡與地圖路線示意" loading="eager" decoding="async" />
     </div>
   </section>
+
+  <StationRole role={stationRoles['/travel-planner']} />
 
   <section class="feature-grid">
     <article class="card boarding-pass-card recommended-card">
