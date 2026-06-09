@@ -1,0 +1,146 @@
+---
+import WorkshopLayout from '../layouts/WorkshopLayout.astro';
+import CTASection from '../components/common/CTASection.astro';
+import ImageCard from '../components/common/ImageCard.astro';
+import {
+  aiEraRoles,
+  aiToolMap,
+  beneficialFriends,
+  impacts,
+  interfaceBasics,
+  opportunities,
+  promptFormula,
+  todayFlow
+} from '../content/aiGuidePage';
+---
+<WorkshopLayout title="AI 益友入口" currentPath="/ai-guide">
+  <section class="hero with-image">
+    <div>
+      <p class="eyebrow">AI 小白友善入口</p>
+      <h1>把 AI 當成益友，而不是難懂的機器</h1>
+      <p>孔子說「益者三友」：友直、友諒、友多聞。今天我們也用這個角度認識 AI：它可以照見盲點、耐心陪練、打開視野，但最後做判斷與負責的人，仍然是你。</p>
+      <div class="actions">
+        <a class="btn" href="#three-friends">認識三種 AI 益友</a>
+        <a class="btn alt" href="#tool-map">工具怎麼選</a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img src="/images/ai-guide/hero-ai-beneficial-friend-01.png" alt="友善 AI 和初學者一起在工作坊桌上討論旅行與創作素材" loading="eager" decoding="async" />
+    </div>
+  </section>
+
+  <section class="tool-grid">
+    {aiEraRoles.map((item) => (
+      <article class="card glass-card">
+        <h2>{item.title}</h2>
+        <p>{item.text}</p>
+      </article>
+    ))}
+  </section>
+
+  <section class="section-heading" id="three-friends">
+    <p class="eyebrow">益者三友</p>
+    <h2>AI 可以像三種好朋友，陪你開始學</h2>
+  </section>
+  <section class="friend-grid">
+    {beneficialFriends.map((friend) => (
+      <article class="friend-card">
+        <img src={friend.image} alt={friend.alt} loading="lazy" decoding="async" />
+        <div>
+          <p class="eyebrow">{friend.quote}</p>
+          <h3>{friend.title}</h3>
+          <p>{friend.text}</p>
+          <ul>{friend.examples.map((example) => <li>{example}</li>)}</ul>
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <section class="section-heading" id="tool-map">
+    <p class="eyebrow">工具地圖</p>
+    <h2>不要問哪個 AI 最強，先問你要完成什麼</h2>
+  </section>
+  <section class="tool-table card">
+    <div class="tool-row tool-head">
+      <strong>工具</strong>
+      <strong>最適合</strong>
+      <strong>什麼時候選它</strong>
+    </div>
+    {aiToolMap.map((item) => (
+      <div class="tool-row">
+        <strong>{item.tool}</strong>
+        <span>{item.bestFor}</span>
+        <span>{item.chooseWhen}</span>
+      </div>
+    ))}
+  </section>
+
+  <section class="two-col">
+    <section class="card postcard-card">
+      <p class="eyebrow">操作介面</p>
+      <h2>大部分 AI App 都看這幾個地方</h2>
+      <ul class="example-list">{interfaceBasics.map(([name, text]) => <li><strong>{name}</strong>：{text}</li>)}</ul>
+    </section>
+    <section class="card notice-card">
+      <p class="eyebrow">小白提醒</p>
+      <h2>第一次答不好很正常</h2>
+      <p>AI 的使用方式不是「問一次就結束」，而是像和朋友討論：你補背景、它給草稿；你指出不對、它再修正。</p>
+    </section>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">萬用提示詞</p>
+    <h2>把問題問清楚，答案才會更像你要的</h2>
+  </section>
+  <section class="card itinerary-card">
+    <ul class="example-list">{promptFormula.map((item) => <li>{item}</li>)}</ul>
+    <div class="example-block">
+      <p><strong>範例：</strong></p>
+      <p>你是一位旅遊規劃師。我要規劃 3 天 2 夜台中親子旅行，旅伴有 2 位大人和 1 位小學生，希望不要太趕，預算中等。請用表格列出每天上午、下午、晚上行程，並附交通與注意事項。</p>
+    </div>
+  </section>
+
+  <section style="margin: 28px 0;">
+    <ImageCard src="/images/ai-guide/friend-wide-reader-01.png" alt="AI 展開聊天、表格、簡報、影片、圖片與旅行等工具選項" title="AI 幫你看到選項，但你決定方向" text="今天會練習把 AI 放在正確任務上：查資料、做圖、做影片、做文件，各有適合的工具。" ratio="16 / 9" tone="featured" />
+  </section>
+
+  <section class="two-col">
+    <section class="card">
+      <p class="eyebrow">機會</p>
+      <h2>AI 讓小團隊也有大能力</h2>
+      <ul class="example-list">{opportunities.map((item) => <li>{item}</li>)}</ul>
+    </section>
+    <section class="card">
+      <p class="eyebrow">衝擊</p>
+      <h2>越方便，越需要判斷力</h2>
+      <ul class="example-list">{impacts.map((item) => <li>{item}</li>)}</ul>
+    </section>
+  </section>
+
+  <section class="card boarding-pass-card today-card">
+    <p class="eyebrow">今天怎麼走</p>
+    <h2>先建立地圖，再開始做作品</h2>
+    <ol>{todayFlow.map((item) => <li>{item}</li>)}</ol>
+  </section>
+
+  <CTASection title="先有架構，再進入 AI 入門" text="下一頁會用更生活化的方式理解 AI 旅伴，接著開始短影音暖身。" primaryLabel="前往 AI 入門" primaryHref="/ai-basics" />
+
+  <style>
+    .friend-grid { display:grid; gap:20px; }
+    .friend-card { display:grid; grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1fr); gap:22px; align-items:center; padding:18px; border:1px solid var(--line); border-radius:var(--radius-md); background:#fff; box-shadow:var(--shadow-card); }
+    .friend-card img { width:100%; aspect-ratio: 4 / 3; object-fit:cover; display:block; border-radius:var(--radius-sm); background:#f6fbff; }
+    .friend-card h3 { font-size:1.45rem; }
+    .friend-card ul { margin:14px 0 0; padding-left:22px; }
+    .tool-table { padding:0; overflow:hidden; }
+    .tool-row { display:grid; grid-template-columns: 130px minmax(0, 1fr) minmax(0, 1fr); gap:14px; padding:15px 18px; border-bottom:1px solid var(--line); }
+    .tool-row:last-child { border-bottom:0; }
+    .tool-head { background:#f6fbff; color:var(--night); }
+    .today-card ol { margin: 0; padding-left: 24px; color: var(--ink-soft); font-weight: 700; }
+    .today-card li { margin-bottom: 8px; }
+    @media (max-width: 760px) {
+      .friend-card { grid-template-columns: 1fr; }
+      .tool-row { grid-template-columns: 1fr; gap:6px; }
+      .tool-head { display:none; }
+    }
+  </style>
+</WorkshopLayout>

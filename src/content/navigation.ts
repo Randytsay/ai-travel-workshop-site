@@ -3,6 +3,7 @@ export interface NavItem { label: string; path: string; short: string }
 export const navItems: NavItem[] = [
   { label: '工作坊首頁', path: '/', short: '首頁' },
   { label: '課前準備', path: '/prep', short: '任務' },
+  { label: 'AI 益友入口', path: '/ai-guide', short: '益友' },
   { label: 'AI 入門', path: '/ai-basics', short: 'AI' },
   { label: '即夢短影音', path: '/jimeng-short-video', short: '即夢' },
   { label: '3D 公仔', path: '/doll-maker', short: '公仔' },

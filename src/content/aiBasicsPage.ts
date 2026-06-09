@@ -9,6 +9,7 @@ export const aiLifeHelps = ['旅遊行程草案', '聚餐與送禮靈感', '貼�
 export const aiToolCompare = [
   { tool: 'ChatGPT', fit: '靈感發想、對話整理、生成圖片', note: '本次工作坊主力工具' },
   { tool: 'Gemini', fit: '備援生成、觀點補充、多版本比較', note: '遇到額度限制可切換' },
+  { tool: 'Codex', fit: 'Word、Excel、PPT、網站與工作檔案製作', note: '需要產出檔案時交給它' },
   { tool: 'NotebookLM', fit: '長資料整理、摘要、簡報化', note: '適合課後深化研究' }
 ];
 
