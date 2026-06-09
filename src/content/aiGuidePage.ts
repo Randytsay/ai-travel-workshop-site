@@ -17,7 +17,7 @@ export const beneficialFriends = [
   {
     title: '友直：幫你照見盲點',
     quote: '像一面不刺人的鏡子',
-    image: '/images/ai-guide/friend-honest-mirror-01.png',
+    image: '/images/ai-guide/friend-honest-mirror-01.webp',
     alt: '友善 AI 用鏡子協助初學者把混亂想法整理成步驟',
     text: '當你不知道問題出在哪裡，AI 可以幫你拆解需求、指出矛盾、提醒遺漏，讓你重新看見自己的想法。',
     examples: ['檢查企劃是否完整', '提醒資料還缺什麼', '把含糊需求問清楚']
@@ -25,7 +25,7 @@ export const beneficialFriends = [
   {
     title: '友諒：陪你慢慢練習',
     quote: '像一位不會嫌你問太多次的教練',
-    image: '/images/ai-guide/friend-patient-coach-01.png',
+    image: '/images/ai-guide/friend-patient-coach-01.webp',
     alt: '友善 AI 端著茶，耐心陪伴初學者看步驟卡',
     text: '小白最需要的不是一次學完，而是有人願意用不同說法重講。AI 很適合當練習夥伴，陪你改、陪你問、陪你再試一次。',
     examples: ['用白話解釋專有名詞', '改寫成更自然的句子', '陪你演練簡報或銷售']
@@ -33,7 +33,7 @@ export const beneficialFriends = [
   {
     title: '友多聞：幫你打開視野',
     quote: '像一位讀過很多資料的旅伴',
-    image: '/images/ai-guide/friend-wide-reader-01.png',
+    image: '/images/ai-guide/friend-wide-reader-01.webp',
     alt: '友善 AI 展開多種工具卡，協助初學者選擇適合路徑',
     text: 'AI 可以快速比較工具、整理資料、給你多種角度。它不是最終裁判，但能讓你先看到更多可能。',
     examples: ['比較不同工具適合情境', '整理文件重點', '提供多個創作方向']
