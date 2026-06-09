@@ -5,9 +5,11 @@ import CTASection from '../components/common/CTASection.astro';
 import ImageCard from '../components/common/ImageCard.astro';
 import PromptCard from '../components/prompts/PromptCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
 import { notebookContent } from '../content/prompts';
 import { notebookSteps } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
+import { stationRoles } from '../content/journeyGuide';
 
 const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-research')?.prompts.chatgpt || '';
 ---
@@ -27,6 +29,8 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
       <img src="/images/notebooklm/hero-research-studio-01.webp" alt="NotebookLM 旅遊研究工作桌，包含地圖、資料卡與研究報告示意" loading="eager" decoding="async" />
     </div>
   </section>
+
+  <StationRole role={stationRoles['/notebooklm']} />
 
   <section class="section-heading">
     <p class="eyebrow">📋 研究手冊</p>

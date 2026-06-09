@@ -4,19 +4,65 @@ import ImageCard from '../components/common/ImageCard.astro';
 import VoteWorkCard from '../components/voting/VoteWorkCard.astro';
 import LeaderboardPanel from '../components/voting/LeaderboardPanel.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
 import { voteTabs, voteWorks } from '../data/voting';
+import { recommendedVotingFlow, sharingMethods, stationRoles, votingAwardIdeas } from '../content/journeyGuide';
+import { siteConfig } from '../content/siteConfig';
 ---
 <WorkshopLayout title="現場互動投票" currentPath="/voting">
   <section class="hero with-image">
     <div>
       <p class="eyebrow">🏆 壓軸互動</p>
       <h1>現場頒獎舞台</h1>
-      <p>選出你最喜歡的紀念品與旅遊規劃，給旅伴們一個熱烈掌聲 👏 目前為可展示的本機互動版，正式版將串接即時資料庫。</p>
+      <p>這一站先把大家的成果集中到同一個舞台，再一起選出最有共鳴的作品。現場建議用 LINE 群組收件，助教整理後再開放投票。</p>
+      <div class="actions">
+        <a class="btn" href={siteConfig.workshopGroupUrl} target="_blank" rel="noreferrer">上傳作品到群組</a>
+        <a class="btn alt" href="#vote-list">前往投票區</a>
+        <a class="btn ghost" href="#sharing-methods">查看分享方式</a>
+      </div>
     </div>
     <div class="hero-media">
       <img src="/images/voting/hero-award-stage-01.webp" alt="人氣票選頒獎舞台，作品展示架與獎盃在燈光下呈現" loading="eager" decoding="async" />
     </div>
   </section>
+
+  <StationRole role={stationRoles['/voting']} />
+
+  <section class="voting-flow-board">
+    <div>
+      <p class="eyebrow">推薦現場流程</p>
+      <h2>先收件，再展示，最後投票</h2>
+      <p>對新手最友善的方式，是不要讓大家同時學新工具又上傳作品。先用熟悉的 LINE 群組收件，再由助教整理到投票頁。</p>
+    </div>
+    <ol class="voting-flow-list">
+      {recommendedVotingFlow.map((item) => <li>{item}</li>)}
+    </ol>
+  </section>
+
+  <section class="section-heading" id="sharing-methods">
+    <p class="eyebrow">成果可以怎麼分享</p>
+    <h2>依活動規模選一種，不要一次開太多入口</h2>
+  </section>
+  <section class="sharing-method-grid">
+    {sharingMethods.map((method) => (
+      <article class="card sharing-method-card">
+        <span>{method.fit}</span>
+        <h3>{method.title}</h3>
+        <p>{method.text}</p>
+        <p class="muted">{method.tradeoff}</p>
+      </article>
+    ))}
+  </section>
+
+  <section class="card share-format-card">
+    <p class="eyebrow">LINE 群組收件格式</p>
+    <h2>請學員照這 3 行上傳</h2>
+    <pre>姓名 / 作品類型
+作品一句話介紹
+上傳圖片或貼上作品連結</pre>
+    <button class="btn ghost copy-btn" type="button" data-text={`姓名 / 作品類型\n作品一句話介紹\n上傳圖片或貼上作品連結`}>複製收件格式</button>
+  </section>
+
   <section style="margin-bottom:24px;">
     <ImageCard src="/images/voting/featured-works-collage-01.webp" alt="參與投票的公仔、旅遊行程卡與貼圖作品拼貼" title="先瀏覽精選作品，再投下你的一票" text="正式活動時可替換成當場學員作品，目前使用示意素材呈現投票情境。" ratio="16 / 9" />
   </section>
@@ -30,8 +76,8 @@ import { voteTabs, voteWorks } from '../data/voting';
   <LeaderboardPanel works={voteWorks} />
   <section class="card vote-status-card"><p class="eyebrow">🚥 舞台狀態</p><h2>現場票選進行中</h2><p>主持人會在最後統一揭曉排行榜 TOP 3，歡迎繼續為你喜歡的旅伴作品按讚投票。</p></section>
   <section class="feature-grid">
-    <article class="card showcase-card" style="text-align:left;"><h2>🎁 獎項說明</h2><ul class="example-list"><li>人氣王（總票數第一）</li><li>最佳創意獎（講師團特選）</li><li>最暖故事獎（主持人特選）</li></ul></article>
-    <article class="card notice-card" style="background:#fdfdfd; border-color:#e0e0e0;"><h2>⚙️ Admin Control (預留)</h2><p>正式版可開啟：開始投票、暫停投票、公布得獎者、重設場次。</p></article>
+    <article class="card showcase-card" style="text-align:left;"><h2>🎁 獎項說明</h2><ul class="example-list">{votingAwardIdeas.map((item) => <li>{item}</li>)}</ul></article>
+    <article class="card notice-card" style="background:#fdfdfd; border-color:#e0e0e0;"><h2>主持人操作建議</h2><p>投票開始前先提醒大家只投一次；結束後截圖排行榜，再請得獎者用 30 秒分享作品故事。</p></article>
   </section>
   <p class="disclaimer-text" style="margin-top: 12px;">上傳作品代表同意於本次工作坊成果展示與現場票選使用；若不希望公開展示，請於上傳前告知講師或助教。</p>
   <CompleteTaskButton 
@@ -41,7 +87,7 @@ import { voteTabs, voteWorks } from '../data/voting';
     nextHref="/survey"
     successMessage="投票完成！看看誰會是今天的人氣王？"
   />
-  <section class="card" style="background:#f9f9f9; padding:16px; font-size:0.85rem;"><p style="margin:0; text-align:center;"><strong>⚙️ 系統待接狀態：</strong>Firebase Realtime Database、裝置投票限制、即時排行榜刷新與投影模式。</p></section>
+  <section class="card" style="background:#f9f9f9; padding:16px; font-size:0.85rem;"><p style="margin:0; text-align:center;"><strong>正式自動化可再接：</strong>Google 表單收件、成果牆同步、裝置投票限制、即時排行榜刷新與投影模式。</p></section>
 </WorkshopLayout>
 <script>
   const tabs = document.querySelectorAll('.vote-tab');

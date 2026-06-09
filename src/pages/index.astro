@@ -4,6 +4,7 @@ import ImageCard from '../components/common/ImageCard.astro';
 import { schedule } from '../content/schedule';
 import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
 import { navItems } from '../content/navigation';
+import { journeyConcept } from '../content/journeyGuide';
 const journeyStops = navItems.slice(1, 8);
 ---
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
@@ -28,6 +29,24 @@ const journeyStops = navItems.slice(1, 8);
     </div>
   </section>
 
+  <section class="journey-logic-card">
+    <div>
+      <p class="eyebrow">新手先看這裡</p>
+      <h2>{journeyConcept.title}</h2>
+      <p>{journeyConcept.text}</p>
+    </div>
+    <div class="journey-logic-grid">
+      <article>
+        <strong>7 站任務章</strong>
+        <p>上課跟著走的操作路線</p>
+      </article>
+      <article>
+        <strong>3 個可帶走成果</strong>
+        <p>課後能保存、分享、重做的作品</p>
+      </article>
+    </div>
+  </section>
+
   <section class="journey-strip" aria-label="工作坊路線">
     {journeyStops.map((item, index) => (
       <a href={item.path} class="journey-stop">
@@ -48,6 +67,19 @@ const journeyStops = navItems.slice(1, 8);
         <p>{item.text}</p>
       </article>
     ))}
+  </section>
+
+  <section class="tool-grid">
+    <article class="card itinerary-card">
+      <p class="eyebrow">任務章路線</p>
+      <h2>今天照這 7 站走</h2>
+      <ul class="example-list">{journeyConcept.tasks.map((item) => <li>{item}</li>)}</ul>
+    </article>
+    <article class="card notice-card">
+      <p class="eyebrow">成果整理</p>
+      <h2>最後帶走這 3 類作品</h2>
+      <ul class="example-list">{journeyConcept.outcomes.map((item) => <li>{item}</li>)}</ul>
+    </article>
   </section>
 
   <section class="hero-gallery" style="margin: 32px 0;">

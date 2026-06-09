@@ -5,9 +5,11 @@ import CTASection from '../components/common/CTASection.astro';
 import ImageCard from '../components/common/ImageCard.astro';
 import StylePackCard from '../components/prompts/StylePackCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
 import { stickerLabContent } from '../content/prompts';
 import { stickerSteps } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
+import { stationRoles } from '../content/journeyGuide';
 ---
 <WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
   <section class="hero">
@@ -26,6 +28,8 @@ import { siteConfig } from '../content/siteConfig';
       </div>
     </div>
   </section>
+
+  <StationRole role={stationRoles['/sticker-lab']} />
 
   <section class="feature-grid">
     <article class="card notice-card">

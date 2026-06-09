@@ -4,6 +4,7 @@ import ImageCard from '../components/common/ImageCard.astro';
 import GalleryGrid from '../components/gallery/GalleryGrid.astro';
 import GalleryModal from '../components/gallery/GalleryModal.astro';
 import { galleryFilters, galleryItems } from '../data/gallery';
+import { recommendedVotingFlow } from '../content/journeyGuide';
 ---
 <WorkshopLayout title="成果牆" currentPath="/gallery">
   <section class="hero with-image">
@@ -16,6 +17,12 @@ import { galleryFilters, galleryItems } from '../data/gallery';
       <img src="/images/gallery/postcard-wall-01.webp" alt="AI 旅行成果明信片牆，展示公仔、貼圖、行程卡與地圖作品" loading="eager" decoding="async" />
     </div>
   </section>
+  <section class="card gallery-intent-card">
+    <p class="eyebrow">成果牆怎麼用</p>
+    <h2>這裡負責展示與回顧，收件請先走 LINE 群組或表單</h2>
+    <p>現場最穩的節奏是：先收件、再整理、再投票，最後把精選作品放回成果牆。這樣新手不用同時學太多工具，主持人也比較能掌控流程。</p>
+    <ol class="example-list">{recommendedVotingFlow.slice(0, 3).map((item) => <li>{item}</li>)}</ol>
+  </section>
   <section class="hero-gallery" style="margin-bottom:24px;">
     <ImageCard src="/images/gallery/hero-postcard-wall-01.webp" alt="旅行回憶牆上的明信片、拍立得、地圖與貼紙" title="每張作品都是一張旅程郵戳" text="現場作品會逐步補進這面牆，形成可回看的共創紀錄。" ratio="16 / 9" />
     <ImageCard src="/images/gallery/gallery-featured-01.webp" alt="3D 公仔、旅遊行程卡、貼圖卡與研究成果卡展示" title="精選成果展示" text="用示意圖先建立展示感，正式版可接表單或資料庫同步。" ratio="16 / 9" />
@@ -26,8 +33,11 @@ import { galleryFilters, galleryItems } from '../data/gallery';
   </section>
   <section id="gallery-wrap" class="gallery-wall" style="margin-top:20px;">{galleryItems.map((item) => <div class="card postcard-card" style="padding:16px; margin-bottom:0;" data-item-type={item.type} data-title={item.title} data-desc={item.desc}><GalleryGrid items={[item]} /></div>)}</section>
   <GalleryModal />
-  <section style="margin:32px 0; text-align:center; opacity:0.6; font-size:0.85rem;"><p>目前為示範資料；正式版將自表單動態同步素材。</p></section>
-  <div style="text-align:center; margin-bottom: 40px;"><a class="btn" href="/survey" style="min-width: 200px;">領取紀念品 (課後問卷)</a></div>
+  <section style="margin:32px 0; text-align:center; opacity:0.75; font-size:0.9rem;"><p>目前為示範資料；正式版可由 LINE 收件後人工更新，或從表單 / 資料庫動態同步素材。</p></section>
+  <div style="text-align:center; margin-bottom: 40px;">
+    <a class="btn alt" href="/voting" style="min-width: 200px;">回到現場投票</a>
+    <a class="btn" href="/survey" style="min-width: 200px; margin-left: 10px;">最後一步：填問卷領講義</a>
+  </div>
 </WorkshopLayout>
 <script>
   const filters = document.querySelectorAll('.filter-btn');

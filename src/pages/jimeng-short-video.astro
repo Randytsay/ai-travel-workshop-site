@@ -2,6 +2,8 @@
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
+import { stationRoles } from '../content/journeyGuide';
 import {
   androidSteps,
   faqItems,
@@ -39,6 +41,8 @@ import {
       </div>
     </div>
   </section>
+
+  <StationRole role={stationRoles['/jimeng-short-video']} />
 
   <section class="tool-grid">{setupSummary.map((item) => <article class="card setup-card"><h2>{item.title}</h2><p>{item.text}</p></article>)}</section>
 

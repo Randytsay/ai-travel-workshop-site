@@ -1,0 +1,10 @@
+---
+const { role } = Astro.props;
+---
+{role && (
+  <section class="station-role-card" aria-label="本頁任務說明">
+    <p class="eyebrow">{role.eyebrow}</p>
+    <h2>{role.title}</h2>
+    <p>{role.text}</p>
+  </section>
+)}

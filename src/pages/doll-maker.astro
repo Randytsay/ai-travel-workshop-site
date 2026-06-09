@@ -5,9 +5,11 @@ import CTASection from '../components/common/CTASection.astro';
 import ImageCard from '../components/common/ImageCard.astro';
 import PromptGroup from '../components/prompts/PromptGroup.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
+import StationRole from '../components/common/StationRole.astro';
 import { dollPrompts } from '../content/prompts';
 import { dollSteps } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
+import { stationRoles } from '../content/journeyGuide';
 ---
 <WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
   <section class="hero">
@@ -26,6 +28,8 @@ import { siteConfig } from '../content/siteConfig';
       </div>
     </div>
   </section>
+
+  <StationRole role={stationRoles['/doll-maker']} />
 
   <section class="feature-grid">
     <article class="card postcard-card">

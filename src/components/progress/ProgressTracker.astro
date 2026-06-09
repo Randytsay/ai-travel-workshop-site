@@ -13,6 +13,7 @@ const total = progressTasks.length;
   <p class="progress-text" data-progress-text-container>
     <span class="progress-count" data-progress-count>0</span> / <span>{total}</span> 已完成
   </p>
+  <p class="progress-next" data-progress-next></p>
   <p class="progress-celebration" data-progress-celebration hidden>太棒了，今天的工作坊任務全完成！</p>
   <button class="progress-reset-btn" type="button" data-progress-reset>重新開始</button>
 </div>
@@ -60,6 +61,12 @@ const total = progressTasks.length;
   }
   .progress-count {
     color: var(--coral);
+  }
+  .progress-next {
+    margin: 6px 0 0;
+    color: var(--night);
+    font-size: 0.8rem;
+    font-weight: 850;
   }
   .progress-celebration {
     margin: 6px 0 0;
@@ -116,17 +123,22 @@ const total = progressTasks.length;
       const countText = container.querySelector('[data-progress-count]') as HTMLElement | null;
       const percentText = container.querySelector('[data-progress-percent]') as HTMLElement | null;
       const textContainer = container.querySelector('[data-progress-text-container]') as HTMLElement | null;
+      const nextText = container.querySelector('[data-progress-next]') as HTMLElement | null;
       const celebration = container.querySelector('[data-progress-celebration]') as HTMLElement | null;
+      const nextTask = progressTasks.find((task) => !progress.includes(task.id));
 
       if (fill) fill.style.width = `${percentage}%`;
       if (countText) countText.textContent = String(count);
       if (percentText) percentText.textContent = `${Math.round(percentage)}%`;
+      if (nextText) nextText.textContent = nextTask ? `下一站：${nextTask.label}` : '';
 
       if (count === total && total > 0) {
         if (textContainer) textContainer.hidden = true;
+        if (nextText) nextText.hidden = true;
         if (celebration) celebration.hidden = false;
       } else {
         if (textContainer) textContainer.hidden = false;
+        if (nextText) nextText.hidden = false;
         if (celebration) celebration.hidden = true;
       }
     });
