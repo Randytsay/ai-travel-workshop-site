@@ -89,8 +89,15 @@ import '../../styles/sticker-tool.css';
         </div>
       </div>
 
+      <div class="st-mode-tabs" role="group" aria-label="微調模式">
+        <button class="st-mode-tab is-active" data-mode="auto" type="button">自動格線</button>
+        <button class="st-mode-tab" data-mode="single" type="button">單格微調</button>
+        <button class="st-mode-tab" data-mode="free" type="button">自由繪製</button>
+      </div>
+
       <div class="st-actions">
         <button class="st-btn st-btn-primary" id="st-btnAuto" disabled>✦ 自動偵測</button>
+        <button class="st-btn st-btn-primary" id="st-btnApplyGrid" disabled>＋ 加入目前格線</button>
         <button class="st-btn st-btn-ocean" id="st-btnCrop" disabled>✂ 裁切並加入</button>
         <button class="st-btn" id="st-btnReset">↺ 重設框選</button>
         <button class="st-btn" id="st-btnNext" disabled>↑ 下一張</button>
@@ -141,6 +148,15 @@ import { buildZip, triggerDownload, downloadAllPng } from '../../lib/sticker-too
 // 讓 PACK_SIZES 元素的型別放寬（避免 as const 推導出太窄的字面量型別）
 type PackSize = (typeof PACK_SIZES)[number];
 let activePack: PackSize = PACK_SIZES.find(p => p.id === DEFAULT_PACK_ID)!;
+type EditMode = 'auto' | 'single' | 'free';
+type CellHandle = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
+type DragState =
+  | { kind: 'manual' }
+  | { kind: 'free' }
+  | { kind: 'line-v'; index: number }
+  | { kind: 'line-h'; index: number }
+  | { kind: 'cell-move'; index: number; start: { x: number; y: number }; rect: Rect }
+  | { kind: 'cell-handle'; index: number; handle: CellHandle; rect: Rect };
 
 // ─── DOM refs ─────────────────────────────────────────────
 const $ = (id: string): HTMLElement => {
@@ -167,6 +183,7 @@ const iW = $('st-iW') as HTMLInputElement;
 const iH = $('st-iH') as HTMLInputElement;
 const szDsp = $('st-szDsp');
 const btnAuto = $('st-btnAuto') as HTMLButtonElement;
+const btnApplyGrid = $('st-btnApplyGrid') as HTMLButtonElement;
 const btnCrop = $('st-btnCrop') as HTMLButtonElement;
 const btnReset = $('st-btnReset') as HTMLButtonElement;
 const btnNext = $('st-btnNext') as HTMLButtonElement;
@@ -201,6 +218,7 @@ let originalCanvas: HTMLCanvasElement | null = null;
 let processingOriginal: Promise<void> | null = null;
 let items: { dataUrl: string; name: string; w: number; h: number }[] = [];
 let dragging = false;
+let dragState: DragState | null = null;
 let ds = { x: 0, y: 0 };
 let cr = { x: 0, y: 0, w: 0, h: 0 };
 let sc = 1, dW = 0, dH = 0;
@@ -212,6 +230,12 @@ let manualBg: BgColor | null = null;
 let autoThresh = 40;
 let watermarkRefCache: HTMLCanvasElement | null = null;
 let lbIndex = -1;
+let editMode: EditMode = 'auto';
+let gridCells: Rect[] = [];
+let rowCuts: number[] = [];
+let colCuts: number[] = [];
+let selectedCellIndex = -1;
+let freePoints: Array<{ x: number; y: number }> = [];
 
 // ─── Helpers ──────────────────────────────────────────────
 const isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -235,6 +259,106 @@ function toast(msg: string, duration = 2500) {
   (t as any)._timer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function rectToDisplay(r: Rect) {
+  return { x: r.x * sc, y: r.y * sc, w: r.w * sc, h: r.h * sc };
+}
+
+function displayToRect(r: { x: number; y: number; w: number; h: number }): Rect {
+  return {
+    x: Math.round(r.x / sc),
+    y: Math.round(r.y / sc),
+    w: Math.max(1, Math.round(r.w / sc)),
+    h: Math.max(1, Math.round(r.h / sc)),
+  };
+}
+
+function clearGridState() {
+  gridCells = [];
+  rowCuts = [];
+  colCuts = [];
+  selectedCellIndex = -1;
+  freePoints = [];
+  btnApplyGrid.disabled = true;
+}
+
+function equalCuts(total: number, divisions: number) {
+  return Array.from({ length: divisions + 1 }, (_, i) => Math.round((total * i) / divisions));
+}
+
+function cutsFromCells(cells: Rect[]) {
+  if (!img || cells.length < activePack.total) {
+    colCuts = img ? equalCuts(img.naturalWidth, activePack.cols) : [];
+    rowCuts = img ? equalCuts(img.naturalHeight, activePack.rows) : [];
+    return;
+  }
+  const firstRow = cells.slice(0, activePack.cols);
+  const firstCol = cells.filter((_, i) => i % activePack.cols === 0);
+  colCuts = [firstRow[0].x, ...firstRow.map(c => c.x + c.w)];
+  rowCuts = [firstCol[0].y, ...firstCol.map(c => c.y + c.h)];
+}
+
+function buildCellsFromCuts(): Rect[] {
+  const cells: Rect[] = [];
+  for (let r = 0; r < activePack.rows; r++) {
+    for (let c = 0; c < activePack.cols; c++) {
+      const x = colCuts[c], y = rowCuts[r];
+      cells.push({ x, y, w: colCuts[c + 1] - x, h: rowCuts[r + 1] - y });
+    }
+  }
+  return cells;
+}
+
+function setGridCells(cells: Rect[]) {
+  gridCells = cells.map(c => ({ ...c }));
+  cutsFromCells(gridCells);
+  if (colCuts.length && rowCuts.length) gridCells = buildCellsFromCuts();
+  selectedCellIndex = -1;
+  cr = { x: 0, y: 0, w: 0, h: 0 };
+  btnApplyGrid.disabled = !gridCells.length;
+  btnCrop.disabled = true;
+  drawOverlay();
+}
+
+function setCrFromCell(index: number) {
+  const cell = gridCells[index];
+  if (!cell) return;
+  cr = rectToDisplay(cell);
+  syncFields();
+  btnCrop.disabled = false;
+}
+
+function updateSelectedCell(next: Rect) {
+  if (!img || selectedCellIndex < 0 || !gridCells[selectedCellIndex]) return;
+  const minSize = 10;
+  const x = clamp(Math.round(next.x), 0, img.naturalWidth - minSize);
+  const y = clamp(Math.round(next.y), 0, img.naturalHeight - minSize);
+  const w = clamp(Math.round(next.w), minSize, img.naturalWidth - x);
+  const h = clamp(Math.round(next.h), minSize, img.naturalHeight - y);
+  gridCells[selectedCellIndex] = { x, y, w, h };
+  setCrFromCell(selectedCellIndex);
+}
+
+function getCropRectOriginal(): Rect | null {
+  if (selectedCellIndex >= 0 && gridCells[selectedCellIndex]) return gridCells[selectedCellIndex];
+  if (!cr.w || !cr.h) return null;
+  return displayToRect(cr);
+}
+
+function addFreeCell(rect: Rect) {
+  gridCells.push(rect);
+  selectedCellIndex = gridCells.length - 1;
+  freePoints = [];
+  setCrFromCell(selectedCellIndex);
+  btnApplyGrid.disabled = false;
+  editMode = 'single';
+  document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.toggle('is-active', (b as HTMLButtonElement).dataset.mode === 'single'));
+  phdr.textContent = '自由繪製完成，可拖曳邊角微調後裁切';
+}
+
 // ─── Pack size selector ───────────────────────────────────
 document.querySelectorAll<HTMLButtonElement>('.st-pack-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -245,9 +369,28 @@ document.querySelectorAll<HTMLButtonElement>('.st-pack-btn').forEach(btn => {
     packTag.textContent = `${activePack.cols}×${activePack.rows}`;
     maxEl.textContent = String(activePack.total);
     pcnt.textContent = `${items.length} / ${activePack.total}`;
+    clearGridState();
+    drawOverlay();
     if (items.length > activePack.total) {
       toast(`已超過 ${activePack.total} 張上限，建議先清空預覽`);
     }
+  });
+});
+
+document.querySelectorAll<HTMLButtonElement>('.st-mode-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    editMode = btn.dataset.mode as EditMode;
+    document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    selectedCellIndex = editMode === 'single' && gridCells.length ? Math.max(0, selectedCellIndex) : selectedCellIndex;
+    if (editMode === 'single' && selectedCellIndex >= 0) setCrFromCell(selectedCellIndex);
+    const hint = {
+      auto: '拖曳格線可微調切割線，確認後按「加入目前格線」',
+      single: '點選任一格後拖曳邊角，可單獨調整貼圖範圍',
+      free: '拖曳畫出新格，或連點 4 個角建立補救裁切範圍',
+    }[editMode];
+    phdr.textContent = hint;
+    drawOverlay();
   });
 });
 
@@ -323,6 +466,7 @@ function loadFile(file: File) {
       phdr.textContent = '框選要裁切的範圍，或按「自動偵測」';
       iName.textContent = file.name.length > 18 ? file.name.slice(0, 16) + '…' : file.name;
       iSize.textContent = `${image.naturalWidth}×${image.naturalHeight}`;
+      clearGridState();
       resetSel();
       btnAuto.disabled = false;
       btnNext.disabled = false;
@@ -448,19 +592,143 @@ function evPos(cx: number, cy: number) {
     y: Math.max(0, Math.min(dH, cy - r.top)),
   };
 }
+
+function evOrig(cx: number, cy: number) {
+  const p = evPos(cx, cy);
+  return { x: Math.round(p.x / sc), y: Math.round(p.y / sc), display: p };
+}
+
+function cellAt(displayX: number, displayY: number) {
+  const ox = displayX / sc, oy = displayY / sc;
+  for (let i = gridCells.length - 1; i >= 0; i--) {
+    const c = gridCells[i];
+    if (ox >= c.x && ox <= c.x + c.w && oy >= c.y && oy <= c.y + c.h) return i;
+  }
+  return -1;
+}
+
+function lineAt(displayX: number, displayY: number) {
+  const hit = isMob ? 18 : 10;
+  for (let i = 1; i < colCuts.length - 1; i++) {
+    if (Math.abs(displayX - colCuts[i] * sc) <= hit) return { kind: 'line-v' as const, index: i };
+  }
+  for (let i = 1; i < rowCuts.length - 1; i++) {
+    if (Math.abs(displayY - rowCuts[i] * sc) <= hit) return { kind: 'line-h' as const, index: i };
+  }
+  return null;
+}
+
+function handlesForCell(index: number) {
+  const r = gridCells[index];
+  if (!r) return [];
+  const d = rectToDisplay(r);
+  const midX = d.x + d.w / 2, midY = d.y + d.h / 2;
+  return [
+    ['nw', d.x, d.y], ['n', midX, d.y], ['ne', d.x + d.w, d.y],
+    ['e', d.x + d.w, midY], ['se', d.x + d.w, d.y + d.h],
+    ['s', midX, d.y + d.h], ['sw', d.x, d.y + d.h], ['w', d.x, midY],
+  ] as Array<[CellHandle, number, number]>;
+}
+
+function handleAt(displayX: number, displayY: number) {
+  if (selectedCellIndex < 0) return null;
+  const hit = isMob ? 18 : 11;
+  for (const [handle, x, y] of handlesForCell(selectedCellIndex)) {
+    if (Math.abs(displayX - x) <= hit && Math.abs(displayY - y) <= hit) return handle;
+  }
+  return null;
+}
+
+function applyHandle(rect: Rect, handle: CellHandle, ox: number, oy: number): Rect {
+  const x2 = rect.x + rect.w, y2 = rect.y + rect.h;
+  let nx = rect.x, ny = rect.y, nw = rect.w, nh = rect.h;
+  if (handle.includes('w')) { nx = ox; nw = x2 - ox; }
+  if (handle.includes('e')) { nw = ox - rect.x; }
+  if (handle.includes('n')) { ny = oy; nh = y2 - oy; }
+  if (handle.includes('s')) { nh = oy - rect.y; }
+  return { x: nx, y: ny, w: nw, h: nh };
+}
+
 function onDown(cx: number, cy: number) {
   if (!img) return;
   dragging = true;
-  ds = evPos(cx, cy);
+  const p = evOrig(cx, cy);
+  ds = p.display;
+  dragState = { kind: 'manual' };
+
+  if (editMode === 'auto' && gridCells.length) {
+    const line = lineAt(p.display.x, p.display.y);
+    if (line) {
+      dragState = line;
+      selectedCellIndex = -1;
+      drawOverlay();
+      return;
+    }
+  }
+
+  if (editMode === 'single' && gridCells.length) {
+    const handle = handleAt(p.display.x, p.display.y);
+    if (handle && selectedCellIndex >= 0) {
+      dragState = { kind: 'cell-handle', index: selectedCellIndex, handle, rect: { ...gridCells[selectedCellIndex] } };
+      drawOverlay();
+      return;
+    }
+    const index = cellAt(p.display.x, p.display.y);
+    if (index >= 0) {
+      selectedCellIndex = index;
+      setCrFromCell(index);
+      dragState = { kind: 'cell-move', index, start: { x: p.x, y: p.y }, rect: { ...gridCells[index] } };
+      drawOverlay();
+      return;
+    }
+  }
+
+  if (editMode === 'free') {
+    dragState = { kind: 'free' };
+  }
+
+  selectedCellIndex = -1;
   cr = { ...ds, w: 0, h: 0 };
   drawOverlay();
 }
 function onMove(cx: number, cy: number) {
   if (!dragging) return;
-  const p = evPos(cx, cy);
+  const p = evOrig(cx, cy);
+
+  if (dragState?.kind === 'line-v') {
+    const i = dragState.index;
+    colCuts[i] = clamp(p.x, colCuts[i - 1] + 10, colCuts[i + 1] - 10);
+    gridCells = buildCellsFromCuts();
+    drawOverlay();
+    return;
+  }
+  if (dragState?.kind === 'line-h') {
+    const i = dragState.index;
+    rowCuts[i] = clamp(p.y, rowCuts[i - 1] + 10, rowCuts[i + 1] - 10);
+    gridCells = buildCellsFromCuts();
+    drawOverlay();
+    return;
+  }
+  if (dragState?.kind === 'cell-move') {
+    selectedCellIndex = dragState.index;
+    updateSelectedCell({
+      ...dragState.rect,
+      x: dragState.rect.x + (p.x - dragState.start.x),
+      y: dragState.rect.y + (p.y - dragState.start.y),
+    });
+    drawOverlay();
+    return;
+  }
+  if (dragState?.kind === 'cell-handle') {
+    selectedCellIndex = dragState.index;
+    updateSelectedCell(applyHandle(dragState.rect, dragState.handle, p.x, p.y));
+    drawOverlay();
+    return;
+  }
+
   cr = {
-    x: Math.min(ds.x, p.x), y: Math.min(ds.y, p.y),
-    w: Math.abs(p.x - ds.x), h: Math.abs(p.y - ds.y),
+    x: Math.min(ds.x, p.display.x), y: Math.min(ds.y, p.display.y),
+    w: Math.abs(p.display.x - ds.x), h: Math.abs(p.display.y - ds.y),
   };
   syncFields();
   drawOverlay();
@@ -468,6 +736,19 @@ function onMove(cx: number, cy: number) {
 function onUp() {
   if (!dragging) return;
   dragging = false;
+  if (dragState?.kind === 'free' && cr.w > 4 && cr.h > 4) {
+    addFreeCell(displayToRect(cr));
+  } else if (dragState?.kind === 'free') {
+    freePoints.push({ x: Math.round(ds.x / sc), y: Math.round(ds.y / sc) });
+    if (freePoints.length >= 4) {
+      const xs = freePoints.map(p => p.x), ys = freePoints.map(p => p.y);
+      const x = Math.min(...xs), y = Math.min(...ys);
+      addFreeCell({ x, y, w: Math.max(10, Math.max(...xs) - x), h: Math.max(10, Math.max(...ys) - y) });
+    } else {
+      phdr.textContent = `自由繪製：已標記 ${freePoints.length} / 4 個角`;
+    }
+  }
+  dragState = null;
   btnCrop.disabled = !(cr.w > 4 && cr.h > 4);
   drawOverlay();
 }
@@ -481,29 +762,107 @@ ovCv.addEventListener('touchend', e => { e.preventDefault(); onUp(); }, { passiv
 
 function drawOverlay() {
   oCtx.clearRect(0, 0, dW, dH);
-  if (!cr.w || !cr.h) return;
-  oCtx.fillStyle = 'rgba(23,33,61,0.4)';
+  if (gridCells.length) drawGridCells();
+  if (cr.w && cr.h && (!gridCells.length || editMode === 'free' || selectedCellIndex < 0)) drawCropRect(cr, STRINGS_COLORS.crop);
+  if (editMode === 'single' && selectedCellIndex >= 0 && gridCells[selectedCellIndex]) {
+    drawCropRect(rectToDisplay(gridCells[selectedCellIndex]), STRINGS_COLORS.crop, true);
+    drawHandles(selectedCellIndex);
+  }
+  if (editMode === 'free' && freePoints.length) drawFreePoints();
+  if (cr.w && cr.h) szDsp.textContent = `${Math.round(cr.w / sc)} × ${Math.round(cr.h / sc)}`;
+}
+
+function drawCropRect(r: { x: number; y: number; w: number; h: number }, color: string, selected = false) {
+  oCtx.save();
+  if (!gridCells.length || editMode === 'free') {
+    oCtx.fillStyle = 'rgba(23,33,61,0.35)';
+    oCtx.fillRect(0, 0, dW, dH);
+    oCtx.clearRect(r.x, r.y, r.w, r.h);
+  }
+  oCtx.strokeStyle = color;
+  oCtx.lineWidth = selected ? 2.5 : 1.5;
+  oCtx.setLineDash(selected ? [] : [5, 3]);
+  oCtx.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
+  oCtx.restore();
+}
+
+function drawGridCells() {
+  oCtx.save();
+  oCtx.fillStyle = 'rgba(23,33,61,0.18)';
   oCtx.fillRect(0, 0, dW, dH);
-  oCtx.clearRect(cr.x, cr.y, cr.w, cr.h);
-  oCtx.strokeStyle = STRINGS_COLORS.crop;
-  oCtx.lineWidth = isMob ? 2.5 : 1.5;
-  oCtx.setLineDash([5, 3]);
-  oCtx.strokeRect(cr.x + 0.5, cr.y + 0.5, cr.w - 1, cr.h - 1);
-  oCtx.setLineDash([]);
-  // 4 角 marker
-  const cs = isMob ? 14 : 10;
-  oCtx.lineWidth = isMob ? 3 : 2;
-  oCtx.strokeStyle = STRINGS_COLORS.crop;
-  [[cr.x, cr.y, +cs, 0, 0, +cs], [cr.x + cr.w, cr.y, -cs, 0, 0, +cs],
-   [cr.x, cr.y + cr.h, +cs, 0, 0, -cs], [cr.x + cr.w, cr.y + cr.h, -cs, 0, 0, -cs]]
-    .forEach(([x, y, ax, ay, bx, by]) => {
+  gridCells.forEach((r, i) => {
+    const d = rectToDisplay(r);
+    oCtx.clearRect(d.x, d.y, d.w, d.h);
+    oCtx.strokeStyle = i === selectedCellIndex ? STRINGS_COLORS.crop : STRINGS_COLORS.detected;
+    oCtx.lineWidth = i === selectedCellIndex ? 2.5 : 1.2;
+    oCtx.setLineDash(i === selectedCellIndex ? [] : [5, 3]);
+    oCtx.strokeRect(d.x + 0.5, d.y + 0.5, d.w - 1, d.h - 1);
+    oCtx.setLineDash([]);
+    const fSize = Math.max(11, Math.min(18, Math.round(d.w * 0.13)));
+    const label = String(i + 1);
+    const bw = fSize * label.length * 0.65 + 8, bh = fSize + 6;
+    oCtx.fillStyle = i === selectedCellIndex ? 'rgba(255,122,92,0.88)' : 'rgba(23,33,61,0.68)';
+    oCtx.beginPath();
+    if ((oCtx as any).roundRect) (oCtx as any).roundRect(d.x + 3, d.y + 3, bw, bh, 3);
+    else oCtx.rect(d.x + 3, d.y + 3, bw, bh);
+    oCtx.fill();
+    oCtx.fillStyle = '#fff';
+    oCtx.font = `bold ${fSize}px "Inter", monospace`;
+    oCtx.textAlign = 'left'; oCtx.textBaseline = 'top';
+    oCtx.fillText(label, d.x + 7, d.y + 6);
+  });
+  if (editMode === 'auto') {
+    oCtx.strokeStyle = 'rgba(255,122,92,0.9)';
+    oCtx.lineWidth = isMob ? 4 : 3;
+    colCuts.slice(1, -1).forEach(x => {
       oCtx.beginPath();
-      oCtx.moveTo((x as number) + (ax as number), (y as number) + (ay as number));
-      oCtx.lineTo(x as number, y as number);
-      oCtx.lineTo((x as number) + (bx as number), (y as number) + (by as number));
+      oCtx.moveTo(x * sc, 0);
+      oCtx.lineTo(x * sc, dH);
       oCtx.stroke();
     });
-  szDsp.textContent = `${Math.round(cr.w / sc)} × ${Math.round(cr.h / sc)}`;
+    rowCuts.slice(1, -1).forEach(y => {
+      oCtx.beginPath();
+      oCtx.moveTo(0, y * sc);
+      oCtx.lineTo(dW, y * sc);
+      oCtx.stroke();
+    });
+  }
+  oCtx.restore();
+}
+
+function drawHandles(index: number) {
+  oCtx.save();
+  const size = isMob ? 12 : 9;
+  handlesForCell(index).forEach(([, x, y]) => {
+    oCtx.fillStyle = '#fff';
+    oCtx.strokeStyle = STRINGS_COLORS.crop;
+    oCtx.lineWidth = 2;
+    oCtx.beginPath();
+    oCtx.rect(x - size / 2, y - size / 2, size, size);
+    oCtx.fill();
+    oCtx.stroke();
+  });
+  oCtx.restore();
+}
+
+function drawFreePoints() {
+  oCtx.save();
+  freePoints.forEach((p, i) => {
+    const x = p.x * sc, y = p.y * sc;
+    oCtx.fillStyle = STRINGS_COLORS.crop;
+    oCtx.strokeStyle = '#fff';
+    oCtx.lineWidth = 2;
+    oCtx.beginPath();
+    oCtx.arc(x, y, isMob ? 7 : 5, 0, Math.PI * 2);
+    oCtx.fill();
+    oCtx.stroke();
+    oCtx.fillStyle = '#fff';
+    oCtx.font = 'bold 10px "Inter", monospace';
+    oCtx.textAlign = 'center';
+    oCtx.textBaseline = 'middle';
+    oCtx.fillText(String(i + 1), x, y);
+  });
+  oCtx.restore();
 }
 
 const STRINGS_COLORS = {
@@ -527,7 +886,11 @@ function syncFields() {
     const y = Math.max(0, +iY.value || 0);
     const w = Math.max(1, +iW.value || 1);
     const h = Math.max(1, +iH.value || 1);
-    cr = { x: x * sc, y: y * sc, w: w * sc, h: h * sc };
+    if (selectedCellIndex >= 0 && gridCells[selectedCellIndex]) {
+      updateSelectedCell({ x, y, w, h });
+    } else {
+      cr = { x: x * sc, y: y * sc, w: w * sc, h: h * sc };
+    }
     szDsp.textContent = `${w} × ${h}`;
     drawOverlay();
     btnCrop.disabled = !(w > 0 && h > 0);
@@ -536,6 +899,7 @@ function syncFields() {
 
 function resetSel() {
   cr = { x: 0, y: 0, w: 0, h: 0 };
+  selectedCellIndex = -1;
   oCtx.clearRect(0, 0, dW, dH);
   if (img) {
     iX.value = '0'; iY.value = '0';
@@ -547,6 +911,7 @@ function resetSel() {
   }
   szDsp.textContent = '— × —';
   btnCrop.disabled = true;
+  drawOverlay();
 }
 
 btnReset.addEventListener('click', resetSel);
@@ -578,10 +943,12 @@ btnCrop.addEventListener('click', async () => {
     toast(STRINGS.warnMaxItems(activePack.total));
     return;
   }
-  const sx = Math.round(cr.x / sc);
-  const sy = Math.round(cr.y / sc);
-  const sw = Math.max(1, Math.round(cr.w / sc));
-  const sh = Math.max(1, Math.round(cr.h / sc));
+  const rect = getCropRectOriginal();
+  if (!rect) return;
+  const sx = rect.x;
+  const sy = rect.y;
+  const sw = rect.w;
+  const sh = rect.h;
   try {
     const cropped = await cropToCanvas(sx, sy, sw, sh);
     const fitted = fitToLineSpec(cropped, { trim: false }); // 已在 cropToCanvas 裡 trim
@@ -601,8 +968,6 @@ btnCrop.addEventListener('click', async () => {
 // ─── Auto-detect ────────────────────────────────────────
 btnAuto.addEventListener('click', async () => {
   if (!img) return;
-  const available = activePack.total - items.length;
-  if (available <= 0) { toast(STRINGS.warnMaxItems(activePack.total)); return; }
 
   btnAuto.disabled = true;
   const origText = btnAuto.textContent;
@@ -614,20 +979,11 @@ btnAuto.addEventListener('click', async () => {
     const data = originalCanvas.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
     const cells = detectGrid(data, manualBg ?? detectedBg, autoThresh, activePack.cols, activePack.rows);
     if (!cells.length) { toast(STRINGS.warnNoDetect); return; }
-    const toAdd = cells.slice(0, available);
-    for (let i = 0; i < toAdd.length; i++) {
-      const r = toAdd[i];
-      const cropped = await cropToCanvas(r.x, r.y, r.w, r.h);
-      const fitted = fitToLineSpec(cropped, { trim: false });
-      const base = curName.replace(/\.[^.]+$/, '');
-      const name = `${base}_sticker${String(items.length + 1).padStart(2, '0')}.png`;
-      items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height });
-    }
-    updateCounter();
-    renderPreview();
-    drawDetectedCells(toAdd);
-    toast(STRINGS.detectedItems(toAdd.length, rmbgEnabled));
-    enableDownload();
+    setGridCells(cells.slice(0, activePack.total));
+    editMode = 'auto';
+    document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.toggle('is-active', (b as HTMLButtonElement).dataset.mode === 'auto'));
+    phdr.textContent = '拖曳橘色切割線微調，確認後按「加入目前格線」';
+    toast(`✓ 偵測到 ${gridCells.length} 格，可先微調再加入`);
   } catch (err: any) {
     toast(STRINGS.warnDetectFail(err?.message ?? ''));
     console.error(err);
@@ -637,33 +993,31 @@ btnAuto.addEventListener('click', async () => {
   }
 });
 
-function drawDetectedCells(cells: Rect[]) {
-  oCtx.clearRect(0, 0, dW, dH);
-  oCtx.fillStyle = 'rgba(23,33,61,0.32)';
-  oCtx.fillRect(0, 0, dW, dH);
-  cells.forEach((r, i) => {
-    const rx = Math.round(r.x * sc), ry = Math.round(r.y * sc);
-    const rw = Math.round(r.w * sc), rh = Math.round(r.h * sc);
-    oCtx.clearRect(rx, ry, rw, rh);
-    oCtx.strokeStyle = STRINGS_COLORS.detected;
-    oCtx.lineWidth = 1.5;
-    oCtx.setLineDash([5, 3]);
-    oCtx.strokeRect(rx + 0.5, ry + 0.5, rw - 1, rh - 1);
-    oCtx.setLineDash([]);
-    const fSize = Math.max(11, Math.min(20, Math.round(rw * 0.14)));
-    const label = String(i + 1);
-    const bw = fSize * label.length * 0.65 + 8, bh = fSize + 6;
-    oCtx.fillStyle = 'rgba(23,33,61,0.7)';
-    oCtx.beginPath();
-    if ((oCtx as any).roundRect) (oCtx as any).roundRect(rx + 3, ry + 3, bw, bh, 3);
-    else oCtx.rect(rx + 3, ry + 3, bw, bh);
-    oCtx.fill();
-    oCtx.fillStyle = '#fff';
-    oCtx.font = `bold ${fSize}px "Inter", monospace`;
-    oCtx.textAlign = 'left'; oCtx.textBaseline = 'top';
-    oCtx.fillText(label, rx + 7, ry + 6);
-  });
-}
+btnApplyGrid.addEventListener('click', async () => {
+  if (!gridCells.length) return;
+  const available = activePack.total - items.length;
+  if (available <= 0) { toast(STRINGS.warnMaxItems(activePack.total)); return; }
+  btnApplyGrid.disabled = true;
+  const toAdd = gridCells.slice(0, available);
+  try {
+    for (const r of toAdd) {
+      const cropped = await cropToCanvas(r.x, r.y, r.w, r.h);
+      const fitted = fitToLineSpec(cropped, { trim: false });
+      const base = curName.replace(/\.[^.]+$/, '');
+      const name = `${base}_sticker${String(items.length + 1).padStart(2, '0')}.png`;
+      items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height });
+    }
+    updateCounter();
+    renderPreview();
+    toast(STRINGS.detectedItems(toAdd.length, rmbgEnabled));
+    enableDownload();
+  } catch (err: any) {
+    toast(STRINGS.warnCanvasFail);
+    console.error(err);
+  } finally {
+    btnApplyGrid.disabled = !gridCells.length;
+  }
+});
 
 // ─── Preview grid ───────────────────────────────────────
 function renderPreview() {
