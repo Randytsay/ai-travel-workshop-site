@@ -198,6 +198,7 @@ let img: HTMLImageElement | null = null;
 let curName = '';
 let originalData: ImageData | null = null;  // 上傳時的原始像素（套浮水印移除前）
 let originalCanvas: HTMLCanvasElement | null = null;
+let processingOriginal: Promise<void> | null = null;
 let items: { dataUrl: string; name: string; w: number; h: number }[] = [];
 let dragging = false;
 let ds = { x: 0, y: 0 };
@@ -267,7 +268,7 @@ toggleWatermark.addEventListener('click', (e) => {
   watermarkEnabled = !watermarkEnabled;
   refreshToggleVisual(toggleWatermark, watermarkEnabled);
   // 即時重處理原圖
-  if (img && originalData) reprocessOriginal();
+  if (img && originalData) processingOriginal = reprocessOriginal();
 });
 
 // ─── File upload ──────────────────────────────────────────
@@ -340,11 +341,10 @@ function processOriginal() {
   const cx = c.getContext('2d', { willReadFrequently: true })!;
   cx.drawImage(img, 0, 0);
   originalData = cx.getImageData(0, 0, c.width, c.height);
-  reprocessOriginal();
-  layoutCanvas();
+  processingOriginal = reprocessOriginal();
 }
 
-function reprocessOriginal() {
+async function reprocessOriginal() {
   if (!img || !originalData) return;
   // 拷貝一份，套用浮水印移除
   const c = document.createElement('canvas');
@@ -352,7 +352,7 @@ function reprocessOriginal() {
   const cx = c.getContext('2d', { willReadFrequently: true })!;
   cx.putImageData(new ImageData(new Uint8ClampedArray(originalData.data), originalData.width, originalData.height), 0, 0);
   if (watermarkEnabled) {
-    removeWatermark(cx, c.width, c.height, watermarkRefCache ?? undefined).catch(err => {
+    await removeWatermark(cx, c.width, c.height, watermarkRefCache ?? undefined).catch(err => {
       console.warn('浮水印移除失敗：', err);
     });
   }
@@ -363,6 +363,7 @@ function reprocessOriginal() {
   autoThresh = det.threshold;
   updateBgUI();
   bgRow.style.display = 'flex';
+  layoutCanvas();
   redrawMain();
 }
 
@@ -380,7 +381,7 @@ bgSwatch.addEventListener('click', () => {
   picker.type = 'color';
   const c = manualBg ?? detectedBg;
   picker.value = '#' + [c.r, c.g, c.b].map(v => v.toString(16).padStart(2, '0')).join('');
-  picker.addEventListener('input', () => {
+  picker.addEventListener('input', async () => {
     const hex = picker.value;
     manualBg = {
       r: parseInt(hex.slice(1, 3), 16),
@@ -394,7 +395,7 @@ bgSwatch.addEventListener('click', () => {
       const cx2 = c2.getContext('2d', { willReadFrequently: true })!;
       cx2.putImageData(new ImageData(new Uint8ClampedArray(originalData.data), originalData.width, originalData.height), 0, 0);
       if (watermarkEnabled) {
-        removeWatermark(cx2, c2.width, c2.height, watermarkRefCache ?? undefined).catch(() => {});
+        await removeWatermark(cx2, c2.width, c2.height, watermarkRefCache ?? undefined).catch(() => {});
       }
       const det = detectBackground(cx2, c2.width, c2.height, { manual: manualBg });
       autoThresh = det.threshold;
@@ -557,6 +558,7 @@ btnNext.addEventListener('click', () => {
 
 // ─── Crop + process pipeline ─────────────────────────────
 async function cropToCanvas(sx: number, sy: number, sw: number, sh: number): Promise<HTMLCanvasElement> {
+  if (processingOriginal) await processingOriginal;
   if (!originalCanvas) throw new Error('無原圖');
   const off = document.createElement('canvas');
   off.width = sw; off.height = sh;
@@ -571,7 +573,7 @@ async function cropToCanvas(sx: number, sy: number, sw: number, sh: number): Pro
 }
 
 btnCrop.addEventListener('click', async () => {
-  if (!img || !originalCanvas) return;
+  if (!img) return;
   if (items.length >= activePack.total) {
     toast(STRINGS.warnMaxItems(activePack.total));
     return;
@@ -598,7 +600,7 @@ btnCrop.addEventListener('click', async () => {
 
 // ─── Auto-detect ────────────────────────────────────────
 btnAuto.addEventListener('click', async () => {
-  if (!img || !originalCanvas) return;
+  if (!img) return;
   const available = activePack.total - items.length;
   if (available <= 0) { toast(STRINGS.warnMaxItems(activePack.total)); return; }
 
@@ -607,6 +609,8 @@ btnAuto.addEventListener('click', async () => {
   btnAuto.textContent = STRINGS.btnAutoBusy;
   await new Promise(r => setTimeout(r, 30));
   try {
+    if (processingOriginal) await processingOriginal;
+    if (!originalCanvas) return;
     const data = originalCanvas.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
     const cells = detectGrid(data, manualBg ?? detectedBg, autoThresh, activePack.cols, activePack.rows);
     if (!cells.length) { toast(STRINGS.warnNoDetect); return; }
