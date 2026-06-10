@@ -10,6 +10,7 @@ export const navItems: NavItem[] = [
   { label: '旅遊規劃師', path: '/travel-planner', short: '旅遊' },
   { label: 'NotebookLM', path: '/notebooklm', short: 'NotebookLM' },
   { label: 'LINE 貼圖工坊', path: '/sticker-lab', short: '貼圖' },
+  { label: '貼圖裁切工具', path: '/sticker-crop-tool', short: '裁切' },
   { label: '現場投票', path: '/voting', short: '投票' },
   { label: '成果牆', path: '/gallery', short: '成果' },
   { label: '問卷與講義', path: '/survey', short: '問卷' }

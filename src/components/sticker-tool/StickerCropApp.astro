@@ -1,0 +1,1157 @@
+---
+// 貼圖裁切工具 — 主要互動元件
+// 包含所有 UI + 編排腳本
+// 演算法分別從 src/lib/sticker-tool/ 載入
+import '../../styles/sticker-tool.css';
+---
+
+<div class="sticker-tool" id="stickerTool" data-version="1.0">
+  <!-- Toolbar -->
+  <div class="st-toolbar">
+    <div class="st-toolbar-title">
+      <div class="st-logo">✂</div>
+      <div>
+        <div>貼圖裁切 & 去背</div>
+        <div style="font-size:0.74rem;font-weight:600;color:var(--ink-soft);">符合 LINE 上架規格 · 370×240 PNG</div>
+      </div>
+    </div>
+
+    <div class="st-toggle-group">
+      <label class="st-toggle on" id="st-toggle-rmbg">
+        <span class="st-toggle-track"></span>
+        <span>去背</span>
+      </label>
+      <label class="st-toggle on" data-variant="watermark" id="st-toggle-watermark" title="去除 Gemini 在圖片右下角的星號浮水印">
+        <span class="st-toggle-track"></span>
+        <span>去浮水印</span>
+      </label>
+    </div>
+
+    <div class="st-pack-select" role="group" aria-label="貼圖數量">
+      <span>數量</span>
+      <button class="st-pack-btn" data-pack="2x4">8 張</button>
+      <button class="st-pack-btn" data-pack="3x3">9 張</button>
+      <button class="st-pack-btn is-active" data-pack="4x4">16 張</button>
+      <button class="st-pack-btn" data-pack="5x4">20 張</button>
+    </div>
+
+    <div class="st-counter">已裁切 <b id="st-cnt">0</b> / <span id="st-max">16</span></div>
+  </div>
+
+  <!-- Main 2-panel layout -->
+  <div class="st-app">
+    <!-- LEFT: Canvas + crop -->
+    <div class="st-panel">
+      <div class="st-panel-header">
+        <span id="st-phdr">把 Gemini 總圖拖到這裡</span>
+        <span id="st-packTag" style="color:var(--sunset);font-weight:900;">4×4</span>
+      </div>
+
+      <div class="st-bg-row" id="st-bgRow" style="display:none">
+        <span>背景色</span>
+        <div class="st-bg-swatch" id="st-bgSwatch" title="點擊手動選色">
+          <div class="st-bg-swatch-fill" id="st-bgSwatchFill"></div>
+        </div>
+        <span id="st-bgHex" style="font-weight:800;color:var(--night);">—</span>
+        <span class="st-bg-thresh" id="st-bgThresh">自動容差 40</span>
+      </div>
+
+      <div class="st-canvas-wrap" id="st-canvasWrap">
+        <div id="st-dropzone">
+          <div class="st-drop-icon">📁</div>
+          <div class="st-drop-title">把 Gemini 總圖拖到這裡</div>
+          <div class="st-drop-sub" id="st-dropSub">或點下方按鈕選擇檔案</div>
+          <button class="st-drop-btn" id="st-pickBtn">選擇圖片</button>
+          <input type="file" id="st-fileInput" accept="image/*" hidden>
+        </div>
+        <div id="st-edArea">
+          <canvas id="st-mainCv"></canvas>
+          <canvas id="st-ovCv"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Controls + preview -->
+    <div class="st-panel">
+      <div class="st-coord-row">
+        <div class="st-coord">
+          <span class="st-coord-lbl">X</span>
+          <input class="st-coord-input" type="number" id="st-iX" value="0" min="0">
+          <span class="st-coord-lbl">Y</span>
+          <input class="st-coord-input" type="number" id="st-iY" value="0" min="0">
+          <div class="st-coord-dsp" id="st-szDsp">— × —</div>
+        </div>
+        <div class="st-coord">
+          <span class="st-coord-lbl">寬</span>
+          <input class="st-coord-input" type="number" id="st-iW" value="100" min="1">
+          <span class="st-coord-lbl">高</span>
+          <input class="st-coord-input" type="number" id="st-iH" value="100" min="1">
+        </div>
+      </div>
+
+      <div class="st-mode-tabs" role="group" aria-label="微調模式">
+        <button class="st-mode-tab is-active" data-mode="auto" type="button">自動格線</button>
+        <button class="st-mode-tab" data-mode="single" type="button">單格微調</button>
+        <button class="st-mode-tab" data-mode="free" type="button">自由繪製</button>
+      </div>
+
+      <div class="st-actions">
+        <button class="st-btn st-btn-primary" id="st-btnAuto" disabled>✦ 自動偵測</button>
+        <button class="st-btn st-btn-primary" id="st-btnApplyGrid" disabled>＋ 加入目前格線</button>
+        <button class="st-btn st-btn-ocean" id="st-btnCrop" disabled>✂ 裁切並加入</button>
+        <button class="st-btn" id="st-btnReset">↺ 重設框選</button>
+        <button class="st-btn" id="st-btnNext" disabled>↑ 下一張</button>
+        <button class="st-btn st-btn-ocean" id="st-btnDlAll" disabled>⬇ 全部下載 PNG</button>
+        <button class="st-btn st-btn-primary" id="st-btnDlZip" disabled>⬇ 下載 ZIP</button>
+        <button class="st-btn st-btn-warn" id="st-btnClear">✕ 清空預覽</button>
+        <button class="st-btn st-btn-danger" id="st-btnReload">↺ 全部重來</button>
+      </div>
+
+      <div class="st-preview">
+        <div class="st-preview-head">
+          <span class="st-preview-title">已裁切預覽</span>
+          <span class="st-preview-count" id="st-pcnt">0 / 16</span>
+        </div>
+        <div class="st-preview-grid" id="st-pgrid">
+          <div class="st-pi-empty" id="st-piEmpty">
+            <div class="st-pi-empty-icon">🖼️</div>
+            <div>尚未裁切任何圖片</div>
+          </div>
+        </div>
+        <div class="st-info-bar">
+          <span>檔：<span id="st-iName">—</span></span>
+          <span>尺寸：<span id="st-iSize">—</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="st-lightbox" role="dialog" aria-label="貼圖預覽">
+    <img id="st-lbImg" alt="">
+    <div class="st-lb-row">
+      <button class="st-lb-btn" id="st-lbDl">⬇ 下載此張</button>
+      <button class="st-lb-btn st-lb-btn danger" id="st-lbDel">✕ 刪除</button>
+      <button class="st-lb-btn" id="st-lbClose">← 關閉</button>
+    </div>
+  </div>
+</div>
+
+<script>
+import { PACK_SIZES, DEFAULT_PACK_ID, LINE_SPEC, STRINGS } from '../../content/stickerToolConfig';
+import { detectBackground, removeBackground, autoTrim, type BgColor } from '../../lib/sticker-tool/bgRemoval';
+import { detectGrid, type Rect } from '../../lib/sticker-tool/gridDetector';
+import { removeWatermark, loadWatermarkRef } from '../../lib/sticker-tool/watermarkRemoval';
+import { fitToLineSpec } from '../../lib/sticker-tool/lineSpec';
+import { buildZip, triggerDownload, downloadAllPng } from '../../lib/sticker-tool/zipExport';
+
+// 讓 PACK_SIZES 元素的型別放寬（避免 as const 推導出太窄的字面量型別）
+type PackSize = (typeof PACK_SIZES)[number];
+let activePack: PackSize = PACK_SIZES.find(p => p.id === DEFAULT_PACK_ID)!;
+type EditMode = 'auto' | 'single' | 'free';
+type CellHandle = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
+type DragState =
+  | { kind: 'manual' }
+  | { kind: 'free' }
+  | { kind: 'line-v'; index: number }
+  | { kind: 'line-h'; index: number }
+  | { kind: 'cell-move'; index: number; start: { x: number; y: number }; rect: Rect }
+  | { kind: 'cell-handle'; index: number; handle: CellHandle; rect: Rect };
+
+// ─── DOM refs ─────────────────────────────────────────────
+const $ = (id: string): HTMLElement => {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Element not found: ${id}`);
+  return el;
+};
+
+const mainCv = $('st-mainCv') as HTMLCanvasElement;
+const ovCv = $('st-ovCv') as HTMLCanvasElement;
+const mCtx = mainCv.getContext('2d')!;
+const oCtx = ovCv.getContext('2d')!;
+
+const dropzone = $('st-dropzone');
+const edArea = $('st-edArea');
+const fileInput = $('st-fileInput') as HTMLInputElement;
+const pickBtn = $('st-pickBtn');
+const phdr = $('st-phdr');
+const iName = $('st-iName');
+const iSize = $('st-iSize');
+const iX = $('st-iX') as HTMLInputElement;
+const iY = $('st-iY') as HTMLInputElement;
+const iW = $('st-iW') as HTMLInputElement;
+const iH = $('st-iH') as HTMLInputElement;
+const szDsp = $('st-szDsp');
+const btnAuto = $('st-btnAuto') as HTMLButtonElement;
+const btnApplyGrid = $('st-btnApplyGrid') as HTMLButtonElement;
+const btnCrop = $('st-btnCrop') as HTMLButtonElement;
+const btnReset = $('st-btnReset') as HTMLButtonElement;
+const btnNext = $('st-btnNext') as HTMLButtonElement;
+const btnDlZip = $('st-btnDlZip') as HTMLButtonElement;
+const btnDlAll = $('st-btnDlAll') as HTMLButtonElement;
+const btnClear = $('st-btnClear') as HTMLButtonElement;
+const btnReload = $('st-btnReload') as HTMLButtonElement;
+const pgrid = $('st-pgrid');
+const piEmpty = $('st-piEmpty');
+const pcnt = $('st-pcnt');
+const cntEl = $('st-cnt');
+const maxEl = $('st-max');
+const packTag = $('st-packTag');
+const toggleRmbg = $('st-toggle-rmbg');
+const toggleWatermark = $('st-toggle-watermark');
+const bgRow = $('st-bgRow');
+const bgSwatch = $('st-bgSwatch');
+const bgSwatchFill = $('st-bgSwatchFill');
+const bgHex = $('st-bgHex');
+const bgThresh = $('st-bgThresh');
+const lightbox = $('st-lightbox');
+const lbImg = $('st-lbImg') as HTMLImageElement;
+const lbDl = $('st-lbDl') as HTMLButtonElement;
+const lbDel = $('st-lbDel') as HTMLButtonElement;
+const lbClose = $('st-lbClose') as HTMLButtonElement;
+
+// ─── State ────────────────────────────────────────────────
+let img: HTMLImageElement | null = null;
+let curName = '';
+let originalData: ImageData | null = null;  // 上傳時的原始像素（套浮水印移除前）
+let originalCanvas: HTMLCanvasElement | null = null;
+let processingOriginal: Promise<void> | null = null;
+let items: { dataUrl: string; name: string; w: number; h: number }[] = [];
+let dragging = false;
+let dragState: DragState | null = null;
+let ds = { x: 0, y: 0 };
+let cr = { x: 0, y: 0, w: 0, h: 0 };
+let sc = 1, dW = 0, dH = 0;
+let activePackId: string = DEFAULT_PACK_ID;
+let rmbgEnabled = true;
+let watermarkEnabled = true;
+let detectedBg: BgColor = { r: 0, g: 0, b: 0 };
+let manualBg: BgColor | null = null;
+let autoThresh = 40;
+let watermarkRefCache: HTMLCanvasElement | null = null;
+let lbIndex = -1;
+let editMode: EditMode = 'auto';
+let gridCells: Rect[] = [];
+let rowCuts: number[] = [];
+let colCuts: number[] = [];
+let selectedCellIndex = -1;
+let freePoints: Array<{ x: number; y: number }> = [];
+
+// ─── Helpers ──────────────────────────────────────────────
+const isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMob) {
+  $('st-dropSub').textContent = '點下方從相簿匯入';
+  pickBtn.textContent = '📷 從相簿選擇';
+}
+maxEl.textContent = String(activePack.total);
+
+function toast(msg: string, duration = 2500) {
+  // 沿用 site 既有 .copy-toast
+  let t = document.querySelector('.st-tmp-toast') as HTMLDivElement | null;
+  if (!t) {
+    t = document.createElement('div');
+    t.className = 'copy-toast st-tmp-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout((t as any)._timer);
+  (t as any)._timer = setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function rectToDisplay(r: Rect) {
+  return { x: r.x * sc, y: r.y * sc, w: r.w * sc, h: r.h * sc };
+}
+
+function displayToRect(r: { x: number; y: number; w: number; h: number }): Rect {
+  return {
+    x: Math.round(r.x / sc),
+    y: Math.round(r.y / sc),
+    w: Math.max(1, Math.round(r.w / sc)),
+    h: Math.max(1, Math.round(r.h / sc)),
+  };
+}
+
+function clearGridState() {
+  gridCells = [];
+  rowCuts = [];
+  colCuts = [];
+  selectedCellIndex = -1;
+  freePoints = [];
+  btnApplyGrid.disabled = true;
+}
+
+function equalCuts(total: number, divisions: number) {
+  return Array.from({ length: divisions + 1 }, (_, i) => Math.round((total * i) / divisions));
+}
+
+function cutsFromCells(cells: Rect[]) {
+  if (!img || cells.length < activePack.total) {
+    colCuts = img ? equalCuts(img.naturalWidth, activePack.cols) : [];
+    rowCuts = img ? equalCuts(img.naturalHeight, activePack.rows) : [];
+    return;
+  }
+  const firstRow = cells.slice(0, activePack.cols);
+  const firstCol = cells.filter((_, i) => i % activePack.cols === 0);
+  colCuts = [firstRow[0].x, ...firstRow.map(c => c.x + c.w)];
+  rowCuts = [firstCol[0].y, ...firstCol.map(c => c.y + c.h)];
+}
+
+function buildCellsFromCuts(): Rect[] {
+  const cells: Rect[] = [];
+  for (let r = 0; r < activePack.rows; r++) {
+    for (let c = 0; c < activePack.cols; c++) {
+      const x = colCuts[c], y = rowCuts[r];
+      cells.push({ x, y, w: colCuts[c + 1] - x, h: rowCuts[r + 1] - y });
+    }
+  }
+  return cells;
+}
+
+function setGridCells(cells: Rect[]) {
+  gridCells = cells.map(c => ({ ...c }));
+  cutsFromCells(gridCells);
+  if (colCuts.length && rowCuts.length) gridCells = buildCellsFromCuts();
+  selectedCellIndex = -1;
+  cr = { x: 0, y: 0, w: 0, h: 0 };
+  btnApplyGrid.disabled = !gridCells.length;
+  btnCrop.disabled = true;
+  drawOverlay();
+}
+
+function setCrFromCell(index: number) {
+  const cell = gridCells[index];
+  if (!cell) return;
+  cr = rectToDisplay(cell);
+  syncFields();
+  btnCrop.disabled = false;
+}
+
+function updateSelectedCell(next: Rect) {
+  if (!img || selectedCellIndex < 0 || !gridCells[selectedCellIndex]) return;
+  const minSize = 10;
+  const x = clamp(Math.round(next.x), 0, img.naturalWidth - minSize);
+  const y = clamp(Math.round(next.y), 0, img.naturalHeight - minSize);
+  const w = clamp(Math.round(next.w), minSize, img.naturalWidth - x);
+  const h = clamp(Math.round(next.h), minSize, img.naturalHeight - y);
+  gridCells[selectedCellIndex] = { x, y, w, h };
+  setCrFromCell(selectedCellIndex);
+}
+
+function getCropRectOriginal(): Rect | null {
+  if (selectedCellIndex >= 0 && gridCells[selectedCellIndex]) return gridCells[selectedCellIndex];
+  if (!cr.w || !cr.h) return null;
+  return displayToRect(cr);
+}
+
+function addFreeCell(rect: Rect) {
+  gridCells.push(rect);
+  selectedCellIndex = gridCells.length - 1;
+  freePoints = [];
+  setCrFromCell(selectedCellIndex);
+  btnApplyGrid.disabled = false;
+  editMode = 'single';
+  document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.toggle('is-active', (b as HTMLButtonElement).dataset.mode === 'single'));
+  phdr.textContent = '自由繪製完成，可拖曳邊角微調後裁切';
+}
+
+// ─── Pack size selector ───────────────────────────────────
+document.querySelectorAll<HTMLButtonElement>('.st-pack-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.st-pack-btn').forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    activePackId = btn.dataset.pack!;
+    activePack = PACK_SIZES.find(p => p.id === activePackId)!;
+    packTag.textContent = `${activePack.cols}×${activePack.rows}`;
+    maxEl.textContent = String(activePack.total);
+    pcnt.textContent = `${items.length} / ${activePack.total}`;
+    clearGridState();
+    drawOverlay();
+    if (items.length > activePack.total) {
+      toast(`已超過 ${activePack.total} 張上限，建議先清空預覽`);
+    }
+  });
+});
+
+document.querySelectorAll<HTMLButtonElement>('.st-mode-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    editMode = btn.dataset.mode as EditMode;
+    document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    selectedCellIndex = editMode === 'single' && gridCells.length ? Math.max(0, selectedCellIndex) : selectedCellIndex;
+    if (editMode === 'single' && selectedCellIndex >= 0) setCrFromCell(selectedCellIndex);
+    const hint = {
+      auto: '拖曳格線可微調切割線，確認後按「加入目前格線」',
+      single: '點選任一格後拖曳邊角，可單獨調整貼圖範圍',
+      free: '拖曳畫出新格，或連點 4 個角建立補救裁切範圍',
+    }[editMode];
+    phdr.textContent = hint;
+    drawOverlay();
+  });
+});
+
+// ─── Toggle handlers ──────────────────────────────────────
+function refreshToggleVisual(el: HTMLElement, on: boolean) {
+  el.classList.toggle('on', on);
+}
+
+toggleRmbg.addEventListener('click', (e) => {
+  e.preventDefault();
+  rmbgEnabled = !rmbgEnabled;
+  refreshToggleVisual(toggleRmbg, rmbgEnabled);
+  toggleRmbg.querySelector('span:last-child')!.textContent = rmbgEnabled ? '去背' : '保留背景';
+});
+
+toggleWatermark.addEventListener('click', (e) => {
+  e.preventDefault();
+  watermarkEnabled = !watermarkEnabled;
+  refreshToggleVisual(toggleWatermark, watermarkEnabled);
+  // 即時重處理原圖
+  if (img && originalData) processingOriginal = reprocessOriginal();
+});
+
+// ─── File upload ──────────────────────────────────────────
+pickBtn.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('click', (e) => { if (e.target === dropzone) fileInput.click(); });
+
+fileInput.addEventListener('change', () => loadFiles(fileInput.files));
+
+['dragover', 'dragenter'].forEach(evt =>
+  dropzone.addEventListener(evt, (e) => {
+    e.preventDefault();
+    dropzone.classList.add('is-over');
+  })
+);
+['dragleave', 'drop'].forEach(evt =>
+  dropzone.addEventListener(evt, () => dropzone.classList.remove('is-over'))
+);
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  if (e.dataTransfer?.files) loadFiles(e.dataTransfer.files);
+});
+
+function loadFiles(files: FileList | null) {
+  if (!files || !files.length) return;
+  const file = files[0];
+  if (!file.type.startsWith('image/')) {
+    toast(STRINGS.warnUnsupportedFile);
+    return;
+  }
+  if (file.size > 20 * 1024 * 1024) {
+    toast(STRINGS.warnImageTooBig(file.size / 1024 / 1024));
+    return;
+  }
+  loadFile(file);
+}
+
+function loadFile(file: File) {
+  curName = file.name;
+  const r = new FileReader();
+  r.onload = (e) => {
+    const result = (e.target as FileReader).result;
+    if (!result) return;
+    const image = new Image();
+    image.onload = () => {
+      if (image.naturalWidth > 8000 || image.naturalHeight > 8000) {
+        toast(STRINGS.warnImageTooWide);
+        return;
+      }
+      img = image;
+      dropzone.style.display = 'none';
+      edArea.classList.add('on');
+      phdr.textContent = '框選要裁切的範圍，或按「自動偵測」';
+      iName.textContent = file.name.length > 18 ? file.name.slice(0, 16) + '…' : file.name;
+      iSize.textContent = `${image.naturalWidth}×${image.naturalHeight}`;
+      clearGridState();
+      resetSel();
+      btnAuto.disabled = false;
+      btnNext.disabled = false;
+      processOriginal();
+    };
+    image.src = result as string;
+  };
+  r.readAsDataURL(file);
+}
+
+function processOriginal() {
+  if (!img) return;
+  // 將原圖繪到一個固定 canvas（後續所有處理都從這份開始）
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const cx = c.getContext('2d', { willReadFrequently: true })!;
+  cx.drawImage(img, 0, 0);
+  originalData = cx.getImageData(0, 0, c.width, c.height);
+  processingOriginal = reprocessOriginal();
+}
+
+async function reprocessOriginal() {
+  if (!img || !originalData) return;
+  // 拷貝一份，套用浮水印移除
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const cx = c.getContext('2d', { willReadFrequently: true })!;
+  cx.putImageData(new ImageData(new Uint8ClampedArray(originalData.data), originalData.width, originalData.height), 0, 0);
+  if (watermarkEnabled) {
+    await removeWatermark(cx, c.width, c.height, watermarkRefCache ?? undefined).catch(err => {
+      console.warn('浮水印移除失敗：', err);
+    });
+  }
+  originalCanvas = c;
+  // 偵測背景色
+  const det = detectBackground(cx, c.width, c.height, { manual: manualBg });
+  detectedBg = det.bg;
+  autoThresh = det.threshold;
+  updateBgUI();
+  bgRow.style.display = 'flex';
+  layoutCanvas();
+  redrawMain();
+}
+
+// ─── Bg color UI ─────────────────────────────────────────
+function updateBgUI() {
+  const c = manualBg ?? detectedBg;
+  const hex = '#' + [c.r, c.g, c.b].map(v => v.toString(16).padStart(2, '0')).join('');
+  bgSwatchFill.style.background = hex;
+  bgHex.textContent = hex.toUpperCase();
+  bgThresh.textContent = `自動容差 ${autoThresh}`;
+}
+
+bgSwatch.addEventListener('click', () => {
+  const picker = document.createElement('input');
+  picker.type = 'color';
+  const c = manualBg ?? detectedBg;
+  picker.value = '#' + [c.r, c.g, c.b].map(v => v.toString(16).padStart(2, '0')).join('');
+  picker.addEventListener('input', async () => {
+    const hex = picker.value;
+    manualBg = {
+      r: parseInt(hex.slice(1, 3), 16),
+      g: parseInt(hex.slice(3, 5), 16),
+      b: parseInt(hex.slice(5, 7), 16),
+    };
+    if (img && originalData) {
+      // 重新偵測容差
+      const c2 = document.createElement('canvas');
+      c2.width = img.naturalWidth; c2.height = img.naturalHeight;
+      const cx2 = c2.getContext('2d', { willReadFrequently: true })!;
+      cx2.putImageData(new ImageData(new Uint8ClampedArray(originalData.data), originalData.width, originalData.height), 0, 0);
+      if (watermarkEnabled) {
+        await removeWatermark(cx2, c2.width, c2.height, watermarkRefCache ?? undefined).catch(() => {});
+      }
+      const det = detectBackground(cx2, c2.width, c2.height, { manual: manualBg });
+      autoThresh = det.threshold;
+      updateBgUI();
+    }
+  });
+  picker.click();
+});
+
+// ─── Canvas layout ───────────────────────────────────────
+function layoutCanvas() {
+  if (!img) return;
+  const wrap = $('st-canvasWrap');
+  const rect = wrap.getBoundingClientRect();
+  const avW = Math.max(100, Math.floor(rect.width - 16));
+  const avH = Math.max(100, Math.floor(rect.height - 16));
+  sc = Math.min(avW / img.naturalWidth, avH / img.naturalHeight, 1);
+  dW = Math.round(img.naturalWidth * sc);
+  dH = Math.round(img.naturalHeight * sc);
+  mainCv.width = dW; mainCv.height = dH;
+  mainCv.style.width = dW + 'px'; mainCv.style.height = dH + 'px';
+  ovCv.width = dW; ovCv.height = dH;
+  requestAnimationFrame(alignOverlay);
+  redrawMain();
+  drawOverlay();
+}
+
+function alignOverlay() {
+  const ea = edArea.getBoundingClientRect();
+  const mc = mainCv.getBoundingClientRect();
+  ovCv.style.left = (mc.left - ea.left) + 'px';
+  ovCv.style.top = (mc.top - ea.top) + 'px';
+  ovCv.style.width = dW + 'px';
+  ovCv.style.height = dH + 'px';
+}
+
+window.addEventListener('resize', () => { if (img) layoutCanvas(); });
+
+function redrawMain() {
+  if (!originalCanvas) return;
+  mCtx.clearRect(0, 0, dW, dH);
+  mCtx.drawImage(originalCanvas, 0, 0, dW, dH);
+}
+
+// ─── Pointer / drag-to-select ────────────────────────────
+function evPos(cx: number, cy: number) {
+  const r = ovCv.getBoundingClientRect();
+  return {
+    x: Math.max(0, Math.min(dW, cx - r.left)),
+    y: Math.max(0, Math.min(dH, cy - r.top)),
+  };
+}
+
+function evOrig(cx: number, cy: number) {
+  const p = evPos(cx, cy);
+  return { x: Math.round(p.x / sc), y: Math.round(p.y / sc), display: p };
+}
+
+function cellAt(displayX: number, displayY: number) {
+  const ox = displayX / sc, oy = displayY / sc;
+  for (let i = gridCells.length - 1; i >= 0; i--) {
+    const c = gridCells[i];
+    if (ox >= c.x && ox <= c.x + c.w && oy >= c.y && oy <= c.y + c.h) return i;
+  }
+  return -1;
+}
+
+function lineAt(displayX: number, displayY: number) {
+  const hit = isMob ? 18 : 10;
+  for (let i = 1; i < colCuts.length - 1; i++) {
+    if (Math.abs(displayX - colCuts[i] * sc) <= hit) return { kind: 'line-v' as const, index: i };
+  }
+  for (let i = 1; i < rowCuts.length - 1; i++) {
+    if (Math.abs(displayY - rowCuts[i] * sc) <= hit) return { kind: 'line-h' as const, index: i };
+  }
+  return null;
+}
+
+function handlesForCell(index: number) {
+  const r = gridCells[index];
+  if (!r) return [];
+  const d = rectToDisplay(r);
+  const midX = d.x + d.w / 2, midY = d.y + d.h / 2;
+  return [
+    ['nw', d.x, d.y], ['n', midX, d.y], ['ne', d.x + d.w, d.y],
+    ['e', d.x + d.w, midY], ['se', d.x + d.w, d.y + d.h],
+    ['s', midX, d.y + d.h], ['sw', d.x, d.y + d.h], ['w', d.x, midY],
+  ] as Array<[CellHandle, number, number]>;
+}
+
+function handleAt(displayX: number, displayY: number) {
+  if (selectedCellIndex < 0) return null;
+  const hit = isMob ? 18 : 11;
+  for (const [handle, x, y] of handlesForCell(selectedCellIndex)) {
+    if (Math.abs(displayX - x) <= hit && Math.abs(displayY - y) <= hit) return handle;
+  }
+  return null;
+}
+
+function applyHandle(rect: Rect, handle: CellHandle, ox: number, oy: number): Rect {
+  const x2 = rect.x + rect.w, y2 = rect.y + rect.h;
+  let nx = rect.x, ny = rect.y, nw = rect.w, nh = rect.h;
+  if (handle.includes('w')) { nx = ox; nw = x2 - ox; }
+  if (handle.includes('e')) { nw = ox - rect.x; }
+  if (handle.includes('n')) { ny = oy; nh = y2 - oy; }
+  if (handle.includes('s')) { nh = oy - rect.y; }
+  return { x: nx, y: ny, w: nw, h: nh };
+}
+
+function onDown(cx: number, cy: number) {
+  if (!img) return;
+  dragging = true;
+  const p = evOrig(cx, cy);
+  ds = p.display;
+  dragState = { kind: 'manual' };
+
+  if (editMode === 'auto' && gridCells.length) {
+    const line = lineAt(p.display.x, p.display.y);
+    if (line) {
+      dragState = line;
+      selectedCellIndex = -1;
+      drawOverlay();
+      return;
+    }
+  }
+
+  if (editMode === 'single' && gridCells.length) {
+    const handle = handleAt(p.display.x, p.display.y);
+    if (handle && selectedCellIndex >= 0) {
+      dragState = { kind: 'cell-handle', index: selectedCellIndex, handle, rect: { ...gridCells[selectedCellIndex] } };
+      drawOverlay();
+      return;
+    }
+    const index = cellAt(p.display.x, p.display.y);
+    if (index >= 0) {
+      selectedCellIndex = index;
+      setCrFromCell(index);
+      dragState = { kind: 'cell-move', index, start: { x: p.x, y: p.y }, rect: { ...gridCells[index] } };
+      drawOverlay();
+      return;
+    }
+  }
+
+  if (editMode === 'free') {
+    dragState = { kind: 'free' };
+  }
+
+  selectedCellIndex = -1;
+  cr = { ...ds, w: 0, h: 0 };
+  drawOverlay();
+}
+function onMove(cx: number, cy: number) {
+  if (!dragging) return;
+  const p = evOrig(cx, cy);
+
+  if (dragState?.kind === 'line-v') {
+    const i = dragState.index;
+    colCuts[i] = clamp(p.x, colCuts[i - 1] + 10, colCuts[i + 1] - 10);
+    gridCells = buildCellsFromCuts();
+    drawOverlay();
+    return;
+  }
+  if (dragState?.kind === 'line-h') {
+    const i = dragState.index;
+    rowCuts[i] = clamp(p.y, rowCuts[i - 1] + 10, rowCuts[i + 1] - 10);
+    gridCells = buildCellsFromCuts();
+    drawOverlay();
+    return;
+  }
+  if (dragState?.kind === 'cell-move') {
+    selectedCellIndex = dragState.index;
+    updateSelectedCell({
+      ...dragState.rect,
+      x: dragState.rect.x + (p.x - dragState.start.x),
+      y: dragState.rect.y + (p.y - dragState.start.y),
+    });
+    drawOverlay();
+    return;
+  }
+  if (dragState?.kind === 'cell-handle') {
+    selectedCellIndex = dragState.index;
+    updateSelectedCell(applyHandle(dragState.rect, dragState.handle, p.x, p.y));
+    drawOverlay();
+    return;
+  }
+
+  cr = {
+    x: Math.min(ds.x, p.display.x), y: Math.min(ds.y, p.display.y),
+    w: Math.abs(p.display.x - ds.x), h: Math.abs(p.display.y - ds.y),
+  };
+  syncFields();
+  drawOverlay();
+}
+function onUp() {
+  if (!dragging) return;
+  dragging = false;
+  if (dragState?.kind === 'free' && cr.w > 4 && cr.h > 4) {
+    addFreeCell(displayToRect(cr));
+  } else if (dragState?.kind === 'free') {
+    freePoints.push({ x: Math.round(ds.x / sc), y: Math.round(ds.y / sc) });
+    if (freePoints.length >= 4) {
+      const xs = freePoints.map(p => p.x), ys = freePoints.map(p => p.y);
+      const x = Math.min(...xs), y = Math.min(...ys);
+      addFreeCell({ x, y, w: Math.max(10, Math.max(...xs) - x), h: Math.max(10, Math.max(...ys) - y) });
+    } else {
+      phdr.textContent = `自由繪製：已標記 ${freePoints.length} / 4 個角`;
+    }
+  }
+  dragState = null;
+  btnCrop.disabled = !(cr.w > 4 && cr.h > 4);
+  drawOverlay();
+}
+ovCv.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+ovCv.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+ovCv.addEventListener('mouseup', onUp);
+ovCv.addEventListener('mouseleave', onUp);
+ovCv.addEventListener('touchstart', e => { e.preventDefault(); const t = e.touches[0]; onDown(t.clientX, t.clientY); }, { passive: false });
+ovCv.addEventListener('touchmove', e => { e.preventDefault(); const t = e.touches[0]; onMove(t.clientX, t.clientY); }, { passive: false });
+ovCv.addEventListener('touchend', e => { e.preventDefault(); onUp(); }, { passive: false });
+
+function drawOverlay() {
+  oCtx.clearRect(0, 0, dW, dH);
+  if (gridCells.length) drawGridCells();
+  if (cr.w && cr.h && (!gridCells.length || editMode === 'free' || selectedCellIndex < 0)) drawCropRect(cr, STRINGS_COLORS.crop);
+  if (editMode === 'single' && selectedCellIndex >= 0 && gridCells[selectedCellIndex]) {
+    drawCropRect(rectToDisplay(gridCells[selectedCellIndex]), STRINGS_COLORS.crop, true);
+    drawHandles(selectedCellIndex);
+  }
+  if (editMode === 'free' && freePoints.length) drawFreePoints();
+  if (cr.w && cr.h) szDsp.textContent = `${Math.round(cr.w / sc)} × ${Math.round(cr.h / sc)}`;
+}
+
+function drawCropRect(r: { x: number; y: number; w: number; h: number }, color: string, selected = false) {
+  oCtx.save();
+  if (!gridCells.length || editMode === 'free') {
+    oCtx.fillStyle = 'rgba(23,33,61,0.35)';
+    oCtx.fillRect(0, 0, dW, dH);
+    oCtx.clearRect(r.x, r.y, r.w, r.h);
+  }
+  oCtx.strokeStyle = color;
+  oCtx.lineWidth = selected ? 2.5 : 1.5;
+  oCtx.setLineDash(selected ? [] : [5, 3]);
+  oCtx.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
+  oCtx.restore();
+}
+
+function drawGridCells() {
+  oCtx.save();
+  oCtx.fillStyle = 'rgba(23,33,61,0.18)';
+  oCtx.fillRect(0, 0, dW, dH);
+  gridCells.forEach((r, i) => {
+    const d = rectToDisplay(r);
+    oCtx.clearRect(d.x, d.y, d.w, d.h);
+    oCtx.strokeStyle = i === selectedCellIndex ? STRINGS_COLORS.crop : STRINGS_COLORS.detected;
+    oCtx.lineWidth = i === selectedCellIndex ? 2.5 : 1.2;
+    oCtx.setLineDash(i === selectedCellIndex ? [] : [5, 3]);
+    oCtx.strokeRect(d.x + 0.5, d.y + 0.5, d.w - 1, d.h - 1);
+    oCtx.setLineDash([]);
+    const fSize = Math.max(11, Math.min(18, Math.round(d.w * 0.13)));
+    const label = String(i + 1);
+    const bw = fSize * label.length * 0.65 + 8, bh = fSize + 6;
+    oCtx.fillStyle = i === selectedCellIndex ? 'rgba(255,122,92,0.88)' : 'rgba(23,33,61,0.68)';
+    oCtx.beginPath();
+    if ((oCtx as any).roundRect) (oCtx as any).roundRect(d.x + 3, d.y + 3, bw, bh, 3);
+    else oCtx.rect(d.x + 3, d.y + 3, bw, bh);
+    oCtx.fill();
+    oCtx.fillStyle = '#fff';
+    oCtx.font = `bold ${fSize}px "Inter", monospace`;
+    oCtx.textAlign = 'left'; oCtx.textBaseline = 'top';
+    oCtx.fillText(label, d.x + 7, d.y + 6);
+  });
+  if (editMode === 'auto') {
+    oCtx.strokeStyle = 'rgba(255,122,92,0.9)';
+    oCtx.lineWidth = isMob ? 4 : 3;
+    colCuts.slice(1, -1).forEach(x => {
+      oCtx.beginPath();
+      oCtx.moveTo(x * sc, 0);
+      oCtx.lineTo(x * sc, dH);
+      oCtx.stroke();
+    });
+    rowCuts.slice(1, -1).forEach(y => {
+      oCtx.beginPath();
+      oCtx.moveTo(0, y * sc);
+      oCtx.lineTo(dW, y * sc);
+      oCtx.stroke();
+    });
+  }
+  oCtx.restore();
+}
+
+function drawHandles(index: number) {
+  oCtx.save();
+  const size = isMob ? 12 : 9;
+  handlesForCell(index).forEach(([, x, y]) => {
+    oCtx.fillStyle = '#fff';
+    oCtx.strokeStyle = STRINGS_COLORS.crop;
+    oCtx.lineWidth = 2;
+    oCtx.beginPath();
+    oCtx.rect(x - size / 2, y - size / 2, size, size);
+    oCtx.fill();
+    oCtx.stroke();
+  });
+  oCtx.restore();
+}
+
+function drawFreePoints() {
+  oCtx.save();
+  freePoints.forEach((p, i) => {
+    const x = p.x * sc, y = p.y * sc;
+    oCtx.fillStyle = STRINGS_COLORS.crop;
+    oCtx.strokeStyle = '#fff';
+    oCtx.lineWidth = 2;
+    oCtx.beginPath();
+    oCtx.arc(x, y, isMob ? 7 : 5, 0, Math.PI * 2);
+    oCtx.fill();
+    oCtx.stroke();
+    oCtx.fillStyle = '#fff';
+    oCtx.font = 'bold 10px "Inter", monospace';
+    oCtx.textAlign = 'center';
+    oCtx.textBaseline = 'middle';
+    oCtx.fillText(String(i + 1), x, y);
+  });
+  oCtx.restore();
+}
+
+const STRINGS_COLORS = {
+  crop: '#FF7A5C',
+  detected: '#4CAF8F',
+};
+
+function syncFields() {
+  iX.value = String(Math.round(cr.x / sc));
+  iY.value = String(Math.round(cr.y / sc));
+  iW.value = String(Math.round(cr.w / sc));
+  iH.value = String(Math.round(cr.h / sc));
+}
+
+['iX', 'iY', 'iW', 'iH'].forEach(id => {
+  const inp = document.getElementById('st-' + id) as HTMLInputElement;
+  if (!inp) return;
+  inp.addEventListener('input', () => {
+    if (!img) return;
+    const x = Math.max(0, +iX.value || 0);
+    const y = Math.max(0, +iY.value || 0);
+    const w = Math.max(1, +iW.value || 1);
+    const h = Math.max(1, +iH.value || 1);
+    if (selectedCellIndex >= 0 && gridCells[selectedCellIndex]) {
+      updateSelectedCell({ x, y, w, h });
+    } else {
+      cr = { x: x * sc, y: y * sc, w: w * sc, h: h * sc };
+    }
+    szDsp.textContent = `${w} × ${h}`;
+    drawOverlay();
+    btnCrop.disabled = !(w > 0 && h > 0);
+  });
+});
+
+function resetSel() {
+  cr = { x: 0, y: 0, w: 0, h: 0 };
+  selectedCellIndex = -1;
+  oCtx.clearRect(0, 0, dW, dH);
+  if (img) {
+    iX.value = '0'; iY.value = '0';
+    iW.value = String(img.naturalWidth);
+    iH.value = String(img.naturalHeight);
+  } else {
+    iX.value = '0'; iY.value = '0';
+    iW.value = '100'; iH.value = '100';
+  }
+  szDsp.textContent = '— × —';
+  btnCrop.disabled = true;
+  drawOverlay();
+}
+
+btnReset.addEventListener('click', resetSel);
+
+btnNext.addEventListener('click', () => {
+  fileInput.value = '';
+  fileInput.click();
+});
+
+// ─── Crop + process pipeline ─────────────────────────────
+async function cropToCanvas(sx: number, sy: number, sw: number, sh: number): Promise<HTMLCanvasElement> {
+  if (processingOriginal) await processingOriginal;
+  if (!originalCanvas) throw new Error('無原圖');
+  const off = document.createElement('canvas');
+  off.width = sw; off.height = sh;
+  const offCtx = off.getContext('2d', { willReadFrequently: true })!;
+  offCtx.drawImage(originalCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+
+  if (rmbgEnabled) {
+    removeBackground(offCtx, sw, sh, manualBg ?? detectedBg, autoThresh);
+    return autoTrim(offCtx, sw, sh);
+  }
+  return off;
+}
+
+btnCrop.addEventListener('click', async () => {
+  if (!img) return;
+  if (items.length >= activePack.total) {
+    toast(STRINGS.warnMaxItems(activePack.total));
+    return;
+  }
+  const rect = getCropRectOriginal();
+  if (!rect) return;
+  const sx = rect.x;
+  const sy = rect.y;
+  const sw = rect.w;
+  const sh = rect.h;
+  try {
+    const cropped = await cropToCanvas(sx, sy, sw, sh);
+    const fitted = fitToLineSpec(cropped, { trim: false }); // 已在 cropToCanvas 裡 trim
+    const base = curName.replace(/\.[^.]+$/, '');
+    const name = `${base}_sticker${String(items.length + 1).padStart(2, '0')}.png`;
+    items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height });
+    updateCounter();
+    renderPreview();
+    toast(STRINGS.addedItem(items.length, rmbgEnabled));
+    enableDownload();
+  } catch (err: any) {
+    toast(STRINGS.warnCanvasFail);
+    console.error(err);
+  }
+});
+
+// ─── Auto-detect ────────────────────────────────────────
+btnAuto.addEventListener('click', async () => {
+  if (!img) return;
+
+  btnAuto.disabled = true;
+  const origText = btnAuto.textContent;
+  btnAuto.textContent = STRINGS.btnAutoBusy;
+  await new Promise(r => setTimeout(r, 30));
+  try {
+    if (processingOriginal) await processingOriginal;
+    if (!originalCanvas) return;
+    const data = originalCanvas.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
+    const cells = detectGrid(data, manualBg ?? detectedBg, autoThresh, activePack.cols, activePack.rows);
+    if (!cells.length) { toast(STRINGS.warnNoDetect); return; }
+    setGridCells(cells.slice(0, activePack.total));
+    editMode = 'auto';
+    document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.toggle('is-active', (b as HTMLButtonElement).dataset.mode === 'auto'));
+    phdr.textContent = '拖曳橘色切割線微調，確認後按「加入目前格線」';
+    toast(`✓ 偵測到 ${gridCells.length} 格，可先微調再加入`);
+  } catch (err: any) {
+    toast(STRINGS.warnDetectFail(err?.message ?? ''));
+    console.error(err);
+  } finally {
+    btnAuto.disabled = false;
+    btnAuto.textContent = origText;
+  }
+});
+
+btnApplyGrid.addEventListener('click', async () => {
+  if (!gridCells.length) return;
+  const available = activePack.total - items.length;
+  if (available <= 0) { toast(STRINGS.warnMaxItems(activePack.total)); return; }
+  btnApplyGrid.disabled = true;
+  const toAdd = gridCells.slice(0, available);
+  try {
+    for (const r of toAdd) {
+      const cropped = await cropToCanvas(r.x, r.y, r.w, r.h);
+      const fitted = fitToLineSpec(cropped, { trim: false });
+      const base = curName.replace(/\.[^.]+$/, '');
+      const name = `${base}_sticker${String(items.length + 1).padStart(2, '0')}.png`;
+      items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height });
+    }
+    updateCounter();
+    renderPreview();
+    toast(STRINGS.detectedItems(toAdd.length, rmbgEnabled));
+    enableDownload();
+  } catch (err: any) {
+    toast(STRINGS.warnCanvasFail);
+    console.error(err);
+  } finally {
+    btnApplyGrid.disabled = !gridCells.length;
+  }
+});
+
+// ─── Preview grid ───────────────────────────────────────
+function renderPreview() {
+  pgrid.innerHTML = '';
+  if (!items.length) {
+    pgrid.appendChild(piEmpty);
+    pcnt.textContent = `0 / ${activePack.total}`;
+    return;
+  }
+  items.forEach((it, i) => {
+    const div = document.createElement('div');
+    div.className = 'st-pi';
+    const im = document.createElement('img');
+    im.src = it.dataUrl; im.alt = it.name;
+    div.appendChild(im);
+    const num = document.createElement('span');
+    num.className = 'st-pi-num';
+    num.textContent = String(i + 1);
+    div.appendChild(num);
+    const actions = document.createElement('div');
+    actions.className = 'st-pi-actions';
+    const dlBtn = document.createElement('button');
+    dlBtn.className = 'st-pi-action';
+    dlBtn.title = '下載此張';
+    dlBtn.textContent = '⬇';
+    dlBtn.onclick = (e) => { e.stopPropagation(); downloadOne(i); };
+    const delBtn = document.createElement('button');
+    delBtn.className = 'st-pi-action danger';
+    delBtn.title = '刪除';
+    delBtn.textContent = '✕';
+    delBtn.onclick = (e) => { e.stopPropagation(); removeItem(i); };
+    actions.appendChild(dlBtn);
+    actions.appendChild(delBtn);
+    div.appendChild(actions);
+    div.addEventListener('click', () => openLb(i));
+    pgrid.appendChild(div);
+  });
+  pcnt.textContent = items.length >= activePack.total ? STRINGS.previewFull : `${items.length} / ${activePack.total}`;
+}
+
+function removeItem(i: number) {
+  items.splice(i, 1);
+  updateCounter();
+  renderPreview();
+  if (lbIndex === i) closeLb();
+  if (!items.length) {
+    btnDlZip.disabled = true;
+    btnDlAll.disabled = true;
+  }
+}
+
+async function downloadOne(i: number) {
+  const it = items[i];
+  const blob = await (await fetch(it.dataUrl)).blob();
+  triggerDownload(blob, it.name);
+  toast(STRINGS.downloaded(1));
+}
+
+btnClear.addEventListener('click', () => {
+  if (!items.length) return;
+  if (!confirm('確定清空所有已裁切預覽？')) return;
+  items = [];
+  updateCounter();
+  renderPreview();
+  btnDlZip.disabled = true;
+  btnDlAll.disabled = true;
+  toast(STRINGS.cleared);
+});
+
+btnReload.addEventListener('click', () => {
+  if (confirm('確定要全部重來？將清除所有狀態。')) location.reload();
+});
+
+function updateCounter() { cntEl.textContent = String(items.length); }
+function enableDownload() {
+  btnDlZip.disabled = items.length === 0;
+  btnDlAll.disabled = items.length === 0;
+}
+
+// ─── Lightbox ────────────────────────────────────────────
+function openLb(i: number) {
+  lbIndex = i;
+  lbImg.src = items[i].dataUrl;
+  lightbox.classList.add('on');
+}
+function closeLb() {
+  lightbox.classList.remove('on');
+  lbIndex = -1;
+}
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+lbClose.addEventListener('click', closeLb);
+lbDel.addEventListener('click', () => { if (lbIndex >= 0) { removeItem(lbIndex); closeLb(); } });
+lbDl.addEventListener('click', () => { if (lbIndex >= 0) { downloadOne(lbIndex); } });
+
+// ─── Download ZIP / All ─────────────────────────────────
+btnDlZip.addEventListener('click', async () => {
+  if (!items.length) return;
+  btnDlZip.disabled = true;
+  toast(STRINGS.zipPackaging);
+  try {
+    const blob = await buildZip(items);
+    const date = new Date().toISOString().slice(0, 10);
+    triggerDownload(blob, `line_stickers_${activePack.id}_${date}.zip`);
+    toast(STRINGS.zipDone(items.length));
+  } catch (e) {
+    toast(STRINGS.warnEmptyPack);
+    console.error(e);
+  } finally {
+    btnDlZip.disabled = false;
+  }
+});
+
+btnDlAll.addEventListener('click', async () => {
+  if (!items.length) return;
+  btnDlAll.disabled = true;
+  toast(STRINGS.zipPackaging);
+  try {
+    await downloadAllPng(items);
+    toast(STRINGS.downloaded(items.length));
+  } catch (e) {
+    console.error(e);
+  } finally {
+    btnDlAll.disabled = false;
+  }
+});
+
+// ─── Init ────────────────────────────────────────────────
+(async () => {
+  // 預載 Gemini 浮水印參考圖（背景）
+  try {
+    watermarkRefCache = await loadWatermarkRef();
+  } catch (e) {
+    console.warn('Gemini 浮水印參考圖載入失敗：', e);
+  }
+  renderPreview();
+})();
+</script>
