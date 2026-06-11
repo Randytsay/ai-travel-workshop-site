@@ -79,6 +79,99 @@ function scaleRef(ref: HTMLCanvasElement, size: number): ImageData {
   return ctx.getImageData(0, 0, size, size);
 }
 
+function luminance(r: number, g: number, b: number): number {
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function estimateRegionBackground(
+  ctx: CanvasRenderingContext2D,
+  imageWidth: number,
+  imageHeight: number,
+  region: WatermarkRegion,
+): number {
+  const pad = Math.max(8, Math.round(region.width * 0.2));
+  const x1 = Math.max(0, region.x - pad);
+  const y1 = Math.max(0, region.y - pad);
+  const x2 = Math.min(imageWidth, region.x + region.width + pad);
+  const y2 = Math.min(imageHeight, region.y + region.height + pad);
+  const sample = ctx.getImageData(x1, y1, x2 - x1, y2 - y1).data;
+  let sum = 0, count = 0;
+
+  for (let y = 0; y < y2 - y1; y++) {
+    for (let x = 0; x < x2 - x1; x++) {
+      const absoluteX = x1 + x;
+      const absoluteY = y1 + y;
+      const insideRegion =
+        absoluteX >= region.x &&
+        absoluteX < region.x + region.width &&
+        absoluteY >= region.y &&
+        absoluteY < region.y + region.height;
+      if (insideRegion) continue;
+      const p = (y * (x2 - x1) + x) * 4;
+      if (sample[p + 3] < 128) continue;
+      sum += luminance(sample[p], sample[p + 1], sample[p + 2]);
+      count++;
+    }
+  }
+
+  if (!count) {
+    const target = ctx.getImageData(region.x, region.y, region.width, region.height).data;
+    for (let i = 0; i < region.width * region.height; i++) {
+      const p = i * 4;
+      if (target[p + 3] < 128) continue;
+      sum += luminance(target[p], target[p + 1], target[p + 2]);
+      count++;
+    }
+  }
+
+  return count ? sum / count : 255;
+}
+
+/** 偵測預期位置是否有 Gemini 星號浮水印 */
+export async function detectWatermarkPresence(
+  ctx: CanvasRenderingContext2D,
+  imageWidth: number,
+  imageHeight: number,
+  refCanvas?: HTMLCanvasElement,
+): Promise<boolean> {
+  const config = detectWatermarkConfig(imageWidth, imageHeight);
+  const region = getWatermarkRegion(imageWidth, imageHeight, config);
+  if (region.x < 0 || region.y < 0 ||
+      region.x + region.width > imageWidth ||
+      region.y + region.height > imageHeight) {
+    return false;
+  }
+
+  const ref = refCanvas ?? await loadWatermarkRef();
+  const refData = ref.width === config.logoSize
+    ? ref.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, ref.width, ref.height)
+    : scaleRef(ref, config.logoSize);
+  const target = ctx.getImageData(region.x, region.y, region.width, region.height).data;
+  const rd = refData.data;
+  const bgLum = estimateRegionBackground(ctx, imageWidth, imageHeight, region);
+
+  let weightedLift = 0;
+  let alphaWeight = 0;
+  let brightMatches = 0;
+  let alphaPixels = 0;
+
+  for (let i = 0; i < region.width * region.height; i++) {
+    const p = i * 4;
+    const a = rd[p + 3] / 255;
+    if (a < 0.08 || target[p + 3] < 128) continue;
+    const lift = luminance(target[p], target[p + 1], target[p + 2]) - bgLum;
+    weightedLift += lift * a;
+    alphaWeight += a;
+    alphaPixels++;
+    if (lift > 6) brightMatches++;
+  }
+
+  if (!alphaWeight || !alphaPixels) return false;
+  const avgLift = weightedLift / alphaWeight;
+  const matchRatio = brightMatches / alphaPixels;
+  return avgLift > 7 && matchRatio > 0.18;
+}
+
 /** 在指定 ctx 區域上套用 reverse alpha blending */
 export async function removeWatermark(
   ctx: CanvasRenderingContext2D,

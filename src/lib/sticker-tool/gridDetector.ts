@@ -16,6 +16,13 @@ export interface CellRect {
   h: number;
 }
 
+interface Bounds {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
 function smooth1D(arr: Float32Array, sigma: number): Float32Array {
   const r = Math.round(sigma * 2);
   const N = arr.length;
@@ -111,14 +118,21 @@ function detectGridFromData(
     fg[i] = dr * dr + dg * dg + db * db > t2 ? 1 : 0;
   }
 
-  // Row projection
-  const rowProj = new Float32Array(H);
-  for (let y = 0; y < H; y++) {
-    let s = 0;
-    for (let x = 0; x < W; x++) s += fg[y * W + x];
-    rowProj[y] = s / W;
+  const bounds = findContentBounds(fg, W, H, cols, rows);
+  const workW = bounds.x2 - bounds.x1 + 1;
+  const workH = bounds.y2 - bounds.y1 + 1;
+  if (workW <= GRID_DETECT.minCellPx || workH <= GRID_DETECT.minCellPx) {
+    return [];
   }
-  const rowCuts = findCuts(rowProj, H, rows);
+
+  // Row projection
+  const rowProj = new Float32Array(workH);
+  for (let y = 0; y < workH; y++) {
+    let s = 0;
+    for (let x = bounds.x1; x <= bounds.x2; x++) s += fg[(bounds.y1 + y) * W + x];
+    rowProj[y] = s / workW;
+  }
+  const rowCuts = findCuts(rowProj, workH, rows).map(y => y + bounds.y1);
 
   // Per-row band column projection
   const rects: CellRect[] = [];
@@ -127,13 +141,13 @@ function detectGridFromData(
     const y2 = rowCuts[ri + 1];
     const bandH = y2 - y1;
     if (bandH <= 0) continue;
-    const colProj = new Float32Array(W);
-    for (let x = 0; x < W; x++) {
+    const colProj = new Float32Array(workW);
+    for (let x = 0; x < workW; x++) {
       let s = 0;
-      for (let y = y1; y < y2; y++) s += fg[y * W + x];
+      for (let y = y1; y < y2; y++) s += fg[y * W + bounds.x1 + x];
       colProj[x] = s / bandH;
     }
-    const colCuts = findCuts(colProj, W, cols);
+    const colCuts = findCuts(colProj, workW, cols).map(x => x + bounds.x1);
     for (let ci = 0; ci < cols; ci++) {
       const x1 = colCuts[ci];
       const x2 = colCuts[ci + 1];
@@ -144,6 +158,49 @@ function detectGridFromData(
   }
   rects.sort((a, b) => (a.y !== b.y ? a.y - b.y : a.x - b.x));
   return rects;
+}
+
+function findContentBounds(fg: Float32Array, W: number, H: number, cols: number, rows: number): Bounds {
+  const rowProj = new Float32Array(H);
+  const colProj = new Float32Array(W);
+
+  for (let y = 0; y < H; y++) {
+    let s = 0;
+    for (let x = 0; x < W; x++) {
+      const v = fg[y * W + x];
+      s += v;
+      colProj[x] += v;
+    }
+    rowProj[y] = s / W;
+  }
+  for (let x = 0; x < W; x++) colProj[x] /= H;
+
+  const rowMax = Math.max(...rowProj);
+  const colMax = Math.max(...colProj);
+  if (rowMax <= 0 || colMax <= 0) return { x1: 0, y1: 0, x2: W - 1, y2: H - 1 };
+
+  const rowThreshold = Math.max(0.02, rowMax * 0.12);
+  const colThreshold = Math.max(0.02, colMax * 0.12);
+  let y1 = 0, y2 = H - 1, x1 = 0, x2 = W - 1;
+  while (y1 < H && rowProj[y1] < rowThreshold) y1++;
+  while (y2 > y1 && rowProj[y2] < rowThreshold) y2--;
+  while (x1 < W && colProj[x1] < colThreshold) x1++;
+  while (x2 > x1 && colProj[x2] < colThreshold) x2--;
+
+  const minW = cols * GRID_DETECT.minCellPx;
+  const minH = rows * GRID_DETECT.minCellPx;
+  if (x2 - x1 + 1 < minW || y2 - y1 + 1 < minH) {
+    return { x1: 0, y1: 0, x2: W - 1, y2: H - 1 };
+  }
+
+  const padX = Math.round((x2 - x1 + 1) * 0.01);
+  const padY = Math.round((y2 - y1 + 1) * 0.01);
+  return {
+    x1: Math.max(0, x1 - padX),
+    y1: Math.max(0, y1 - padY),
+    x2: Math.min(W - 1, x2 + padX),
+    y2: Math.min(H - 1, y2 + padY),
+  };
 }
 
 // ─── Aliases for StickerCropApp ──────────────────────────────────────────────

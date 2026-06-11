@@ -21,9 +21,9 @@ import '../../styles/sticker-tool.css';
         <span class="st-toggle-track"></span>
         <span>去背</span>
       </label>
-      <label class="st-toggle on" data-variant="watermark" id="st-toggle-watermark" title="去除 Gemini 在圖片右下角的星號浮水印">
+      <label class="st-toggle" data-variant="watermark" id="st-toggle-watermark" title="上傳後會自動判斷右下角是否有 Gemini 星號浮水印">
         <span class="st-toggle-track"></span>
-        <span>去浮水印</span>
+        <span>浮水印自動</span>
       </label>
     </div>
 
@@ -103,13 +103,13 @@ import '../../styles/sticker-tool.css';
       </div>
 
       <div class="st-actions">
-        <button class="st-btn st-btn-primary" id="st-btnAuto" disabled>✦ 自動偵測</button>
-        <button class="st-btn st-btn-primary" id="st-btnApplyGrid" disabled>＋ 加入目前格線</button>
-        <button class="st-btn st-btn-ocean" id="st-btnCrop" disabled>✂ 裁切並加入</button>
+        <button class="st-btn st-btn-primary" id="st-btnAuto" disabled>① 自動偵測格線</button>
+        <button class="st-btn st-btn-primary" id="st-btnApplyGrid" disabled>② 依格線裁切全部</button>
+        <button class="st-btn st-btn-ocean" id="st-btnCrop" disabled>裁切選取單格</button>
         <button class="st-btn" id="st-btnReset">↺ 重設框選</button>
         <button class="st-btn" id="st-btnNext" disabled>↑ 下一張</button>
-        <button class="st-btn st-btn-ocean" id="st-btnDlAll" disabled>⬇ 全部下載 PNG</button>
-        <button class="st-btn st-btn-primary" id="st-btnDlZip" disabled>⬇ 下載 ZIP</button>
+        <button class="st-btn st-btn-ocean" id="st-btnDlAll" disabled>③ 全部下載 PNG</button>
+        <button class="st-btn st-btn-primary" id="st-btnDlZip" disabled>③ 下載 ZIP</button>
         <button class="st-btn st-btn-warn" id="st-btnClear">✕ 清空預覽</button>
         <button class="st-btn st-btn-danger" id="st-btnReload">↺ 全部重來</button>
       </div>
@@ -148,7 +148,7 @@ import '../../styles/sticker-tool.css';
 import { PACK_SIZES, DEFAULT_PACK_ID, LINE_SPEC, STRINGS } from '../../content/stickerToolConfig';
 import { detectBackground, removeBackground, autoTrim, type BgColor } from '../../lib/sticker-tool/bgRemoval';
 import { detectGrid, type Rect } from '../../lib/sticker-tool/gridDetector';
-import { removeWatermark, loadWatermarkRef } from '../../lib/sticker-tool/watermarkRemoval';
+import { detectWatermarkPresence, removeWatermark, loadWatermarkRef } from '../../lib/sticker-tool/watermarkRemoval';
 import { fitToLineSpec } from '../../lib/sticker-tool/lineSpec';
 import { buildZip, triggerDownload, downloadAllPng } from '../../lib/sticker-tool/zipExport';
 
@@ -239,7 +239,7 @@ let ds = { x: 0, y: 0 };
 let cr = { x: 0, y: 0, w: 0, h: 0 };
 let sc = 1, dW = 0, dH = 0;
 let rmbgEnabled = true;
-let watermarkEnabled = true;
+let watermarkEnabled = false;
 let detectedBg: BgColor = { r: 0, g: 0, b: 0 };
 let manualBg: BgColor | null = null;
 let autoThresh = 40;
@@ -448,6 +448,12 @@ function refreshToggleVisual(el: HTMLElement, on: boolean) {
   el.classList.toggle('on', on);
 }
 
+function setWatermarkEnabled(on: boolean, label?: string) {
+  watermarkEnabled = on;
+  refreshToggleVisual(toggleWatermark, watermarkEnabled);
+  toggleWatermark.querySelector('span:last-child')!.textContent = label ?? (on ? '已偵測並去浮水印' : '未偵測到浮水印');
+}
+
 toggleRmbg.addEventListener('click', (e) => {
   e.preventDefault();
   rmbgEnabled = !rmbgEnabled;
@@ -457,8 +463,7 @@ toggleRmbg.addEventListener('click', (e) => {
 
 toggleWatermark.addEventListener('click', (e) => {
   e.preventDefault();
-  watermarkEnabled = !watermarkEnabled;
-  refreshToggleVisual(toggleWatermark, watermarkEnabled);
+  setWatermarkEnabled(!watermarkEnabled, !watermarkEnabled ? '手動去浮水印' : '手動關閉去浮水印');
   // 即時重處理原圖
   if (img && originalData) processingOriginal = reprocessOriginal();
 });
@@ -534,7 +539,16 @@ function processOriginal() {
   const cx = c.getContext('2d', { willReadFrequently: true })!;
   cx.drawImage(img, 0, 0);
   originalData = cx.getImageData(0, 0, c.width, c.height);
-  processingOriginal = reprocessOriginal();
+  processingOriginal = (async () => {
+    try {
+      const hasWatermark = await detectWatermarkPresence(cx, c.width, c.height, watermarkRefCache ?? undefined);
+      setWatermarkEnabled(hasWatermark, hasWatermark ? '已偵測並去浮水印' : '未偵測到浮水印');
+    } catch (err) {
+      console.warn('浮水印偵測失敗：', err);
+      setWatermarkEnabled(false, '浮水印偵測失敗');
+    }
+    await reprocessOriginal();
+  })();
 }
 
 async function reprocessOriginal() {
