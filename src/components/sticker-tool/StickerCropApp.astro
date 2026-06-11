@@ -27,12 +27,19 @@ import '../../styles/sticker-tool.css';
       </label>
     </div>
 
-    <div class="st-pack-select" role="group" aria-label="貼圖數量">
-      <span>數量</span>
+    <div class="st-pack-select" role="group" aria-label="快速貼圖數量">
+      <span>快速</span>
       <button class="st-pack-btn" data-pack="2x4">8 張</button>
       <button class="st-pack-btn" data-pack="3x3">9 張</button>
       <button class="st-pack-btn is-active" data-pack="4x4">16 張</button>
       <button class="st-pack-btn" data-pack="5x4">20 張</button>
+    </div>
+
+    <div class="st-custom-pack" aria-label="自訂格線數量">
+      <span>自訂</span>
+      <label>寬 <input id="st-customCols" type="number" min="1" max="10" value="4" inputmode="numeric"></label>
+      <label>高 <input id="st-customRows" type="number" min="1" max="10" value="4" inputmode="numeric"></label>
+      <button id="st-customApply" type="button">套用</button>
     </div>
 
     <div class="st-counter">已裁切 <b id="st-cnt">0</b> / <span id="st-max">16</span></div>
@@ -145,9 +152,15 @@ import { removeWatermark, loadWatermarkRef } from '../../lib/sticker-tool/waterm
 import { fitToLineSpec } from '../../lib/sticker-tool/lineSpec';
 import { buildZip, triggerDownload, downloadAllPng } from '../../lib/sticker-tool/zipExport';
 
-// 讓 PACK_SIZES 元素的型別放寬（避免 as const 推導出太窄的字面量型別）
-type PackSize = (typeof PACK_SIZES)[number];
-let activePack: PackSize = PACK_SIZES.find(p => p.id === DEFAULT_PACK_ID)!;
+type ActivePack = {
+  id: string;
+  label: string;
+  cols: number;
+  rows: number;
+  count: number;
+  total: number;
+};
+let activePack: ActivePack = { ...PACK_SIZES.find(p => p.id === DEFAULT_PACK_ID)! };
 type EditMode = 'auto' | 'single' | 'free';
 type CellHandle = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
 type DragState =
@@ -197,6 +210,9 @@ const pcnt = $('st-pcnt');
 const cntEl = $('st-cnt');
 const maxEl = $('st-max');
 const packTag = $('st-packTag');
+const customCols = $('st-customCols') as HTMLInputElement;
+const customRows = $('st-customRows') as HTMLInputElement;
+const customApply = $('st-customApply') as HTMLButtonElement;
 const toggleRmbg = $('st-toggle-rmbg');
 const toggleWatermark = $('st-toggle-watermark');
 const bgRow = $('st-bgRow');
@@ -222,7 +238,6 @@ let dragState: DragState | null = null;
 let ds = { x: 0, y: 0 };
 let cr = { x: 0, y: 0, w: 0, h: 0 };
 let sc = 1, dW = 0, dH = 0;
-let activePackId: string = DEFAULT_PACK_ID;
 let rmbgEnabled = true;
 let watermarkEnabled = true;
 let detectedBg: BgColor = { r: 0, g: 0, b: 0 };
@@ -348,6 +363,37 @@ function getCropRectOriginal(): Rect | null {
   return displayToRect(cr);
 }
 
+function makePack(cols: number, rows: number, id?: string): ActivePack {
+  const total = cols * rows;
+  return { id: id ?? `${cols}x${rows}`, label: `${cols}×${rows} = ${total} 張`, cols, rows, count: total, total };
+}
+
+function readCustomPack(): ActivePack {
+  const cols = clamp(Math.round(Number(customCols.value) || 1), 1, 10);
+  const rows = clamp(Math.round(Number(customRows.value) || 1), 1, 10);
+  customCols.value = String(cols);
+  customRows.value = String(rows);
+  return makePack(cols, rows, `custom-${cols}x${rows}`);
+}
+
+function setActivePack(nextPack: ActivePack, source: 'preset' | 'custom') {
+  activePack = nextPack;
+  packTag.textContent = `${activePack.cols}×${activePack.rows}`;
+  maxEl.textContent = String(activePack.total);
+  pcnt.textContent = `${items.length} / ${activePack.total}`;
+  customCols.value = String(activePack.cols);
+  customRows.value = String(activePack.rows);
+  document.querySelectorAll<HTMLButtonElement>('.st-pack-btn').forEach(btn => {
+    btn.classList.toggle('is-active', source === 'preset' && btn.dataset.pack === activePack.id);
+  });
+  customApply.classList.toggle('is-active', source === 'custom');
+  clearGridState();
+  drawOverlay();
+  if (items.length > activePack.total) {
+    toast(`已超過 ${activePack.total} 張上限，建議先清空預覽`);
+  }
+}
+
 function addFreeCell(rect: Rect) {
   gridCells.push(rect);
   selectedCellIndex = gridCells.length - 1;
@@ -362,19 +408,21 @@ function addFreeCell(rect: Rect) {
 // ─── Pack size selector ───────────────────────────────────
 document.querySelectorAll<HTMLButtonElement>('.st-pack-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.st-pack-btn').forEach(b => b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    activePackId = btn.dataset.pack!;
-    activePack = PACK_SIZES.find(p => p.id === activePackId)!;
-    packTag.textContent = `${activePack.cols}×${activePack.rows}`;
-    maxEl.textContent = String(activePack.total);
-    pcnt.textContent = `${items.length} / ${activePack.total}`;
-    clearGridState();
-    drawOverlay();
-    if (items.length > activePack.total) {
-      toast(`已超過 ${activePack.total} 張上限，建議先清空預覽`);
-    }
+    const preset = PACK_SIZES.find(p => p.id === btn.dataset.pack);
+    if (!preset) return;
+    setActivePack({ ...preset }, 'preset');
   });
+});
+
+customApply.addEventListener('click', () => {
+  setActivePack(readCustomPack(), 'custom');
+});
+
+[customCols, customRows].forEach(input => {
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') setActivePack(readCustomPack(), 'custom');
+  });
+  input.addEventListener('change', () => setActivePack(readCustomPack(), 'custom'));
 });
 
 document.querySelectorAll<HTMLButtonElement>('.st-mode-tab').forEach(btn => {
