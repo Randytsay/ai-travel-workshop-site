@@ -119,22 +119,23 @@ import '../../styles/sticker-tool.css';
         <button class="st-btn st-btn-danger" id="st-btnReload">↺ 全部重來</button>
       </div>
 
-      <div class="st-preview">
-        <div class="st-preview-head">
-          <span class="st-preview-title">已裁切預覽</span>
-          <span class="st-preview-count" id="st-pcnt">0 / 16</span>
-        </div>
-        <div class="st-preview-grid" id="st-pgrid">
-          <div class="st-pi-empty" id="st-piEmpty">
-            <div class="st-pi-empty-icon">🖼️</div>
-            <div>尚未裁切任何圖片</div>
-          </div>
-        </div>
-        <div class="st-info-bar">
-          <span>檔：<span id="st-iName">—</span></span>
-          <span>尺寸：<span id="st-iSize">—</span></span>
-        </div>
+    </div>
+  </div>
+
+  <div class="st-preview">
+    <div class="st-preview-head">
+      <span class="st-preview-title">已裁切預覽</span>
+      <span class="st-preview-count" id="st-pcnt">0 / 16</span>
+    </div>
+    <div class="st-preview-grid" id="st-pgrid">
+      <div class="st-pi-empty" id="st-piEmpty">
+        <div class="st-pi-empty-icon">🖼️</div>
+        <div>尚未裁切任何圖片</div>
       </div>
+    </div>
+    <div class="st-info-bar">
+      <span>檔：<span id="st-iName">—</span></span>
+      <span>尺寸：<span id="st-iSize">—</span></span>
     </div>
   </div>
 
@@ -239,7 +240,8 @@ let curName = '';
 let originalData: ImageData | null = null;  // 上傳時的原始像素（套浮水印移除前）
 let originalCanvas: HTMLCanvasElement | null = null;
 let processingOriginal: Promise<void> | null = null;
-let items: { dataUrl: string; name: string; w: number; h: number }[] = [];
+let items: { dataUrl: string; name: string; w: number; h: number; imageId?: number; rect?: Rect }[] = [];
+let currentImageId = 0;
 let dragging = false;
 let dragState: DragState | null = null;
 let ds = { x: 0, y: 0 };
@@ -260,6 +262,8 @@ let colCuts: number[] = [];
 let selectedCellIndex = -1;
 let freePoints: Array<{ x: number; y: number }> = [];
 let hoverLine: { kind: 'line-v' | 'line-h'; index: number } | null = null;
+let bgPreviewTimer = 0;
+let bgPreviewRun = 0;
 
 // ─── Helpers ──────────────────────────────────────────────
 const isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -289,6 +293,11 @@ function clamp(n: number, min: number, max: number) {
 
 function bgThreshold() {
   return manualThresh ?? autoThresh;
+}
+
+async function buildStickerFromRect(rect: Rect) {
+  const cropped = await cropToCanvas(rect.x, rect.y, rect.w, rect.h);
+  return fitToLineSpec(cropped, { trim: false });
 }
 
 function rectToDisplay(r: Rect) {
@@ -471,6 +480,7 @@ toggleRmbg.addEventListener('click', (e) => {
   rmbgEnabled = !rmbgEnabled;
   refreshToggleVisual(toggleRmbg, rmbgEnabled);
   toggleRmbg.querySelector('span:last-child')!.textContent = rmbgEnabled ? '去背' : '保留背景';
+  queueBgPreviewRefresh();
 });
 
 toggleWatermark.addEventListener('click', (e) => {
@@ -527,6 +537,7 @@ function loadFile(file: File) {
         return;
       }
       img = image;
+      currentImageId++;
       manualThresh = null;
       dropzone.style.display = 'none';
       edArea.classList.add('on');
@@ -623,6 +634,7 @@ bgSwatch.addEventListener('click', () => {
       const det = detectBackground(cx2, c2.width, c2.height, { manual: manualBg });
       autoThresh = det.threshold;
       updateBgUI();
+      queueBgPreviewRefresh();
     }
   });
   picker.click();
@@ -631,6 +643,7 @@ bgSwatch.addEventListener('click', () => {
 bgStrength.addEventListener('input', () => {
   manualThresh = clamp(Math.round(Number(bgStrength.value) || autoThresh), 10, 120);
   updateBgUI();
+  queueBgPreviewRefresh();
 });
 
 // ─── Canvas layout ───────────────────────────────────────
@@ -1106,11 +1119,11 @@ btnCrop.addEventListener('click', async () => {
   const sw = rect.w;
   const sh = rect.h;
   try {
-    const cropped = await cropToCanvas(sx, sy, sw, sh);
-    const fitted = fitToLineSpec(cropped, { trim: false }); // 已在 cropToCanvas 裡 trim
+    const rect = { x: sx, y: sy, w: sw, h: sh };
+    const fitted = await buildStickerFromRect(rect); // 已在 cropToCanvas 裡 trim
     const base = curName.replace(/\.[^.]+$/, '');
     const name = `${base}_sticker${String(items.length + 1).padStart(2, '0')}.png`;
-    items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height });
+    items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height, imageId: currentImageId, rect });
     updateCounter();
     renderPreview();
     toast(STRINGS.addedItem(items.length, rmbgEnabled));
@@ -1157,11 +1170,11 @@ btnApplyGrid.addEventListener('click', async () => {
   const toAdd = gridCells.slice(0, available);
   try {
     for (const r of toAdd) {
-      const cropped = await cropToCanvas(r.x, r.y, r.w, r.h);
-      const fitted = fitToLineSpec(cropped, { trim: false });
+      const rect = { ...r };
+      const fitted = await buildStickerFromRect(rect);
       const base = curName.replace(/\.[^.]+$/, '');
       const name = `${base}_sticker${String(items.length + 1).padStart(2, '0')}.png`;
-      items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height });
+      items.push({ dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format), name, w: fitted.canvas.width, h: fitted.canvas.height, imageId: currentImageId, rect });
     }
     updateCounter();
     renderPreview();
@@ -1176,6 +1189,34 @@ btnApplyGrid.addEventListener('click', async () => {
 });
 
 // ─── Preview grid ───────────────────────────────────────
+function queueBgPreviewRefresh() {
+  window.clearTimeout(bgPreviewTimer);
+  bgPreviewTimer = window.setTimeout(() => {
+    refreshCurrentImagePreviews().catch(err => {
+      console.warn('去背預覽更新失敗：', err);
+    });
+  }, 120);
+}
+
+async function refreshCurrentImagePreviews() {
+  if (!items.some(item => item.imageId === currentImageId && item.rect)) return;
+  const run = ++bgPreviewRun;
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    if (item.imageId !== currentImageId || !item.rect) continue;
+    const fitted = await buildStickerFromRect(item.rect);
+    if (run !== bgPreviewRun) return;
+    items[i] = {
+      ...item,
+      dataUrl: fitted.canvas.toDataURL(LINE_SPEC.format),
+      w: fitted.canvas.width,
+      h: fitted.canvas.height,
+    };
+  }
+  renderPreview();
+  if (lbIndex >= 0 && items[lbIndex]) lbImg.src = items[lbIndex].dataUrl;
+}
+
 function renderPreview() {
   pgrid.innerHTML = '';
   if (!items.length) {
