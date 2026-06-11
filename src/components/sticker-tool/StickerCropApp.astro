@@ -251,6 +251,7 @@ let rowCuts: number[] = [];
 let colCuts: number[] = [];
 let selectedCellIndex = -1;
 let freePoints: Array<{ x: number; y: number }> = [];
+let hoverLine: { kind: 'line-v' | 'line-h'; index: number } | null = null;
 
 // ─── Helpers ──────────────────────────────────────────────
 const isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -666,6 +667,23 @@ function lineAt(displayX: number, displayY: number) {
   return null;
 }
 
+function updateHoverState(cx: number, cy: number) {
+  if (dragging) return;
+  const p = evPos(cx, cy);
+  const line = editMode === 'auto' && gridCells.length ? lineAt(p.x, p.y) : null;
+  const nextHover = line ? { kind: line.kind, index: line.index } : null;
+  const changed = hoverLine?.kind !== nextHover?.kind || hoverLine?.index !== nextHover?.index;
+  hoverLine = nextHover;
+  ovCv.style.cursor = hoverLine?.kind === 'line-v'
+    ? 'col-resize'
+    : hoverLine?.kind === 'line-h'
+      ? 'row-resize'
+      : editMode === 'single'
+        ? 'grab'
+        : 'crosshair';
+  if (changed) drawOverlay();
+}
+
 function handlesForCell(index: number) {
   const r = gridCells[index];
   if (!r) return [];
@@ -708,6 +726,7 @@ function onDown(cx: number, cy: number) {
     const line = lineAt(p.display.x, p.display.y);
     if (line) {
       dragState = line;
+      hoverLine = line;
       selectedCellIndex = -1;
       drawOverlay();
       return;
@@ -740,6 +759,10 @@ function onDown(cx: number, cy: number) {
   drawOverlay();
 }
 function onMove(cx: number, cy: number) {
+  if (!dragging) {
+    updateHoverState(cx, cy);
+    return;
+  }
   if (!dragging) return;
   const p = evOrig(cx, cy);
 
@@ -797,13 +820,20 @@ function onUp() {
     }
   }
   dragState = null;
+  hoverLine = null;
+  ovCv.style.cursor = editMode === 'single' ? 'grab' : 'crosshair';
   btnCrop.disabled = !(cr.w > 4 && cr.h > 4);
   drawOverlay();
 }
 ovCv.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
 ovCv.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
 ovCv.addEventListener('mouseup', onUp);
-ovCv.addEventListener('mouseleave', onUp);
+ovCv.addEventListener('mouseleave', () => {
+  hoverLine = null;
+  ovCv.style.cursor = 'crosshair';
+  drawOverlay();
+  onUp();
+});
 ovCv.addEventListener('touchstart', e => { e.preventDefault(); const t = e.touches[0]; onDown(t.clientX, t.clientY); }, { passive: false });
 ovCv.addEventListener('touchmove', e => { e.preventDefault(); const t = e.touches[0]; onMove(t.clientX, t.clientY); }, { passive: false });
 ovCv.addEventListener('touchend', e => { e.preventDefault(); onUp(); }, { passive: false });
@@ -860,21 +890,64 @@ function drawGridCells() {
     oCtx.fillText(label, d.x + 7, d.y + 6);
   });
   if (editMode === 'auto') {
-    oCtx.strokeStyle = 'rgba(255,122,92,0.9)';
-    oCtx.lineWidth = isMob ? 4 : 3;
-    colCuts.slice(1, -1).forEach(x => {
+    colCuts.slice(1, -1).forEach((x, idx) => {
+      const index = idx + 1;
+      const active = hoverLine?.kind === 'line-v' && hoverLine.index === index || dragState?.kind === 'line-v' && dragState.index === index;
+      oCtx.strokeStyle = active ? 'rgba(255,122,92,1)' : 'rgba(255,122,92,0.82)';
+      oCtx.lineWidth = active ? (isMob ? 7 : 5) : (isMob ? 4 : 3);
+      if (active) {
+        oCtx.shadowColor = 'rgba(255,122,92,0.55)';
+        oCtx.shadowBlur = 10;
+      } else {
+        oCtx.shadowBlur = 0;
+      }
       oCtx.beginPath();
       oCtx.moveTo(x * sc, 0);
       oCtx.lineTo(x * sc, dH);
       oCtx.stroke();
     });
-    rowCuts.slice(1, -1).forEach(y => {
+    rowCuts.slice(1, -1).forEach((y, idx) => {
+      const index = idx + 1;
+      const active = hoverLine?.kind === 'line-h' && hoverLine.index === index || dragState?.kind === 'line-h' && dragState.index === index;
+      oCtx.strokeStyle = active ? 'rgba(255,122,92,1)' : 'rgba(255,122,92,0.82)';
+      oCtx.lineWidth = active ? (isMob ? 7 : 5) : (isMob ? 4 : 3);
+      if (active) {
+        oCtx.shadowColor = 'rgba(255,122,92,0.55)';
+        oCtx.shadowBlur = 10;
+      } else {
+        oCtx.shadowBlur = 0;
+      }
       oCtx.beginPath();
       oCtx.moveTo(0, y * sc);
       oCtx.lineTo(dW, y * sc);
       oCtx.stroke();
     });
+    oCtx.shadowBlur = 0;
+    drawLineHint();
   }
+  oCtx.restore();
+}
+
+function drawLineHint() {
+  if (!hoverLine || isMob) return;
+  const text = hoverLine.kind === 'line-v' ? '拖曳調整欄寬' : '拖曳調整列高';
+  const x = hoverLine.kind === 'line-v' ? colCuts[hoverLine.index] * sc + 8 : 8;
+  const y = hoverLine.kind === 'line-h' ? rowCuts[hoverLine.index] * sc + 8 : 8;
+  oCtx.save();
+  oCtx.font = 'bold 12px "Inter", sans-serif';
+  const w = oCtx.measureText(text).width + 18;
+  const h = 26;
+  const bx = Math.min(Math.max(6, x), dW - w - 6);
+  const by = Math.min(Math.max(6, y), dH - h - 6);
+  oCtx.fillStyle = 'rgba(23,33,61,0.86)';
+  oCtx.beginPath();
+  if ((oCtx as any).roundRect) (oCtx as any).roundRect(bx, by, w, h, 6);
+  else oCtx.rect(bx, by, w, h);
+  oCtx.fill();
+  oCtx.fillStyle = '#fff';
+  oCtx.textAlign = 'left';
+  oCtx.textBaseline = 'middle';
+  oCtx.fillText(text, bx + 9, by + h / 2);
   oCtx.restore();
 }
 
