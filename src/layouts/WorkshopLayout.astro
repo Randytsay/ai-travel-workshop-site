@@ -21,6 +21,20 @@ const nextItem = currentIndex >= 0 && currentIndex < navItems.length - 1 ? navIt
     <title>{title}</title>
   </head>
   <body class:list={[presentationMode && 'presentation-body']}>
+    {!presentationMode && (
+      <script is:inline>
+        (() => {
+          try {
+            const pinned = localStorage.getItem('workshop_sidebar_mode') === 'pinned';
+            document.body.classList.toggle('sidebar-pinned', pinned);
+            document.body.classList.toggle('sidebar-expanded', pinned);
+            document.body.classList.toggle('sidebar-auto', !pinned);
+          } catch {
+            document.body.classList.add('sidebar-auto');
+          }
+        })();
+      </script>
+    )}
     <div class:list={['shell', presentationMode && 'presentation-shell']}>
       {!presentationMode && <DesktopSidebar currentPath={currentPath} />}
       <main class:list={[presentationMode && 'presentation-main']}>

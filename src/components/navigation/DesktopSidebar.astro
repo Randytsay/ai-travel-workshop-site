@@ -3,22 +3,44 @@ import { navItems } from '../../content/navigation';
 import ProgressTracker from '../progress/ProgressTracker.astro';
 const { currentPath } = Astro.props;
 ---
-<aside class="sidebar">
+<aside class="sidebar" data-sidebar>
   <div class="sidebar-brand">
     <span class="brand-mark" aria-hidden="true">AI</span>
-    <div>
+    <div class="sidebar-title">
       <h3>AI 旅遊規劃師</h3>
       <p>Workshop Route</p>
     </div>
   </div>
-  
-  <ProgressTracker />
 
-  <div class="nav-route">
+  <div class="sidebar-tools" aria-label="側邊欄顯示設定">
+    <button
+      class="sidebar-icon-btn"
+      type="button"
+      data-sidebar-expand
+      aria-label="展開側邊欄"
+      aria-expanded="false"
+    >
+      <span aria-hidden="true">›</span>
+    </button>
+    <button class="sidebar-pin" type="button" data-sidebar-pin aria-pressed="false">
+      <span class="pin-dot" aria-hidden="true"></span>
+      <span class="pin-label">固定顯示</span>
+    </button>
+  </div>
+  
+  <div class="sidebar-progress">
+    <ProgressTracker />
+  </div>
+
+  <div class="nav-route" aria-label="工作坊章節">
     {navItems.map((item, index) => (
-      <a class={`nav-link ${currentPath === item.path ? 'active' : ''}`} href={item.path}>
+      <a
+        class={`nav-link ${currentPath === item.path ? 'active' : ''}`}
+        href={item.path}
+        title={item.label}
+      >
         <span class="nav-step">{String(index + 1).padStart(2, '0')}</span>
-        <span>{item.label}</span>
+        <span class="nav-label">{item.label}</span>
       </a>
     ))}
   </div>
@@ -27,3 +49,65 @@ const { currentPath } = Astro.props;
     <p class="nav-meta-block">依序完成即夢短影音、公仔、旅遊需求、NotebookLM 研究與貼圖素材。</p>
   </div>
 </aside>
+
+<script>
+  const SIDEBAR_MODE_KEY = 'workshop_sidebar_mode';
+  type SidebarMode = 'auto' | 'pinned';
+
+  const sidebar = document.querySelector('[data-sidebar]') as HTMLElement | null;
+  const expandButton = document.querySelector('[data-sidebar-expand]') as HTMLButtonElement | null;
+  const pinButton = document.querySelector('[data-sidebar-pin]') as HTMLButtonElement | null;
+  const body = document.body;
+
+  const getMode = (): SidebarMode => {
+    try {
+      return localStorage.getItem(SIDEBAR_MODE_KEY) === 'pinned' ? 'pinned' : 'auto';
+    } catch {
+      return 'auto';
+    }
+  };
+
+  const saveMode = (mode: SidebarMode) => {
+    try {
+      localStorage.setItem(SIDEBAR_MODE_KEY, mode);
+    } catch {
+      // Keep the visual toggle working even if storage is blocked.
+    }
+  };
+
+  const setExpanded = (expanded: boolean) => {
+    body.classList.toggle('sidebar-expanded', expanded);
+    expandButton?.setAttribute('aria-expanded', String(expanded));
+    if (expandButton) expandButton.setAttribute('aria-label', expanded ? '收合側邊欄' : '展開側邊欄');
+  };
+
+  const applyMode = (mode: SidebarMode) => {
+    body.classList.toggle('sidebar-pinned', mode === 'pinned');
+    body.classList.toggle('sidebar-auto', mode === 'auto');
+    pinButton?.setAttribute('aria-pressed', String(mode === 'pinned'));
+    if (pinButton) {
+      pinButton.querySelector('.pin-label')!.textContent = mode === 'pinned' ? '固定中' : '固定顯示';
+    }
+    setExpanded(mode === 'pinned');
+  };
+
+  applyMode(getMode());
+
+  expandButton?.addEventListener('click', () => {
+    setExpanded(!body.classList.contains('sidebar-expanded'));
+  });
+
+  pinButton?.addEventListener('click', () => {
+    const nextMode: SidebarMode = getMode() === 'pinned' ? 'auto' : 'pinned';
+    saveMode(nextMode);
+    applyMode(nextMode);
+  });
+
+  sidebar?.addEventListener('mouseenter', () => {
+    if (getMode() === 'auto') setExpanded(true);
+  });
+
+  sidebar?.addEventListener('mouseleave', () => {
+    if (getMode() === 'auto') setExpanded(false);
+  });
+</script>
