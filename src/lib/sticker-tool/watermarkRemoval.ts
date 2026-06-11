@@ -44,7 +44,7 @@ export function getWatermarkRegion(
 }
 
 /**
- * 載入 Gemini 浮水印參考圖（96×96 全 alpha 版本）
+ * 載入 Gemini 浮水印參考圖（96×96 RGB mask 版本）
  * 來源：https://github.com/GargantuaX/gemini-watermark-remover/blob/main/src/assets/bg_96.png
  * 本地路徑：/gemini-watermark.png
  */
@@ -81,6 +81,18 @@ function scaleRef(ref: HTMLCanvasElement, size: number): ImageData {
 
 function luminance(r: number, g: number, b: number): number {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function clampByte(value: number): number {
+  return Math.max(0, Math.min(255, Math.round(value)));
+}
+
+function watermarkAlphaFromMask(data: Uint8ClampedArray, p: number): number {
+  // The bundled reference PNG is an RGB mask, not an RGBA alpha map.
+  // Its brightest pixels are around 128, so Gemini's white overlay opacity is
+  // encoded directly in the mask brightness.
+  const alpha = Math.max(data[p], data[p + 1], data[p + 2]) / 255;
+  return Math.max(0, Math.min(0.92, alpha));
 }
 
 function estimateRegionBackground(
@@ -157,7 +169,7 @@ export async function detectWatermarkPresence(
 
   for (let i = 0; i < region.width * region.height; i++) {
     const p = i * 4;
-    const a = rd[p + 3] / 255;
+    const a = watermarkAlphaFromMask(rd, p);
     if (a < 0.08 || target[p + 3] < 128) continue;
     const lift = luminance(target[p], target[p + 1], target[p + 2]) - bgLum;
     weightedLift += lift * a;
@@ -188,7 +200,7 @@ export async function removeWatermark(
   }
 
   const ref = refCanvas ?? await loadWatermarkRef();
-  // 取得對應尺寸的 alpha map
+  // 取得對應尺寸的 RGB mask
   const refData = ref.width === config.logoSize
     ? ref.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, ref.width, ref.height)
     : scaleRef(ref, config.logoSize);
@@ -201,26 +213,14 @@ export async function removeWatermark(
   for (let i = 0; i < w * h; i++) {
     const p = i * 4;
     // Reverse alpha: original = (watermarked - alpha*ref) / (1 - alpha)
-    // ref 的 RGB 是純白星號，alpha 決定混合程度
-    const aR = rd[p + 3] / 255;     // 參考的 R 通道 alpha
-    const aG = rd[p + 3] / 255;     // （假設 RGBA alpha 相同）
-    const aB = rd[p + 3] / 255;
-    const refR = rd[p];
-    const refG = rd[p + 1];
-    const refB = rd[p + 2];
+    // ref 的圖案是白色星號，RGB mask 亮度決定混合程度。
+    const a = watermarkAlphaFromMask(rd, p);
+    if (a < 0.02 || target.data[p + 3] < 128) continue;
 
-    if (aR > 0 && aR < 1) {
-      td[p]     = Math.max(0, Math.min(255, Math.round((td[p]     - aR * refR) / (1 - aR))));
-      td[p + 1] = Math.max(0, Math.min(255, Math.round((td[p + 1] - aG * refG) / (1 - aG))));
-      td[p + 2] = Math.max(0, Math.min(255, Math.round((td[p + 2] - aB * refB) / (1 - aB))));
-      // alpha 保持不變
-    } else if (aR === 0) {
-      // 純透明，原樣保留
-    } else {
-      // aR === 1，浮水印完全覆蓋此像素 → 視為不透明星號
-      // 無法還原，設為透明（讓背景偵測後填補）
-      td[p + 3] = 0;
-    }
+    const denom = 1 - a;
+    td[p] = clampByte((td[p] - a * 255) / denom);
+    td[p + 1] = clampByte((td[p + 1] - a * 255) / denom);
+    td[p + 2] = clampByte((td[p + 2] - a * 255) / denom);
   }
   ctx.putImageData(target, region.x, region.y);
   return true;
