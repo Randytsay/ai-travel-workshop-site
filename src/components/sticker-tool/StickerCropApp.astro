@@ -50,7 +50,7 @@ import '../../styles/sticker-tool.css';
     <!-- LEFT: Canvas + crop -->
     <div class="st-panel">
       <div class="st-panel-header">
-        <span id="st-phdr">把 Gemini 總圖拖到這裡</span>
+        <span id="st-phdr">把圖拖到這裡</span>
         <span id="st-packTag" style="color:var(--sunset);font-weight:900;">4×4</span>
       </div>
 
@@ -61,12 +61,17 @@ import '../../styles/sticker-tool.css';
         </div>
         <span id="st-bgHex" style="font-weight:800;color:var(--night);">—</span>
         <span class="st-bg-thresh" id="st-bgThresh">自動容差 40</span>
+        <label class="st-bg-slider">
+          <span>去背程度</span>
+          <input id="st-bgStrength" type="range" min="10" max="120" step="1" value="40">
+          <b id="st-bgStrengthVal">40</b>
+        </label>
       </div>
 
       <div class="st-canvas-wrap" id="st-canvasWrap">
         <div id="st-dropzone">
           <div class="st-drop-icon">📁</div>
-          <div class="st-drop-title">把 Gemini 總圖拖到這裡</div>
+          <div class="st-drop-title">把圖拖到這裡</div>
           <div class="st-drop-sub" id="st-dropSub">或點下方按鈕選擇檔案</div>
           <button class="st-drop-btn" id="st-pickBtn">選擇圖片</button>
           <input type="file" id="st-fileInput" accept="image/*" hidden>
@@ -220,6 +225,8 @@ const bgSwatch = $('st-bgSwatch');
 const bgSwatchFill = $('st-bgSwatchFill');
 const bgHex = $('st-bgHex');
 const bgThresh = $('st-bgThresh');
+const bgStrength = $('st-bgStrength') as HTMLInputElement;
+const bgStrengthVal = $('st-bgStrengthVal');
 const lightbox = $('st-lightbox');
 const lbImg = $('st-lbImg') as HTMLImageElement;
 const lbDl = $('st-lbDl') as HTMLButtonElement;
@@ -243,6 +250,7 @@ let watermarkEnabled = false;
 let detectedBg: BgColor = { r: 0, g: 0, b: 0 };
 let manualBg: BgColor | null = null;
 let autoThresh = 40;
+let manualThresh: number | null = null;
 let watermarkRefCache: HTMLCanvasElement | null = null;
 let lbIndex = -1;
 let editMode: EditMode = 'auto';
@@ -277,6 +285,10 @@ function toast(msg: string, duration = 2500) {
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
+}
+
+function bgThreshold() {
+  return manualThresh ?? autoThresh;
 }
 
 function rectToDisplay(r: Rect) {
@@ -434,7 +446,7 @@ document.querySelectorAll<HTMLButtonElement>('.st-mode-tab').forEach(btn => {
     selectedCellIndex = editMode === 'single' && gridCells.length ? Math.max(0, selectedCellIndex) : selectedCellIndex;
     if (editMode === 'single' && selectedCellIndex >= 0) setCrFromCell(selectedCellIndex);
     const hint = {
-      auto: '拖曳格線可微調切割線，確認後按「加入目前格線」',
+      auto: '拖曳格線可微調切割線，確認後按「② 依格線裁切全部」',
       single: '點選任一格後拖曳邊角，可單獨調整貼圖範圍',
       free: '拖曳畫出新格，或連點 4 個角建立補救裁切範圍',
     }[editMode];
@@ -515,6 +527,7 @@ function loadFile(file: File) {
         return;
       }
       img = image;
+      manualThresh = null;
       dropzone.style.display = 'none';
       edArea.classList.add('on');
       phdr.textContent = '框選要裁切的範圍，或按「自動偵測」';
@@ -580,7 +593,10 @@ function updateBgUI() {
   const hex = '#' + [c.r, c.g, c.b].map(v => v.toString(16).padStart(2, '0')).join('');
   bgSwatchFill.style.background = hex;
   bgHex.textContent = hex.toUpperCase();
-  bgThresh.textContent = `自動容差 ${autoThresh}`;
+  const thresh = bgThreshold();
+  bgThresh.textContent = manualThresh === null ? `自動容差 ${autoThresh}` : `手動容差 ${thresh}`;
+  bgStrength.value = String(thresh);
+  bgStrengthVal.textContent = String(thresh);
 }
 
 bgSwatch.addEventListener('click', () => {
@@ -610,6 +626,11 @@ bgSwatch.addEventListener('click', () => {
     }
   });
   picker.click();
+});
+
+bgStrength.addEventListener('input', () => {
+  manualThresh = clamp(Math.round(Number(bgStrength.value) || autoThresh), 10, 120);
+  updateBgUI();
 });
 
 // ─── Canvas layout ───────────────────────────────────────
@@ -1066,7 +1087,7 @@ async function cropToCanvas(sx: number, sy: number, sw: number, sh: number): Pro
   offCtx.drawImage(originalCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
 
   if (rmbgEnabled) {
-    removeBackground(offCtx, sw, sh, manualBg ?? detectedBg, autoThresh);
+    removeBackground(offCtx, sw, sh, manualBg ?? detectedBg, bgThreshold());
     return autoTrim(offCtx, sw, sh);
   }
   return off;
@@ -1112,12 +1133,12 @@ btnAuto.addEventListener('click', async () => {
     if (processingOriginal) await processingOriginal;
     if (!originalCanvas) return;
     const data = originalCanvas.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
-    const cells = detectGrid(data, manualBg ?? detectedBg, autoThresh, activePack.cols, activePack.rows);
+    const cells = detectGrid(data, manualBg ?? detectedBg, bgThreshold(), activePack.cols, activePack.rows);
     if (!cells.length) { toast(STRINGS.warnNoDetect); return; }
     setGridCells(cells.slice(0, activePack.total));
     editMode = 'auto';
     document.querySelectorAll('.st-mode-tab').forEach(b => b.classList.toggle('is-active', (b as HTMLButtonElement).dataset.mode === 'auto'));
-    phdr.textContent = '拖曳橘色切割線微調，確認後按「加入目前格線」';
+    phdr.textContent = '拖曳橘色切割線微調，確認後按「② 依格線裁切全部」';
     toast(`✓ 偵測到 ${gridCells.length} 格，可先微調再加入`);
   } catch (err: any) {
     toast(STRINGS.warnDetectFail(err?.message ?? ''));
