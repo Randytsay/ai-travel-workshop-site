@@ -1,33 +1,267 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import QuizCard from '../components/learning/QuizCard.astro';
-import CTASection from '../components/common/CTASection.astro';
-import ImageCard from '../components/common/ImageCard.astro';
+import {
+  aiEraRoles,
+  aiToolMap,
+  beneficialFriends,
+  impacts,
+  interfaceBasics,
+  opportunities,
+  promptFormula,
+  todayFlow
+} from '../content/aiGuidePage';
 import { aiExplainCards, aiLifeHelps, aiToolCompare, aiQuiz } from '../content/aiBasicsPage';
+
+const totalSlides = 15;
 ---
-<WorkshopLayout title="AI 入門" currentPath="/ai-basics">
-  <section class="hero with-image">
-    <div>
-      <p class="eyebrow">🗺️ 啟程導覽：不用懂引擎，懂方向盤就好</p>
-      <h1>認識你的 AI 旅伴</h1>
-      <p>把 AI 想成一位行動力極強的旅伴：你給它目的地、偏好與限制，它就能幫你規劃出第一版行程，再由你來決定去哪裡。</p>
+<WorkshopLayout title="AI 入門簡報" currentPath="/ai-basics" presentationMode={true}>
+  <section class="slide-deck" aria-label="AI 入門簡報" data-slide-deck>
+    <div class="deck-topbar" aria-live="polite">
+      <a class="deck-exit" href="/prep">課前準備</a>
+      <div class="deck-counter"><span data-slide-current>1</span> / {totalSlides}</div>
+      <a class="deck-exit is-next" href="/jimeng-short-video">下一站：短影音</a>
     </div>
-    <div class="hero-media">
-      <img src="/images/ai-basics/ai-buddy-hero-01.webp" alt="友善的 AI 旅伴與旅行規劃卡，象徵入門導覽" loading="eager" decoding="async" />
+
+    <article class="deck-slide is-active title-slide" data-slide>
+      <div class="slide-copy">
+        <p class="deck-kicker">AI 小白友善入口</p>
+        <h1>把 AI 當成益友，而不是難懂的機器</h1>
+        <p class="slide-lead">今天先用一個好懂的角度開始：AI 可以照見盲點、耐心陪練、打開視野；最後做判斷與負責的人，仍然是你。</p>
+        <button class="btn" type="button" data-next-slide>開始導覽</button>
+      </div>
+      <figure class="slide-hero-figure">
+        <img src="/images/ai-guide/hero-ai-beneficial-friend-01.webp" alt="友善 AI 和初學者一起在工作坊桌上討論旅行與創作素材" loading="eager" decoding="async" />
+      </figure>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy">
+        <p class="deck-kicker">先換一個心智模型</p>
+        <h2>AI 不是考試題，而是協作對象</h2>
+      </div>
+      <div class="slide-card-grid">
+        {aiEraRoles.map((item) => (
+          <section class="slide-card">
+            <span>{item.title}</span>
+            <p>{item.text}</p>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="deck-slide friends-overview-slide" data-slide>
+      <div class="slide-copy centered">
+        <p class="deck-kicker">益者三友</p>
+        <h2>我們用三種好朋友，快速認識 AI</h2>
+        <p class="slide-lead">這不是哲學課，是讓新手不用怕的操作地圖。</p>
+      </div>
+      <div class="friend-pill-row">
+        {beneficialFriends.map((friend) => (
+          <section class="friend-pill">
+            <img src={friend.image} alt={friend.alt} loading="lazy" decoding="async" />
+            <strong>{friend.title}</strong>
+            <span>{friend.quote}</span>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    {beneficialFriends.map((friend) => (
+      <article class="deck-slide friend-detail-slide" data-slide>
+        <figure class="slide-image-panel">
+          <img src={friend.image} alt={friend.alt} loading="lazy" decoding="async" />
+        </figure>
+        <div class="slide-copy">
+          <p class="deck-kicker">{friend.quote}</p>
+          <h2>{friend.title}</h2>
+          <p class="slide-lead">{friend.text}</p>
+          <ul class="slide-list">{friend.examples.map((example) => <li>{example}</li>)}</ul>
+        </div>
+      </article>
+    ))}
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy centered">
+        <p class="deck-kicker">AI 基本概念</p>
+        <h2>不用懂引擎，懂方向盤就好</h2>
+        <p class="slide-lead">把 AI 想成一位行動力很強的旅伴：你給它目的地、偏好與限制，它先做第一版，你再決定怎麼修正。</p>
+      </div>
+      <div class="slide-card-grid">
+        {aiExplainCards.map((card) => (
+          <section class="slide-card">
+            <span>{card.title}</span>
+            <p>{card.text}</p>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy centered">
+        <p class="deck-kicker">工具地圖</p>
+        <h2>不要先問哪個 AI 最強，先問你要完成什麼</h2>
+      </div>
+      <div class="tool-map-board">
+        {aiToolMap.map((item) => (
+          <section class="tool-map-item">
+            <strong>{item.tool}</strong>
+            <span>{item.bestFor}</span>
+            <p>{item.chooseWhen}</p>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy">
+        <p class="deck-kicker">今天會派上用場</p>
+        <h2>主力工具與備援角色</h2>
+      </div>
+      <div class="tool-map-board compact">
+        {aiToolCompare.map((item) => (
+          <section class="tool-map-item">
+            <strong>{item.tool}</strong>
+            <span>{item.fit}</span>
+            <p>{item.note}</p>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy">
+        <p class="deck-kicker">第一次打開 AI App</p>
+        <h2>大部分工具，都先看這五個地方</h2>
+      </div>
+      <div class="interface-board">
+        {interfaceBasics.map(([name, text], index) => (
+          <section class="interface-step">
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <strong>{name}</strong>
+            <p>{text}</p>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="deck-slide prompt-slide" data-slide>
+      <div class="slide-copy">
+        <p class="deck-kicker">萬用提示詞</p>
+        <h2>把問題問清楚，答案才會更像你要的</h2>
+      </div>
+      <div class="prompt-board">
+        <ol>{promptFormula.map((item) => <li>{item}</li>)}</ol>
+        <section class="prompt-example">
+          <strong>投影示範句</strong>
+          <p>你是一位旅遊規劃師。我要規劃 3 天 2 夜台中親子旅行，旅伴有 2 位大人和 1 位小學生，希望不要太趕，預算中等。請用表格列出每天上午、下午、晚上行程，並附交通與注意事項。</p>
+        </section>
+      </div>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy centered">
+        <p class="deck-kicker">生活化應用</p>
+        <h2>這位旅伴還能幫我們做什麼？</h2>
+      </div>
+      <div class="journey-strip slide-chip-board">
+        {aiLifeHelps.map((item) => <span class="chip">{item}</span>)}
+      </div>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy centered">
+        <p class="deck-kicker">機會與衝擊</p>
+        <h2>AI 越方便，人的判斷力越重要</h2>
+      </div>
+      <div class="impact-board">
+        <section>
+          <strong>機會</strong>
+          <ul>{opportunities.map((item) => <li>{item}</li>)}</ul>
+        </section>
+        <section>
+          <strong>需要注意</strong>
+          <ul>{impacts.map((item) => <li>{item}</li>)}</ul>
+        </section>
+      </div>
+    </article>
+
+    <article class="deck-slide" data-slide>
+      <div class="slide-copy centered">
+        <p class="deck-kicker">入關小測驗</p>
+        <h2>蓋滿通關章就可以開始第一個作品</h2>
+      </div>
+      <div class="slide-quiz-board">
+        {aiQuiz.map((quiz, idx) => <QuizCard quiz={quiz} index={idx + 1} />)}
+      </div>
+    </article>
+
+    <article class="deck-slide closing-slide" data-slide>
+      <div class="slide-copy">
+        <p class="deck-kicker">今天怎麼走</p>
+        <h2>先建立地圖，再開始做作品</h2>
+        <ol class="today-flow">{todayFlow.map((item) => <li>{item}</li>)}</ol>
+        <a class="btn" href="/jimeng-short-video">前往短影音暖身</a>
+      </div>
+      <figure class="slide-image-panel">
+        <img src="/images/ai-guide/friend-wide-reader-01.webp" alt="友善 AI 展開多種工具卡，協助初學者選擇適合路徑" loading="lazy" decoding="async" />
+      </figure>
+    </article>
+
+    <div class="deck-controls" aria-label="簡報控制">
+      <button type="button" class="deck-nav-btn" data-prev-slide aria-label="上一頁">‹</button>
+      <div class="deck-dots" aria-label="投影片頁碼">
+        {Array.from({ length: totalSlides }, (_, index) => (
+          <button type="button" class:list={['deck-dot', index === 0 && 'is-active']} data-slide-dot={index} aria-label={`前往第 ${index + 1} 頁`}></button>
+        ))}
+      </div>
+      <button type="button" class="deck-nav-btn" data-next-slide aria-label="下一頁">›</button>
     </div>
   </section>
 
-  <section class="tool-grid">{aiExplainCards.map((card) => <article class="card glass-card"><h2>{card.title}</h2><p>{card.text}</p></article>)}</section>
-  <section style="margin:24px 0;">
-    <ImageCard src="/images/ai-basics/ai-idea-to-outcomes-01.webp" alt="從想法經過 AI 協作推進成公仔、行程與貼圖作品的流程圖" title="AI 不只是聊天，是把想法推進成作品" text="這堂課會用明確任務讓工具各自發揮：生成、整理、研究、展示。" ratio="16 / 9" />
-  </section>
-  <section class="card postcard-card"><p class="eyebrow">🌟 生活化旅行應用</p><h2>這位旅伴還能幫我們做什麼？</h2><div class="help-grid">{aiLifeHelps.map((item) => <span class="chip">{item}</span>)}</div></section>
-  <section class="card itinerary-card"><p class="eyebrow">🤝 旅行助手定位</p><h2>今天會派上用場的旅伴角色卡</h2><ul>{aiToolCompare.map((t) => <li><strong>{t.tool}</strong>｜{t.fit}（{t.note}）</li>)}</ul></section>
-  <section class="section-heading">
-    <p class="eyebrow">🎫 入關小測驗</p>
-    <h2>蓋滿通關章就可以開始第一個作品</h2>
-  </section>
-  {aiQuiz.map((quiz, idx) => <div class="card boarding-pass-card" style="padding:0; border:none; margin-bottom: 20px; box-shadow:none;"><QuizCard quiz={quiz} index={idx + 1} /></div>)}
-  <section class="card notice-card"><p class="eyebrow">🎁 免稅店驚喜</p><h2>通關禮物互動提示卡</h2><p>答對 2 題可舉手領取現場通關紀念品，快和旁邊的旅伴互相討論。</p></section>
-  <CTASection title="護照確認無誤，前往第一站" text="接下來先用短影音做一段暖身，熟悉範例、素材與生成的節奏。" primaryLabel="前往短影音暖身" primaryHref="/jimeng-short-video" />
+  <script>
+    const deck = document.querySelector<HTMLElement>('[data-slide-deck]');
+    if (deck) {
+      const slides = Array.from(deck.querySelectorAll<HTMLElement>('[data-slide]'));
+      const dots = Array.from(deck.querySelectorAll<HTMLButtonElement>('[data-slide-dot]'));
+      const counter = deck.querySelector<HTMLElement>('[data-slide-current]');
+      let activeIndex = 0;
+
+      const setSlide = (nextIndex: number) => {
+        activeIndex = Math.min(Math.max(nextIndex, 0), slides.length - 1);
+        slides.forEach((slide, index) => {
+          slide.classList.toggle('is-active', index === activeIndex);
+          slide.setAttribute('aria-hidden', index === activeIndex ? 'false' : 'true');
+        });
+        dots.forEach((dot, index) => dot.classList.toggle('is-active', index === activeIndex));
+        if (counter) counter.textContent = String(activeIndex + 1);
+        window.history.replaceState(null, '', `#${activeIndex + 1}`);
+      };
+
+      const initialHash = Number(window.location.hash.replace('#', ''));
+      if (Number.isInteger(initialHash) && initialHash > 0) setSlide(initialHash - 1);
+      else setSlide(0);
+
+      deck.querySelectorAll<HTMLElement>('[data-next-slide]').forEach((button) => {
+        button.addEventListener('click', () => setSlide(activeIndex + 1));
+      });
+      deck.querySelectorAll<HTMLElement>('[data-prev-slide]').forEach((button) => {
+        button.addEventListener('click', () => setSlide(activeIndex - 1));
+      });
+      dots.forEach((dot, index) => dot.addEventListener('click', () => setSlide(index)));
+
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+          event.preventDefault();
+          setSlide(activeIndex + 1);
+        }
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+          event.preventDefault();
+          setSlide(activeIndex - 1);
+        }
+        if (event.key === 'Home') setSlide(0);
+        if (event.key === 'End') setSlide(slides.length - 1);
+      });
+    }
+  </script>
 </WorkshopLayout>

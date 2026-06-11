@@ -5,7 +5,10 @@ import { schedule } from '../content/schedule';
 import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
 import { navItems } from '../content/navigation';
 import { journeyConcept } from '../content/journeyGuide';
-const journeyStops = navItems.slice(1, 8);
+const journeyStopPaths = ['/ai-basics', '/jimeng-short-video', '/doll-maker', '/travel-planner', '/notebooklm', '/sticker-lab', '/voting'];
+const journeyStops = journeyStopPaths
+  .map((path) => navItems.find((item) => item.path === path))
+  .filter((item) => item !== undefined);
 ---
 <WorkshopLayout title="AI 旅遊規劃師工作坊" currentPath="/">
   <section class="hero hero-home">
@@ -15,7 +18,7 @@ const journeyStops = navItems.slice(1, 8);
       <p>今天不是只聽課，而是跟著網站一步步完成短影音、公仔、旅遊研究與 LINE 貼圖素材，把 AI 變成回家也能帶上的生活旅伴。</p>
       <div class="actions">
         <a class="btn" href="/prep">開始我的 AI 旅行</a>
-        <a class="btn alt" href="/jimeng-short-video">前往第一站：短影音暖身</a>
+        <a class="btn alt" href="/ai-basics">前往第一站：AI 入門簡報</a>
         <a class="btn ghost" href="/voting">前往頒獎舞台</a>
       </div>
       <div class="hero-stats" aria-label="工作坊重點">
@@ -38,7 +41,7 @@ const journeyStops = navItems.slice(1, 8);
     <div class="journey-logic-grid">
       <article>
         <strong>7 站任務章</strong>
-        <p>上課跟著走的操作路線</p>
+        <p>從 AI 入門到作品分享的操作路線</p>
       </article>
       <article>
         <strong>3 個可帶走成果</strong>
@@ -58,7 +61,7 @@ const journeyStops = navItems.slice(1, 8);
 
   <section class="section-heading">
     <p class="eyebrow">🎒 你的行李清單：今天會帶走的 3 個成果</p>
-    <h2>先做出作品，再理解方法</h2>
+    <h2>先建立共同語言，再做出作品</h2>
   </section>
   <section class="feature-grid">
     {homeOutcomes.map((item) => (
