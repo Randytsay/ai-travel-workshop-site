@@ -158,6 +158,8 @@ import { detectWatermarkPresence, removeWatermark, loadWatermarkRef } from '../.
 import { fitToLineSpec } from '../../lib/sticker-tool/lineSpec';
 import { buildZip, triggerDownload, downloadAllPng } from '../../lib/sticker-tool/zipExport';
 
+function initStickerApp() {
+
 type ActivePack = {
   id: string;
   label: string;
@@ -672,7 +674,14 @@ function alignOverlay() {
   ovCv.style.height = dH + 'px';
 }
 
-window.addEventListener('resize', () => { if (img) layoutCanvas(); });
+    const handleResize = () => {
+      if (img && document.getElementById('st-mainCv')) layoutCanvas();
+    };
+    window.addEventListener('resize', handleResize);
+
+    document.addEventListener('astro:before-swap', () => {
+      window.removeEventListener('resize', handleResize);
+    }, { once: true });
 
 function redrawMain() {
   if (!originalCanvas) return;
@@ -1350,4 +1359,8 @@ btnDlAll.addEventListener('click', async () => {
   }
   renderPreview();
 })();
+
+}
+
+document.addEventListener('astro:page-load', initStickerApp);
 </script>
