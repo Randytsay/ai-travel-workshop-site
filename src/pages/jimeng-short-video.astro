@@ -9,9 +9,7 @@ import Icon from '../components/common/Icon.astro';
 import { stationRoles } from '../content/journeyGuide';
 import {
   androidSteps,
-  faqItems,
   iosSteps,
-  officialLinks,
   screenshotAssetFolder,
   setupSummary,
   tutorialReferences
@@ -177,31 +175,7 @@ const hasImage = (filename: string) => {
     ))}
   </section>
 
-  <section class="section-heading">
-    <p class="eyebrow">常見卡關</p>
-    <h2>現場助教可以照這裡排除</h2>
-  </section>
-  <section class="faq-grid">
-    {faqItems.map((item) => (
-      <article class="card faq-lite">
-        <h3>{item.q}</h3>
-        <p>{item.a}</p>
-      </article>
-    ))}
-  </section>
 
-  <section class="section-heading">
-    <p class="eyebrow">官方來源</p>
-    <h2>頁面內容依這些入口整理</h2>
-  </section>
-  <section class="source-list">
-    {officialLinks.map((link) => (
-      <a class="source-item" href={link.href} target="_blank" rel="noreferrer">
-        <strong>{link.label}</strong>
-        <span>{link.note}</span>
-      </a>
-    ))}
-  </section>
 
   <CompleteTaskButton
     taskId="jimeng-short-video-complete"

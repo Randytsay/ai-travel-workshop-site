@@ -123,25 +123,6 @@ export const androidSteps = [
 
 export const screenshotAssetFolder = '/images/jimeng/';
 
-export const faqItems = [
-  {
-    q: 'iPhone 一定要把自己的 Apple ID 改到中國大陸嗎？',
-    a: '不一定。若學員擔心訂閱、付款或既有 App 受到影響，課堂更穩的做法是準備一個只用來下載 App 的教學用 Apple 帳號。'
-  },
-  {
-    q: 'Android 可以從第三方 APK 站下載嗎？',
-    a: '不建議。工作坊面向一般學員，優先走官方網站或手機品牌商店；第三方 APK 站可能有版本、簽章與安全風險。'
-  },
-  {
-    q: '沒有中國大陸手機號可以登入嗎？',
-    a: '登入頁通常可以切換國碼，但實際可用性會隨平台政策變動。課前最好用主辦方準備的測試手機完整走一次。'
-  },
-  {
-    q: '可以直接使用別人教學網站的截圖嗎？',
-    a: '建議不要。最安全的方式是依照本頁的截圖清單，用自己的手機重拍流程圖，再放進工作坊頁面。'
-  }
-];
-
 export const tutorialReferences = [
   {
     label: '即夢 AI 完整操作手冊',
@@ -166,33 +147,5 @@ export const tutorialReferences = [
     href: 'https://www.douyin.com/video/6946396406894710024',
     source: '抖音影片',
     note: '抖音官方帳號的拍同款教學影片，適合放給學員自行點開觀看。'
-  }
-];
-
-export const officialLinks = [
-  {
-    label: 'Apple 官方：更改 Apple 帳戶國家或地區',
-    href: 'https://support.apple.com/zh-tw/118283',
-    note: 'Apple 說明更改地區前需處理帳戶餘額、訂閱、付款方式等限制。'
-  },
-  {
-    label: '即夢AI App Store 中國大陸頁',
-    href: 'https://apps.apple.com/cn/app/%E5%8D%B3%E6%A2%A6ai-%E6%8A%96%E9%9F%B3%E6%97%97%E4%B8%8Bai%E5%9B%BE%E7%89%87%E5%92%8C%E8%A7%86%E9%A2%91%E5%B7%A5%E5%85%B7/id6503676563',
-    note: '確認 iPhone 需求、開發者、功能描述與「做同款」功能。'
-  },
-  {
-    label: '即夢AI 官方網站',
-    href: 'https://www.jimeng.com/',
-    note: '官方介紹文 / 圖生影片、中文創作、首尾幀控制與 AI 繪圖功能。'
-  },
-  {
-    label: '抖音 App Store 中國大陸頁',
-    href: 'https://apps.apple.com/cn/app/%E6%8A%96%E9%9F%B3/id1142110895',
-    note: '確認 iOS 需求、開發者與 App 介紹。'
-  },
-  {
-    label: '抖音官方下載頁',
-    href: 'https://www.douyin.com/downloadpage/app',
-    note: '官方列出 iOS、Android 行動端下載入口與執行環境。'
   }
 ];
