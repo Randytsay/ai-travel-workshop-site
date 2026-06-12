@@ -7,20 +7,22 @@ import { stationRoles } from '../content/journeyGuide';
 ---
 
 <WorkshopLayout title="課後問卷" currentPath="/survey">
-  <section class="hero">
+  <section class="hero with-image">
     <div>
       <p class="eyebrow">📋 旅程最後一站</p>
       <h1>課後體驗與意見回饋</h1>
       <p>感謝您參與今天的 AI 旅遊規劃師工作坊！請花 1 分鐘填寫以下問卷，您的寶貴建議將幫助我們持續優化後續的活動體驗。</p>
     </div>
+    <div class="hero-media">
+      <img src="/images/survey/hero-finish-journey-01.webp" alt="工作坊結尾的旅行桌面，呈現完成旅程的溫暖感" loading="eager" decoding="async" />
+    </div>
   </section>
 
   <StationRole role={stationRoles['/survey']} />
 
-  <div class="survey-container" style="margin-top: 32px; max-width: 800px; margin-left: auto; margin-right: auto;">
-    <!-- Form Screen -->
-    <div class="form-screen" id="form-screen">
-      <div class="card" style="overflow: hidden; border: 1px solid var(--st-border, rgba(23,33,61,0.1)); border-radius: var(--radius-md, 16px); box-shadow: var(--shadow-card);">
+  <!-- Form Screen -->
+  <div class="form-screen" id="form-screen" style="margin-top: 32px;">
+    <section class="card" style="overflow: hidden; padding: 0;">
         <div class="card-header" id="form-header" style="background: linear-gradient(135deg, var(--sunset), #ffb199); color: #fff; padding: 24px; position: relative;">
           <div class="card-header-flex" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
             <div>
@@ -189,21 +191,18 @@ import { stationRoles } from '../content/journeyGuide';
               📤 提交問卷
             </button>
           </form>
-        </div>
       </div>
-    </div>
+    </section>
+  </div>
 
-    <!-- Success Screen -->
-    <div class="success-screen" id="success-screen" style="display: none; text-align: center;">
-      <div class="card" style="background: #fff; border: 1px solid var(--st-border, rgba(23,33,61,0.1)); border-radius: var(--radius-md, 16px); box-shadow: var(--shadow-card);">
-        <div class="card-body" style="padding: 48px 24px;">
-          <div style="font-size: 4.5rem; margin-bottom: 16px;">🎉</div>
-          <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--night); margin: 0 0 12px 0;">感謝您的寶貴回饋！</h2>
-          <p style="color: var(--ink-soft); margin: 0 0 24px 0; font-size: 1rem;">您的問卷已成功送出，非常感謝您的支持。</p>
-          <a href="/" class="btn" style="background: var(--ocean); color: #fff; border: 0; padding: 12px 28px; border-radius: 999px; font-weight: 800;">🏠 回到首頁</a>
-        </div>
-      </div>
-    </div>
+  <!-- Success Screen -->
+  <div class="success-screen" id="success-screen" style="display: none; text-align: center; margin-top: 32px;">
+    <section class="card" style="background: #fff; padding: 48px 24px;">
+      <div style="font-size: 4.5rem; margin-bottom: 16px;">🎉</div>
+      <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--night); margin: 0 0 12px 0;">感謝您的寶貴回饋！</h2>
+      <p style="color: var(--ink-soft); margin: 0 0 24px 0; font-size: 1rem;">您的問卷已成功送出，非常感謝您的支持。</p>
+      <a href="/" class="btn" style="background: var(--ocean); color: #fff; border: 0; padding: 12px 28px; border-radius: 999px; font-weight: 800;">🏠 回到首頁</a>
+    </section>
   </div>
 
   <CTASection 
