@@ -111,19 +111,4 @@ import StickerCropApp from '../components/sticker-tool/StickerCropApp.astro';
     </div>
   </section>
 
-  <section class="card" style="margin-top: 16px;">
-    <p class="eyebrow">❓ 常見問題</p>
-    <details style="margin-top: 12px;">
-      <summary style="font-weight:800;cursor:pointer;padding:8px 0;">Q：為什麼浮水印開關預設是開的？</summary>
-      <p style="margin-top:8px;color:var(--ink-soft);">A：Gemini 預設會在圖片右下角加一個星號浮水印，會擋到該格貼圖。工具會用 reverse alpha blending 數學還原，無損移除。如果你的圖是透過 API 生成的（沒有浮水印），可以關掉這個開關。</p>
-    </details>
-    <details style="margin-top: 12px;">
-      <summary style="font-weight:800;cursor:pointer;padding:8px 0;">Q：自動偵測不準怎麼辦？</summary>
-      <p style="margin-top:8px;color:var(--ink-soft);">A：AI 生成的圖偶爾格線會跑掉。點「單格微調」可以拖單一格的 4 個角；如果差太多，點「自由繪製」手動畫框。</p>
-    </details>
-    <details style="margin-top: 12px;">
-      <summary style="font-weight:800;cursor:pointer;padding:8px 0;">Q：可以製作 8 張或 20 張的貼圖組嗎？</summary>
-      <p style="margin-top:8px;color:var(--ink-soft);">A：可以。工具列「數量」可以切換 8 / 9 / 16 / 20 張。Gemini 下不同的 prompt 就能生成對應的網格。</p>
-    </details>
-  </section>
 </WorkshopLayout>
