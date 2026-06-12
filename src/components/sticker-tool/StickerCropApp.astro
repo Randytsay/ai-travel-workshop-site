@@ -60,7 +60,10 @@ import '../../styles/sticker-tool.css';
           <div class="st-bg-swatch-fill" id="st-bgSwatchFill"></div>
         </div>
         <span id="st-bgHex" style="font-weight:800;color:var(--night);">—</span>
-        <span class="st-bg-thresh" id="st-bgThresh">自動容差 40</span>
+        <div style="display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+          <span class="st-bg-thresh" id="st-bgThresh">自動容差 40</span>
+          <button id="st-btnResetThresh" type="button" style="display: none; background: none; border: none; color: var(--sunset); cursor: pointer; padding: 2px 4px; font-size: 0.76rem; font-weight: 700; text-decoration: underline; white-space: nowrap;">還原自動</button>
+        </div>
         <label class="st-bg-slider">
           <span>去背程度</span>
           <input id="st-bgStrength" type="range" min="10" max="120" step="1" value="40">
@@ -228,6 +231,7 @@ const bgSwatch = $('st-bgSwatch');
 const bgSwatchFill = $('st-bgSwatchFill');
 const bgHex = $('st-bgHex');
 const bgThresh = $('st-bgThresh');
+const btnResetThresh = $('st-btnResetThresh') as HTMLButtonElement;
 const bgStrength = $('st-bgStrength') as HTMLInputElement;
 const bgStrengthVal = $('st-bgStrengthVal');
 const lightbox = $('st-lightbox');
@@ -609,6 +613,9 @@ function updateBgUI() {
   bgThresh.textContent = manualThresh === null ? `自動容差 ${autoThresh}` : `手動容差 ${thresh}`;
   bgStrength.value = String(thresh);
   bgStrengthVal.textContent = String(thresh);
+  if (btnResetThresh) {
+    btnResetThresh.style.display = manualThresh === null ? 'none' : 'inline-block';
+  }
 }
 
 bgSwatch.addEventListener('click', () => {
@@ -643,6 +650,12 @@ bgSwatch.addEventListener('click', () => {
 
 bgStrength.addEventListener('input', () => {
   manualThresh = clamp(Math.round(Number(bgStrength.value) || autoThresh), 10, 120);
+  updateBgUI();
+  queueBgPreviewRefresh();
+});
+
+btnResetThresh.addEventListener('click', () => {
+  manualThresh = null;
   updateBgUI();
   queueBgPreviewRefresh();
 });
