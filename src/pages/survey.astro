@@ -383,6 +383,13 @@ import { siteConfig } from '../content/siteConfig';
     const surveyForm = document.getElementById('survey-form') as HTMLFormElement | null;
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
 
+    // 取得需要動態 required 的欄位
+    const wowSelect = document.getElementById('wow-moment') as HTMLSelectElement | null;
+    const shopSelect = document.getElementById('shopcom-interest') as HTMLSelectElement | null;
+    const flowSelect = document.getElementById('flow-rating') as HTMLSelectElement | null;
+    const transitionSelect = document.getElementById('transition-feedback') as HTMLSelectElement | null;
+    const guestReactionInput = document.getElementById('guest-reaction') as HTMLInputElement | null;
+
     if (!surveyForm) return; // 確保在其他頁面不執行
 
     function switchRole(role: 'guest' | 'member') {
@@ -397,18 +404,33 @@ import { siteConfig } from '../content/siteConfig';
           guestQuestions.style.display = 'block';
           memberQuestions.style.display = 'none';
           if (inviterInput) inviterInput.setAttribute('required', '');
+
+          if (wowSelect) wowSelect.setAttribute('required', '');
+          if (shopSelect) shopSelect.setAttribute('required', '');
+          if (flowSelect) flowSelect.removeAttribute('required');
+          if (transitionSelect) transitionSelect.removeAttribute('required');
+          if (guestReactionInput) guestReactionInput.removeAttribute('required');
         } else {
           surveyTitle.textContent = '🤝 夥伴流程優化回饋';
           surveySubtitle.textContent = '感謝您的協助，讓活動越來越好！';
           guestQuestions.style.display = 'none';
           memberQuestions.style.display = 'block';
           if (inviterInput) inviterInput.removeAttribute('required');
+
+          if (wowSelect) wowSelect.removeAttribute('required');
+          if (shopSelect) shopSelect.removeAttribute('required');
+          if (flowSelect) flowSelect.setAttribute('required', '');
+          if (transitionSelect) transitionSelect.setAttribute('required', '');
+          if (guestReactionInput) guestReactionInput.setAttribute('required', '');
         }
       }
     }
 
     btnGuest?.addEventListener('click', () => switchRole('guest'));
     btnMember?.addEventListener('click', () => switchRole('member'));
+
+    // 初始化呼叫一次以綁定預設 required
+    switchRole('guest');
 
     // Rating buttons logic
     document.querySelectorAll('.rating-group-10').forEach(group => {
@@ -439,6 +461,34 @@ import { siteConfig } from '../content/siteConfig';
 
     surveyForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // 新朋友額外欄位必選檢查
+      if (currentRole === 'guest') {
+        if (!ratings.absorptionGuest) {
+          alert('請勾選「2. 您覺得自己今天對課程內容的吸收程度？」');
+          return;
+        }
+        if (!ratings.overall) {
+          alert('請勾選「3. 今天的 AI 旅遊規劃教學，您給幾分？」');
+          return;
+        }
+        if (!getSelectedInterests()) {
+          alert('請至少勾選一項「5. 未來感興趣的 AI 生活應用主題」');
+          return;
+        }
+        if (!ratings.recommend) {
+          alert('請勾選「7. 您會推薦朋友來參加這個工作坊嗎？」');
+          return;
+        }
+      }
+
+      // 夥伴額外欄位必選檢查
+      if (currentRole === 'member') {
+        if (!ratings.absorptionMember) {
+          alert('請勾選「2. 您覺得自己今天對課程內容的吸收程度？」');
+          return;
+        }
+      }
 
       if (submitBtn) {
         submitBtn.disabled = true;
