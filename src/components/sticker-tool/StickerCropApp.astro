@@ -69,13 +69,13 @@ import '../../styles/sticker-tool.css';
       </div>
 
       <div class="st-canvas-wrap" id="st-canvasWrap">
-        <div id="st-dropzone">
+        <label id="st-dropzone" for="st-fileInput">
           <div class="st-drop-icon">📁</div>
           <div class="st-drop-title">把圖拖到這裡</div>
-          <div class="st-drop-sub" id="st-dropSub">或點下方按鈕選擇檔案</div>
-          <button class="st-drop-btn" id="st-pickBtn">選擇圖片</button>
+          <div class="st-drop-sub" id="st-dropSub">或點此處選擇檔案</div>
+          <span class="st-drop-btn" id="st-pickBtn">選擇圖片</span>
           <input type="file" id="st-fileInput" accept="image/*" hidden>
-        </div>
+        </label>
         <div id="st-edArea">
           <canvas id="st-mainCv"></canvas>
           <canvas id="st-ovCv"></canvas>
@@ -491,8 +491,7 @@ toggleWatermark.addEventListener('click', (e) => {
 });
 
 // ─── File upload ──────────────────────────────────────────
-pickBtn.addEventListener('click', () => fileInput.click());
-dropzone.addEventListener('click', (e) => { if (e.target === dropzone) fileInput.click(); });
+
 
 fileInput.addEventListener('change', () => loadFiles(fileInput.files));
 
