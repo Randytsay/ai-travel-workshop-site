@@ -5,7 +5,7 @@ export const navItems: NavItem[] = [
   { label: '課前準備', path: '/prep', short: '任務' },
   { label: 'AI 入門簡報', path: '/ai-basics', short: 'AI' },
   { label: '即夢短影音', path: '/jimeng-short-video', short: '即夢' },
-  { label: '3D 公仔', path: '/doll-maker', short: '公仔' },
+  { label: '旅遊人格', path: '/doll-maker', short: '人格' },
   { label: '旅遊規劃師', path: '/travel-planner', short: '旅遊' },
   { label: 'NotebookLM', path: '/notebooklm', short: 'NotebookLM' },
   { label: 'LINE 貼圖工坊', path: '/sticker-lab', short: '貼圖' },

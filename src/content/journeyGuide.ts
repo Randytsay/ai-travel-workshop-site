@@ -1,21 +1,21 @@
 export const journeyConcept = {
   title: '7 站任務章，最後整理成 3 個可帶走成果',
   text: '任務章是現場跟著操作的路線；成果是課後真正帶得走、能分享、能重做的作品。',
-  tasks: ['AI 入門簡報', '短影音暖身', '3D 公仔', '旅遊需求', 'NotebookLM 研究', 'LINE 貼圖', '現場投票與問卷'],
-  outcomes: ['一張可分享的 AI 公仔圖', '一份可延伸的旅遊研究資料', '一組旅行主題貼圖素材']
+  tasks: ['AI 入門簡報', '短影音暖身', '旅遊人格', '旅遊需求', 'NotebookLM 研究', 'LINE 貼圖', '現場投票與問卷'],
+  outcomes: ['一張專屬的旅遊人格生圖', '一份可延伸的旅遊研究資料', '一組旅行主題貼圖素材']
 } as const;
-
-export const stationRoles = {
-  '/jimeng-short-video': {
-    eyebrow: '這一站的作用',
-    title: '先暖身，理解 AI 生成的節奏',
-    text: '用短影音「做同款」練習範例、素材與生成流程，讓新手先熟悉 AI 創作不是一次就完美，而是選範本、換素材、再微調。'
-  },
-  '/doll-maker': {
-    eyebrow: '這一站的作用',
-    title: '做第一個可分享作品',
-    text: '用照片生成 3D 公仔，快速建立成就感，也準備第一個可以上傳到群組與成果牆的素材。'
-  },
+ 
+ export const stationRoles = {
+   '/jimeng-short-video': {
+     eyebrow: '這一站的作用',
+     title: '先暖身，理解 AI 生成的節奏',
+     text: '用短影音「做同款」練習範例、素材與生成流程，讓新手先熟悉 AI 創作不是一次就完美，而是選範本、換素材、再微調。'
+   },
+   '/doll-maker': {
+     eyebrow: '這一站的作用',
+     title: '探索旅遊人格並認識 AI',
+     text: '透過簡單的性向測驗，獲得個人專屬的 3D 旅遊人格生圖指令，並在過程中熟悉 AI 對話框與基本操作介面。'
+   },
   '/travel-planner': {
     eyebrow: '這一站的作用',
     title: '把模糊旅行想法整理成需求',

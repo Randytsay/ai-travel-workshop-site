@@ -33,32 +33,35 @@ import { stationRoles } from '../content/journeyGuide';
   
   <div class="card ai-intro-card">
     <div class="ai-intro-content">
-      <div class="ai-intro-media">
-        <img src="/images/doll-maker/ai-interface-intro.png" alt="AI 操作介面介紹" class="step-real-image" />
-        <small class="qr-tip">📱 點擊圖片可放大觀看詳細介面</small>
-      </div>
-      <div class="ai-intro-text">
-        <p class="intro-desc">在開始規劃前，讓我們先來熟悉一下 AI 的操作介面。其實非常簡單，就像在用 LINE 聊天一樣！</p>
+       <div class="ai-intro-text">
+        <p class="intro-desc">在開始規劃前，讓我們先來熟悉一下 AI 的操作介面。對照左圖，操作步驟如下：</p>
         <ul class="intro-steps">
           <li>
             <div class="step-badge">1</div>
             <div>
-              <strong>💬 對話框 (Input)</strong>
-              <p>畫面最下方就是你對 AI 說話的地方，我們稱為「提示詞 (Prompt)」。</p>
+              <strong>🆕 建立新對話 (New Chat)</strong>
+              <p>點擊左上角的「新對話」按鈕，開啟一個乾淨空白的對話，開始你的旅行靈感探索。</p>
             </div>
           </li>
           <li>
             <div class="step-badge">2</div>
             <div>
-              <strong>📜 歷史紀錄 (History)</strong>
-              <p>通常在左側欄，AI 會幫你記住之前的對話，隨時可以回來找。</p>
+              <strong>➕ 按 "+" 號</strong>
+              <p>點擊輸入框左側的「+」號按鈕，展開附加功能選單。</p>
             </div>
           </li>
           <li>
             <div class="step-badge">3</div>
             <div>
-              <strong>🔄 重新生成 (Regenerate)</strong>
-              <p>如果 AI 回答得不滿意，可以點擊重新生成的按鈕，它會再想一個新答案。</p>
+              <strong>📎 新增照片和檔案</strong>
+              <p>點選選單中的「新增照片和檔案」，將您的清楚人臉個人照上傳給 AI 讀取。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-badge">4</div>
+            <div>
+              <strong>✍️ 提示詞輸入區貼上指令</strong>
+              <p>在「想問什麼都可以」的輸入區貼上您複製的人格生圖指令，點擊右側送出按鈕即可開始生成！</p>
             </div>
           </li>
         </ul>
@@ -210,24 +213,22 @@ import { stationRoles } from '../content/journeyGuide';
               <span class="btn-text">📋 複製生圖指令</span>
             </button>
             <div class="ai-launch-buttons">
-              <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="btn alt ai-btn chatgpt-btn">
-                <svg class="ai-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.73 11.23a4.42 4.42 0 0 0-.8-2.92 4.46 4.46 0 0 0-2.45-1.63 4.41 4.41 0 0 0-3.32-.2 4.46 4.46 0 0 0-2.61-2.18 4.43 4.43 0 0 0-3.36.1 4.46 4.46 0 0 0-2.44 2.13 4.42 4.42 0 0 0-1.74 2.5 4.46 4.46 0 0 0 .15 3.36 4.42 4.42 0 0 0 .8 2.92 4.46 4.46 0 0 0 2.45 1.63 4.41 4.41 0 0 0 3.32.2A4.46 4.46 0 0 0 13.5 19.3a4.43 4.43 0 0 0 3.36-.1 4.46 4.46 0 0 0 2.44-2.13 4.42 4.42 0 0 0 1.74-2.5 4.46 4.46 0 0 0-.31-3.34zm-8.85 5.86a2.82 2.82 0 0 1-1.37-.36l.07-.04 2.87-1.66a.79.79 0 0 0 .4-.68v-4.06l1.2-.69a.05.05 0 0 1 .05 0l3.52 2.03a2.83 2.83 0 0 1-1.28 4.31 2.81 2.81 0 0 1-2.2-.18l-3.26-1.88zm-5.18-2.64a2.83 2.83 0 0 1-.36-2.5 2.81 2.81 0 0 1 1.48-1.75l3.23-1.87v3.74a.79.79 0 0 0 .4.68l3.52 2.03v1.38a.05.05 0 0 1-.03.04l-3.52 2.03a2.83 2.83 0 0 1-4.72-2.15l-.02-1.64zm1.96-5.83a2.82 2.82 0 0 1 2.19-.18l-.07.04-2.87 1.66a.79.79 0 0 0-.4.68v4.06l-1.2.69a.05.05 0 0 1-.05 0l-3.52-2.03a2.83 2.83 0 0 1 1.28-4.31 2.81 2.81 0 0 1 2.2.18l3.26 1.88zm8.07 1.41l-3.23 1.87v-3.74a.79.79 0 0 0-.4-.68l-3.52-2.03v-1.38a.05.05 0 0 1 .03-.04l3.52-2.03a2.83 2.83 0 0 1 4.72 2.15l.02 1.64a2.83 2.83 0 0 1 .86 4.25z"/></svg>
-                開啟 ChatGPT
+              <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="btn alt ai-btn chatgpt-btn-round" title="開啟 ChatGPT">
+                <svg class="ai-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.73 11.23a4.42 4.42 0 0 0-.8-2.92 4.46 4.46 0 0 0-2.45-1.63 4.41 4.41 0 0 0-3.32-.2 4.46 4.46 0 0 0-2.61-2.18 4.43 4.43 0 0 0-3.36.1 4.46 4.46 0 0 0-2.44 2.13 4.42 4.42 0 0 0-1.74 2.5 4.46 4.46 0 0 0 .15 3.36 4.42 4.42 0 0 0 .8 2.92 4.46 4.46 0 0 0 2.45 1.63 4.41 4.41 0 0 0 3.32.2A4.46 4.46 0 0 0 13.5 19.3a4.43 4.43 0 0 0 3.36-.1 4.46 4.46 0 0 0 2.44-2.13 4.42 4.42 0 0 0 1.74-2.5 4.46 4.46 0 0 0-.31-3.34zm-8.85 5.86a2.82 2.82 0 0 1-1.37-.36l.07-.04 2.87-1.66a.79.79 0 0 0 .4-.68v-4.06l1.2-.69a.05.05 0 0 1 .05 0l3.52 2.03a2.83 2.83 0 0 1-1.28 4.31 2.81 2.81 0 0 1-2.2-.18l-3.26-1.88zm-5.18-2.64a2.83 2.83 0 0 1-.36-2.5 2.81 2.81 0 0 1 1.48-1.75l3.23-1.87v3.74a.79.79 0 0 0 .4.68l3.52 2.03v1.38a.05.05 0 0 1-.03.04l-3.52 2.03a2.83 2.83 0 0 1-4.72-2.15l-.02-1.64zm1.96-5.83a2.82 2.82 0 0 1 2.19-.18l-.07.04-2.87 1.66a.79.79 0 0 0-.4.68v4.06l-1.2.69a.05.05 0 0 1-.05 0l-3.52-2.03a2.83 2.83 0 0 1 1.28-4.31 2.81 2.81 0 0 1 2.2.18l3.26 1.88zm8.07 1.41l-3.23 1.87v-3.74a.79.79 0 0 0-.4-.68l-3.52-2.03v-1.38a.05.05 0 0 1 .03-.04l3.52-2.03a2.83 2.83 0 0 1 4.72 2.15l.02 1.64a2.83 2.83 0 0 1 .86 4.25z"/></svg>
               </a>
-              <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="btn alt ai-btn gemini-btn">
-                <svg class="ai-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M12 2c-.3 0-.6.1-.8.4l-3 6.1-6.1 3c-.4.2-.6.6-.6.9s.2.7.6.9l6.1 3 3 6.1c.2.4.5.6.8.6s.6-.2.8-.6l3-6.1 6.1-3c.4-.2.6-.6.6-.9s-.2-.7-.6-.9l-.1-.1-6-3-3-6.1c-.2-.3-.5-.4-.8-.4z" fill="url(#gemini-gradient-quiz)"/>
+              <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="btn alt ai-btn gemini-btn-round" title="開啟 Gemini">
+                <svg class="ai-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12 2c-.3 0-.6.1-.8.4l-3 6.1-6.1 3c-.4.2-.6.6-.6.9s.2.7.6.9l6.1 3 3 6.1c.2.4.5.6.8.6s.6-.2.8-.6l3-6.1 6.1-3c.4-.2.6-.6.6-.9s-.2-.7-.6-.9l-.1-.1-6-3-3-6.1c-.2-.3-.5-.4-.8-.4z" fill="url(#gemini-gradient-quiz-v3)"/>
                   <defs>
-                    <linearGradient id="gemini-gradient-quiz" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="gemini-gradient-quiz-v3" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stop-color="#1a73e8" />
                       <stop offset="100%" stop-color="#8ab4f8" />
                     </linearGradient>
                   </defs>
                 </svg>
-                開啟 Gemini
               </a>
             </div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -478,7 +479,8 @@ import { stationRoles } from '../content/journeyGuide';
   .form-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
+    margin-bottom: 32px;
   }
   .form-label {
     font-size: 1.1rem;
@@ -675,6 +677,44 @@ import { stationRoles } from '../content/journeyGuide';
   .gemini-btn:hover {
     background: #e3ecf5 !important;
     border-color: #1a73e8 !important;
+  }
+  .chatgpt-btn-round {
+    background: #0f0f10 !important;
+    color: #10a37f !important;
+    border: 1px solid rgba(16, 163, 127, 0.4) !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .chatgpt-btn-round:hover {
+    background: #1a1a1c !important;
+    border-color: #10a37f !important;
+    transform: scale(1.05);
+  }
+  .gemini-btn-round {
+    background: #f0f4f9 !important;
+    color: #1a73e8 !important;
+    border: 1px solid rgba(26, 115, 232, 0.3) !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .gemini-btn-round:hover {
+    background: #e3ecf5 !important;
+    border-color: #1a73e8 !important;
+    transform: scale(1.05);
   }
   .ai-logo {
     flex-shrink: 0;
