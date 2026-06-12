@@ -179,8 +179,9 @@ function findContentBounds(fg: Float32Array, W: number, H: number, cols: number,
   const colMax = Math.max(...colProj);
   if (rowMax <= 0 || colMax <= 0) return { x1: 0, y1: 0, x2: W - 1, y2: H - 1 };
 
-  const rowThreshold = Math.max(0.02, rowMax * 0.12);
-  const colThreshold = Math.max(0.02, colMax * 0.12);
+  // 調降閥值（降到 3% 與 0.005），讓對邊緣字體、細小裝飾的偵測極為敏銳，不把文字當作背景過濾
+  const rowThreshold = Math.max(0.005, rowMax * 0.03);
+  const colThreshold = Math.max(0.005, colMax * 0.03);
   let y1 = 0, y2 = H - 1, x1 = 0, x2 = W - 1;
   while (y1 < H && rowProj[y1] < rowThreshold) y1++;
   while (y2 > y1 && rowProj[y2] < rowThreshold) y2--;
@@ -193,8 +194,9 @@ function findContentBounds(fg: Float32Array, W: number, H: number, cols: number,
     return { x1: 0, y1: 0, x2: W - 1, y2: H - 1 };
   }
 
-  const padX = Math.round((x2 - x1 + 1) * 0.01);
-  const padY = Math.round((y2 - y1 + 1) * 0.01);
+  // 增加邊界留白緩衝（改為 3% 並外加 12px 固定邊距），防止切割網格貼得太死切到文字
+  const padX = Math.round((x2 - x1 + 1) * 0.03) + 12;
+  const padY = Math.round((y2 - y1 + 1) * 0.03) + 12;
   return {
     x1: Math.max(0, x1 - padX),
     y1: Math.max(0, y1 - padY),
