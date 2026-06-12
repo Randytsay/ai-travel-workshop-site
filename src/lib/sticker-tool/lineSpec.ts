@@ -37,7 +37,7 @@ export function normalizeToLineSpec(
   const { ctx: srcCtx } = { ctx: srcCanvas.getContext('2d')! };
   let trimmedCanvas: HTMLCanvasElement;
   try {
-    trimmedCanvas = autoTrimCanvas(srcCtx, srcCanvas.width, srcCanvas.height, 2);
+    trimmedCanvas = autoTrimCanvas(srcCtx, srcCanvas.width, srcCanvas.height, 8);
   } catch {
     trimmedCanvas = srcCanvas;
   }
@@ -82,7 +82,7 @@ export function cropAndNormalize(
 
   if (enableRmbg) {
     removeBackground(offCtx, rect.w, rect.h, bgColor, thresh);
-    const trimmed = autoTrimCanvas(offCtx, rect.w, rect.h, 2);
+    const trimmed = autoTrimCanvas(offCtx, rect.w, rect.h, 8);
     const result = normalizeToLineSpec(trimmed, bgColor);
     return { canvas: result.canvas, wasTrimmed: true };
   } else {
