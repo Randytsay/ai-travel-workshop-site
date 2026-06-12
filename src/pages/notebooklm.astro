@@ -10,7 +10,7 @@ import { notebookContent } from '../content/prompts';
 import { notebookSteps } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
 import { stationRoles } from '../content/journeyGuide';
-import { pptScenarios, mapStyles, generalTemplates, posterStyles } from '../content/notebookStudio';
+import { pptScenarios, infographicStyles, podcastScenarios } from '../content/notebookStudio';
 
 const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-research')?.prompts.chatgpt || '';
 ---
@@ -88,15 +88,15 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
       <p class="eyebrow">🎨 實作工作坊</p>
       <h2>NotebookLM 視覺與簡報生成工作室</h2>
       <p style="color: var(--ink-soft); max-width: 800px; margin: 8px auto 0; font-size: 1.05rem; line-height: 1.6;">
-        使用 NotebookLM 整理完行程研究後，可以直接在這裡產生簡報 YAML 指令，或是複製風格化地圖與資訊圖的生圖提示詞，套用至 NotebookLM、ChatGPT 與 Gemini！
+        使用 NotebookLM 整理完行程研究後，可以直接在這裡複製簡報、資訊圖表或語音摘要的提示詞，套用至 NotebookLM、ChatGPT 與 Gemini！
       </p>
     </div>
 
     <!-- Studio Tabs -->
     <div class="studio-tabs">
-      <button class="studio-tab active" data-tab="tab-ppt">📊 簡報大綱生成</button>
-      <button class="studio-tab" data-tab="tab-map">🗺️ 風格地圖生成</button>
-      <button class="studio-tab" data-tab="tab-visual">🖼️ 視覺提示詞庫</button>
+      <button class="studio-tab active" data-tab="tab-ppt">📊 簡報生成提示詞</button>
+      <button class="studio-tab" data-tab="tab-infographic">🗺️ 資訊圖表生成提示詞</button>
+      <button class="studio-tab" data-tab="tab-podcast">🎙️ 語音摘要生成提示詞</button>
     </div>
 
     <div class="studio-panels">
@@ -132,14 +132,14 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
         </div>
       </div>
 
-      <!-- Panel B: Map -->
-      <div class="studio-panel" id="tab-map">
-        <h3 style="font-size: 1.25rem; font-weight: bold; color: var(--night); margin-bottom: 12px; text-align: center;">🎨 選擇風格化地圖視覺</h3>
-        <p style="color: var(--ink-soft); font-size: 0.95rem; text-align: center; margin-bottom: 24px;">生成地圖提示詞，協助您在 Gemini 中繪製出精美路線圖</p>
+      <!-- Panel B: Infographic -->
+      <div class="studio-panel" id="tab-infographic">
+        <h3 style="font-size: 1.25rem; font-weight: bold; color: var(--night); margin-bottom: 12px; text-align: center;">🎨 選擇風格化資訊圖表視覺</h3>
+        <p style="color: var(--ink-soft); font-size: 0.95rem; text-align: center; margin-bottom: 24px;">生成圖表提示詞，協助您在 Gemini 中繪製出精美路線與導覽圖</p>
 
         <div class="studio-grid">
-          {Object.entries(mapStyles).map(([key, item]) => (
-            <div class={`studio-card ${key === 'watercolor' ? 'active' : ''}`} data-map-key={key}>
+          {Object.entries(infographicStyles).map(([key, item]) => (
+            <div class={`studio-card ${key === 'watercolor' ? 'active' : ''}`} data-infographic-key={key}>
               <span class="emoji">{item.emoji}</span>
               <span class="title">{item.name}</span>
               <span class="desc" style="margin-top: 4px;">{item.target}</span>
@@ -149,66 +149,47 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
 
         <div class="studio-prompt-box">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <strong style="color: var(--night); font-size: 1.05rem;">🗺️ 地圖生成提示詞</strong>
+            <strong style="color: var(--night); font-size: 1.05rem;">🗺️ 資訊圖表生成提示詞</strong>
             <span style="font-size: 0.8rem; color: var(--ink-soft);">可貼到 Gemini 繪圖工具</span>
           </div>
-          <textarea id="map-prompt" class="studio-textarea" readonly></textarea>
+          <textarea id="infographic-prompt" class="studio-textarea" readonly></textarea>
           
           <div class="studio-actions">
-            <button type="button" class="btn" id="copy-map-btn" style="background: var(--page-accent, var(--sunset)); color: white; border: none;">📋 複製地圖提示詞</button>
-            <a href={siteConfig.externalLinks.geminiUrl} target="_blank" rel="noopener noreferrer" class="btn gemini-btn-brand" style="text-decoration: none;">🚀 開啟 Gemini 生成地圖</a>
+            <button type="button" class="btn" id="copy-infographic-btn" style="background: var(--page-accent, var(--sunset)); color: white; border: none;">📋 複製圖表提示詞</button>
+            <a href={siteConfig.externalLinks.geminiUrl} target="_blank" rel="noopener noreferrer" class="btn gemini-btn-brand" style="text-decoration: none;">🚀 開啟 Gemini 生成圖表</a>
           </div>
         </div>
       </div>
 
-      <!-- Panel C: Visual Library -->
-      <div class="studio-panel" id="tab-visual">
-        <h3 style="font-size: 1.25rem; font-weight: bold; color: var(--night); margin-bottom: 12px; text-align: center;">🖼️ 視覺提示詞模板庫</h3>
-        <p style="color: var(--ink-soft); font-size: 0.95rem; text-align: center; margin-bottom: 24px;">選擇適合的圖表或插畫風格，將您的行程視覺化</p>
+      <!-- Panel C: Podcast -->
+      <div class="studio-panel" id="tab-podcast">
+        <h3 style="font-size: 1.25rem; font-weight: bold; color: var(--night); margin-bottom: 12px; text-align: center;">🎙️ Step 1：選擇語音對象與情境</h3>
+        <p style="color: var(--ink-soft); font-size: 0.95rem; text-align: center; margin-bottom: 24px;">我們已為您調配對應的情境與口吻，請點選以下卡片以取得 NotebookLM 語音自訂指令</p>
 
-        <div class="sub-tabs">
-          <button type="button" class="sub-tab active" data-visual-tab="general">📊 一般資訊圖</button>
-          <button type="button" class="sub-tab" data-visual-tab="poster">🧸 布偶海報系列</button>
-        </div>
-
-        <!-- General templates grid -->
-        <div id="general-templates-section">
-          <div class="studio-grid">
-            {Object.entries(generalTemplates).map(([key, item]) => (
-              <div class={`studio-card ${key === 'multiday' ? 'active' : ''}`} data-general-key={key}>
-                <span class="emoji">{item.emoji}</span>
-                <span class="title">{item.name}</span>
-                <span class="desc" style="margin-top: 4px;">{item.target}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <!-- Poster templates grid (hidden initially) -->
-        <div id="poster-templates-section" style="display: none;">
-          <div class="studio-grid">
-            {Object.entries(posterStyles).map(([key, item]) => (
-              <div class={`studio-card ${key === 'fairy' ? 'active' : ''}`} data-poster-key={key}>
-                <span class="emoji">{item.emoji}</span>
-                <span class="title">{item.name}</span>
-                <span class="desc" style="margin-top: 4px;">{item.target}</span>
-              </div>
-            ))}
-          </div>
+        <div class="studio-grid">
+          {Object.entries(podcastScenarios).map(([key, item]) => (
+            <div class={`studio-card ${key === 'family' ? 'active' : ''}`} data-podcast-key={key}>
+              <span class="emoji">{item.emoji}</span>
+              <span class="title">{item.title}</span>
+              <span class="desc" style="margin-top: 4px; font-weight: bold; color: var(--page-accent, var(--sunset));">{item.focusRole}</span>
+            </div>
+          ))}
         </div>
 
         <div class="studio-prompt-box">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <strong style="color: var(--night); font-size: 1.05rem;">📝 視覺生圖提示詞</strong>
-            <span style="font-size: 0.8rem; color: var(--ink-soft);">貼到生圖 AI 工具，並附上您的詳細行程即可</span>
+            <strong style="color: var(--night); font-size: 1.05rem;">🎧 語音摘要 (Audio Overview) 自訂指令</strong>
+            <span style="font-size: 0.8rem; color: var(--ink-soft);">貼到 NotebookLM 語音自訂對話框中再生成</span>
           </div>
-          <textarea id="visual-prompt" class="studio-textarea" readonly></textarea>
+          <textarea id="podcast-prompt" class="studio-textarea" readonly>{podcastScenarios.family.prompt}</textarea>
           
           <div class="studio-actions">
-            <button type="button" class="btn" id="copy-visual-btn" style="background: var(--page-accent, var(--sunset)); color: white; border: none;">📋 複製提示詞</button>
-            <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="btn chatgpt-btn-brand" style="text-decoration: none;">🚀 去 ChatGPT 生成</a>
-            <a href={siteConfig.externalLinks.geminiUrl} target="_blank" rel="noopener noreferrer" class="btn gemini-btn-brand" style="text-decoration: none;">🚀 去 Gemini 生成</a>
+            <button type="button" class="btn" id="copy-podcast-btn" style="background: var(--page-accent, var(--sunset)); color: white; border: none;">📋 複製語音自訂指令</button>
+            <a href={siteConfig.externalLinks.notebookLmUrl} target="_blank" rel="noopener noreferrer" class="btn" style="background: #2c2c2c; color: white; border: none; text-decoration: none;">🚀 去 NotebookLM 生成</a>
           </div>
+          <p style="font-size: 0.8rem; color: var(--ink-soft); margin-top: 12px; text-align: center; line-height: 1.4;">
+            💡 點擊語音摘要 (Audio Overview) 旁的筆「自訂 (Customize)」，將此指令貼入「在本集中，AI 主持人應著重哪些部分？」框中，然後點擊生成。
+          </p>
         </div>
       </div>
     </div>
@@ -220,7 +201,7 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
     <ImageCard src="/images/notebooklm/presentation-output-01.webp" alt="旅遊研究延伸成簡報與資訊圖表的成果展示" title="簡報與圖表延伸" text="課後可再把研究內容改成簡報、懶人包或同行討論資料。" />
   </section>
 
-  <script is:inline define:vars={{ pptScenarios, mapStyles, generalTemplates, posterStyles }}>
+  <script is:inline define:vars={{ pptScenarios, infographicStyles, podcastScenarios }}>
     // 1. Studio Tab 點擊切換
     const tabs = document.querySelectorAll('.studio-tab');
     const panels = document.querySelectorAll('.studio-panel');
@@ -250,20 +231,20 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
       });
     });
 
-    // 3. Map Style (Panel B) 切換
-    const mapCards = document.querySelectorAll('[data-map-key]');
-    const mapTextarea = document.getElementById('map-prompt');
+    // 3. Infographic Style (Panel B) 切換
+    const infographicCards = document.querySelectorAll('[data-infographic-key]');
+    const infographicTextarea = document.getElementById('infographic-prompt');
     
-    function updateMapPrompt(key) {
-      const s = mapStyles[key];
+    function updateInfographicPrompt(key) {
+      const s = infographicStyles[key];
       if (s) {
-        mapTextarea.value = `# 角色與目標
+        infographicTextarea.value = `# 角色與目標
 你是一位專業的插畫家。請將來源的行程轉化為一幅資訊圖表地圖。
 
 # 視覺風格要求 (關鍵)
 - 藝術風格: ${s.prompt}
 - 版面與動線: 一條蜿蜒的路徑，從上而下。使用虛線連接事件。
-- 文字標註: 使用繁體中文標註地名與時間。
+- 貼圖與文字標註: 使用繁體中文標註地名與時間。
 
 # 內容元素
 1. 時間: 清晰的時鐘圖示。
@@ -272,101 +253,31 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
       }
     }
 
-    mapCards.forEach(card => {
+    infographicCards.forEach(card => {
       card.addEventListener('click', () => {
-        mapCards.forEach(c => c.classList.remove('active'));
+        infographicCards.forEach(c => c.classList.remove('active'));
         card.classList.add('active');
-        const key = card.getAttribute('data-map-key');
-        updateMapPrompt(key);
+        const key = card.getAttribute('data-infographic-key');
+        updateInfographicPrompt(key);
       });
     });
     
-    // 預載 Map Prompt
-    updateMapPrompt('watercolor');
+    // 預載 Infographic Prompt
+    updateInfographicPrompt('watercolor');
 
-    // 4. Visual Library (Panel C) 頁籤切換
-    const visualTabs = document.querySelectorAll('[data-visual-tab]');
-    const generalSection = document.getElementById('general-templates-section');
-    const posterSection = document.getElementById('poster-templates-section');
-    const visualTextarea = document.getElementById('visual-prompt');
-
-    let currentVisualTab = 'general'; // 'general' | 'poster'
-    let activeGeneralKey = 'multiday';
-    let activePosterKey = 'fairy';
-
-    function generatePosterPrompt(key) {
-      const s = posterStyles[key];
-      if (!s) return '';
-      return `請生成一張「（依你的行程內容設計標題）」的大型橫式 16:9 海報。
-
-主角為${s.role}，每個景點搭配不同的姿勢與造型變化。
-
-以可愛布偶呈現，布偶出現在每個景點旁，用可愛的姿勢互動。
-
-用${s.material}等材質將所有場景物件重新詮釋為觸感舒適的填充玩具造型。賦予他們舒適的毛氈或絨布質感，簡化造型，並用精緻的刺繡點綴。使用${s.tone}，搭配柔和的陰影與細緻的縫線，就像手工製作的填充玩具。整體風格為柔和色彩、圓潤可愛絨毛玩具造型，每個景點特色建築皆療癒可愛、圓滾滾，背景加入可愛的${s.bg}。
-
-${s.note}
-
-▍請務必遵守：
-- 全圖區分為（依行程天數）個不規則區塊（Day1、Day2…DayN）
-- 排列順序：Day1 → Day2 → Day3 → … → DayN，不可跳日、反向或分叉
-- 所有標示皆使用中文
-- 布偶需在每個場景以可愛的方式互動（拍照、逛街、吃美食、搭車…）
-
-以下為行程：`;
-    }
-
-    function updateVisualPrompt() {
-      if (currentVisualTab === 'general') {
-        const g = generalTemplates[activeGeneralKey];
-        visualTextarea.value = g ? g.prompt : '';
-      } else {
-        visualTextarea.value = generatePosterPrompt(activePosterKey);
-      }
-    }
-
-    visualTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        visualTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        const val = tab.getAttribute('data-visual-tab');
-        currentVisualTab = val;
-        
-        if (val === 'general') {
-          generalSection.style.display = 'block';
-          posterSection.style.display = 'none';
-        } else {
-          generalSection.style.display = 'none';
-          posterSection.style.display = 'block';
+    // 4. Podcast Scenario (Panel C) 切換
+    const podcastCards = document.querySelectorAll('[data-podcast-key]');
+    const podcastTextarea = document.getElementById('podcast-prompt');
+    podcastCards.forEach(card => {
+      card.addEventListener('click', () => {
+        podcastCards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const key = card.getAttribute('data-podcast-key');
+        if (podcastScenarios[key]) {
+          podcastTextarea.value = podcastScenarios[key].prompt;
         }
-        updateVisualPrompt();
       });
     });
-
-    // Card select in Panel C
-    const generalCards = document.querySelectorAll('[data-general-key]');
-    generalCards.forEach(card => {
-      card.addEventListener('click', () => {
-        generalCards.forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        activeGeneralKey = card.getAttribute('data-general-key');
-        updateVisualPrompt();
-      });
-    });
-
-    const posterCards = document.querySelectorAll('[data-poster-key]');
-    posterCards.forEach(card => {
-      card.addEventListener('click', () => {
-        posterCards.forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        activePosterKey = card.getAttribute('data-poster-key');
-        updateVisualPrompt();
-      });
-    });
-
-    // 預載 Visual Prompt
-    updateVisualPrompt();
 
     // 5. Copy Buttons Utility
     function handleCopy(btnId, textareaId) {
@@ -394,8 +305,8 @@ ${s.note}
     }
 
     handleCopy('copy-ppt-btn', 'ppt-prompt');
-    handleCopy('copy-map-btn', 'map-prompt');
-    handleCopy('copy-visual-btn', 'visual-prompt');
+    handleCopy('copy-infographic-btn', 'infographic-prompt');
+    handleCopy('copy-podcast-btn', 'podcast-prompt');
 
     // Helper function for showing toast
     function showToast(msg) {
@@ -553,55 +464,7 @@ ${s.note}
       flex-wrap: wrap;
       margin-top: 20px;
     }
-    
-    /* Sub-tabs inside Panel C */
-    .sub-tabs {
-      display: flex;
-      gap: 12px;
-      margin: 8px auto 24px;
-      max-width: 480px;
-    }
-    
-    .sub-tab {
-      flex: 1;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--line);
-      background: #ffffff;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      color: var(--ink-soft);
-    }
-    
-    .sub-tab:hover {
-      background: #f8fafc;
-      color: var(--night);
-    }
-    
-    .sub-tab.active {
-      background: var(--page-accent, var(--sunset));
-      color: white;
-      border-color: var(--page-accent, var(--sunset));
-      box-shadow: 0 4px 12px rgba(255, 122, 92, 0.25);
-    }
 
-    .chatgpt-btn-brand {
-      background: #10a37f !important;
-      color: #ffffff !important;
-      font-weight: 700;
-      border: none !important;
-      box-shadow: 0 4px 12px rgba(16, 163, 127, 0.2);
-    }
-    
-    .chatgpt-btn-brand:hover {
-      background: #0d8c6d !important;
-      box-shadow: 0 6px 16px rgba(16, 163, 127, 0.35);
-      transform: translateY(-2px);
-    }
-    
     .gemini-btn-brand {
       background: linear-gradient(135deg, #1a73e8 0%, #4f46e5 100%) !important;
       color: #ffffff !important;
