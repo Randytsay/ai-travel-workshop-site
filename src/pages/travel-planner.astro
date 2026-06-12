@@ -1,12 +1,8 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CTASection from '../components/common/CTASection.astro';
-import ImageCard from '../components/common/ImageCard.astro';
-import PromptCard from '../components/prompts/PromptCard.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import StationRole from '../components/common/StationRole.astro';
-import { travelPrompts } from '../content/prompts';
-import { travelFlow } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
 import { stationRoles } from '../content/journeyGuide';
 ---
@@ -15,7 +11,7 @@ import { stationRoles } from '../content/journeyGuide';
     <div>
       <p class="eyebrow">🗺️ 第二站：目的地規劃</p>
       <h1>目的地規劃控制台</h1>
-      <p>這站我們開啟多軌並行的路線：不管你是搭乘專屬 GPT 航班、一般 ChatGPT 備援，或轉機 Gemini，目標都是在短時間內取得旅遊需求摘要與下一站的研究通行證（提示詞）。</p>
+      <p>登機開啟專屬 GPT 航班，由 AI 旅遊規劃師引導您調查自由行需求。對話完成後，AI 會為您自動整理出核心需求，並可以直接用於下一階段的 NotebookLM 進行深度的研究。</p>
     </div>
     <div class="hero-media">
       <img src="/images/travel-planner/travel-planner-flow-01.webp" alt="AI 旅遊規劃流程，包含需求訪談、行程卡與地圖路線示意" loading="eager" decoding="async" />
@@ -24,78 +20,24 @@ import { stationRoles } from '../content/journeyGuide';
 
   <StationRole role={stationRoles['/travel-planner']} />
 
-  <section class="feature-grid">
-    <article class="card boarding-pass-card recommended-card">
-      <p class="eyebrow">✈️ 路線 1｜頭等艙直達</p>
-      <h2>專屬 GPT 航班</h2>
-      <p>照著回答 3 輪問題，就能得到需求摘要與 NotebookLM 接力內容。</p>
-      <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl}>登機：開啟 GPT</a>
-    </article>
-    <article class="card boarding-pass-card">
-      <p class="eyebrow">🚌 路線 2｜商務艙轉機</p>
-      <h2>一般 ChatGPT 備援</h2>
-      <p>如果專屬航班客滿，請一鍵複製備援票根（提示詞）到一般聊天框。</p>
-      <div class="actions">
-        <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.chatgpt}>複製備援提示詞</button>
-        <a class="btn alt" href="#fallback-prompts">查看票根內容</a>
+  <section class="planner-actions-section" style="margin: 32px 0 48px; display: flex; justify-content: center;">
+    <article class="card boarding-pass-card recommended-card" style="width: 100%; max-width: 650px; padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; position: relative;">
+      <p class="eyebrow">✈️ 專屬 GPT 航班</p>
+      <h2 style="margin: 0; font-size: 1.8rem; color: var(--night);">ChatGPT 旅遊規劃師</h2>
+      <p style="margin: 0; font-size: 1.05rem; color: #4a5568; line-height: 1.6; max-width: 500px;">
+        點擊下方按鈕開啟專屬的 GPTs。請回答 AI 規劃師提出的問題，它會引導您整理出自由行的核心需求摘要，方便您用於下一階段的研究。
+      </p>
+      <div style="margin-top: 12px; width: 100%; display: flex; justify-content: center;">
+        <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl} style="padding: 12px 36px; font-size: 1.1rem; font-weight: 700; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(255,122,92,0.3); text-decoration: none;">
+          🚀 開啟 ChatGPT 規劃師
+        </a>
       </div>
     </article>
-    <article class="card boarding-pass-card">
-      <p class="eyebrow">🚁 路線 3｜緊急直升機</p>
-      <h2>Gemini 備援路線</h2>
-      <p>如果 ChatGPT 航線暫停，改用 Gemini 備援版完成需求訪談，使命必達。</p>
-      <div class="actions">
-        <button class="btn ghost copy-btn" type="button" data-text={travelPrompts.gemini}>複製 Gemini 備援</button>
-        <a class="btn alt" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.geminiUrl}>開啟 Gemini</a>
-      </div>
-    </article>
-  </section>
-  <section class="feature-grid">
-    <article class="card itinerary-card" style="grid-column: 1 / -1; margin-top: 24px; background: #fdfaf5;">
-      <p class="eyebrow">🧭 新手上路指引</p>
-      <h2>不知道怎麼回答 AI？參考這個旅行範本：</h2>
-      <div class="example-block" style="background:#fff; border-left: 3px solid var(--sunset); box-shadow:var(--shadow-soft);">
-        <ul class="example-list">
-          <li><strong>📍 目的地：</strong>日本京都</li>
-          <li><strong>⏱️ 天數：</strong>5 天 4 夜</li>
-          <li><strong>👥 旅伴：</strong>我和伴侶，共 2 人</li>
-          <li><strong>💰 預算：</strong>包含機加酒，每人約 4 萬台幣</li>
-          <li><strong>✨ 旅遊風格：</strong>步調放慢，喜歡探索在地咖啡廳、體驗傳統文化，不想要每天塞滿行程。</li>
-        </ul>
-      </div>
-    </article>
-  </section>
-
-  <section class="section-heading">
-    <p class="eyebrow">🗺️ 你的地圖路線</p>
-    <h2>4 站完成旅遊研究接力</h2>
-  </section>
-  <section class="timeline" style="margin-top:20px;">
-    {travelFlow.map(([title, text], index) => (
-      <div class="schedule-row" style="align-items: center; border: none; padding-bottom: 30px;">
-        <div style="font-weight: 800; color: var(--ocean); font-size: 1.2rem;">站點 {index + 1}</div>
-        <div><h3 style="margin:0; color:var(--night);">{title}</h3><p style="margin:4px 0 0; font-size:0.95rem;">{text}</p></div>
-      </div>
-    ))}
-  </section>
-
-  <section id="fallback-prompts" class="section-heading">
-    <p class="eyebrow">🎟️ 備用票根（提示詞）</p>
-    <h2>無論航班如何變化，都有路能走</h2>
-  </section>
-  <div class="prompt-grid">
-    <PromptCard title="ChatGPT 備援提示詞（完整）" platform="ChatGPT" prompt={travelPrompts.chatgpt} />
-    <PromptCard title="Gemini 備援提示詞（完整）" platform="Gemini" prompt={travelPrompts.gemini} />
-  </div>
-
-  <section class="asset-grid" style="margin-top: 32px;">
-    <ImageCard src="/images/travel-planner/itinerary-result-01.webp" alt="AI 產出的旅遊行程成果，包含地圖、每日卡片與預算圖示" title="行程成果示意" text="把需求整理成可討論、可調整的第一版旅行計畫。" />
-    <ImageCard src="/images/travel-planner/travel-summary-card-01.webp" alt="旅遊需求摘要卡，使用圖示和線條呈現偏好與限制" title="需求摘要通行證" text="下一站研究會靠這份摘要接力，不必重新說明所有背景。" />
-    <ImageCard src="/images/travel-planner/travel-itinerary-cards-01.webp" alt="多張旅遊行程卡與目的地縮圖的成果展示" title="每日行程卡" text="用卡片方式快速掃描景點、交通、節奏與備案。" />
   </section>
 
   <CompleteTaskButton 
     taskId="travel-planner-complete" 
+    buttonLabel="我已完成旅遊需求調查"
     nextLabel="NotebookLM 研究報告" 
     nextHref="/notebooklm"
     successMessage="需求整理完成！這份摘要是下一關研究的關鍵，記得複製好喔。"
@@ -106,7 +48,7 @@ import { stationRoles } from '../content/journeyGuide';
     text="下一頁會把剛剛整理好的旅遊需求交給 NotebookLM，做更深入的資料查證與行程研究。"
     primaryLabel="前往 NotebookLM 研究升級"
     primaryHref="/notebooklm"
-    secondaryLabel="回到 3D 公仔頁"
+    secondaryLabel="回到 旅遊人格頁"
     secondaryHref="/doll-maker"
   />
 </WorkshopLayout>
