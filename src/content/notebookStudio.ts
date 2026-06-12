@@ -34,11 +34,11 @@ export const pptScenarios: Record<string, PptScenario> = {
   family: {
     title: '家族親情版',
     emoji: '🏠',
-    visualStyle: '溫馨手繪風 (Warm Hand-drawn)',
+    visualStyle: '溫馨手繪風',
     prompt: `請讀取我提供的行程資料，並撰寫一份 20 頁的簡報大綱。要求如下：
 1. 輸出格式：必須為 YAML 程式碼區塊。
 2. 頁數限制：嚴格執行 20 頁。
-3. 視覺風格：溫馨手繪風 (Warm Hand-drawn)。
+3. 視覺風格：溫馨手繪風。
 4. 目標觀眾：長輩與家人。
 5. 情境設定：向家人說明這次旅遊的舒適度、安全性與溫馨亮點。
 6. 分頁結構建議：
@@ -58,11 +58,11 @@ export const pptScenarios: Record<string, PptScenario> = {
   business: {
     title: '商務考察版',
     emoji: '💼',
-    visualStyle: '簡約大氣 (Minimalist / Executive)',
+    visualStyle: '簡約商務風',
     prompt: `請讀取我提供的行程資料，並撰寫一份 20 頁的簡報大綱。要求如下：
 1. 輸出格式：必須為 YAML 程式碼區塊。
 2. 頁數限制：嚴格執行 20 頁。
-3. 視覺風格：簡約大氣 (Minimalist / Executive)。
+3. 視覺風格：簡約商務風。
 4. 目標觀眾：公司同事或上司。
 5. 情境設定：為了考察、團體建設或商務合作，展示行程的效率、CP 值與產業連結亮點。
 6. 分頁結構建議：
@@ -82,11 +82,11 @@ export const pptScenarios: Record<string, PptScenario> = {
   friends: {
     title: '熱血好友版',
     emoji: '🥂',
-    visualStyle: '現代流行/賽博龐克 (Modern / Cyberpunk)',
+    visualStyle: '現代流行風',
     prompt: `請讀取我提供的行程資料，並撰寫一份 20 頁的簡報大綱。要求如下：
 1. 輸出格式：必須為 YAML 程式碼區塊。
 2. 頁數限制：嚴格執行 20 頁。
-3. 視覺風格：現代流行/賽博龐克 (Modern / Cyberpunk)。
+3. 視覺風格：現代流行風。
 4. 目標觀眾：熱血好友或死黨。
 5. 情境設定：點燃大家的旅遊魂！強調必拍位、極限美食、潮流體驗與 IG 爆紅點。
 6. 分頁結構建議：
@@ -105,11 +105,11 @@ export const pptScenarios: Record<string, PptScenario> = {
   kids: {
     title: '親子探險版',
     emoji: '🎈',
-    visualStyle: 'Q版可愛/黏土風 (Q-Cute / Clay 3D)',
+    visualStyle: '可愛黏土風',
     prompt: `請讀取我提供的行程資料，並撰寫一份 20 頁的簡報大綱。要求如下：
 1. 輸出格式：必須為 YAML 程式碼區塊。
 2. 頁數限制：嚴格執行 20 頁。
-3. 視覺風格：Q版可愛/黏土風 (Q-Cute / Clay 3D)。
+3. 視覺風格：可愛黏土風。
 4. 目標觀眾：兒童與親子家庭。
 5. 情境設定：將旅遊包裝成一場「史詩冒險挑戰」，讓孩子充滿參與感。
 6. 分頁結構建議：
