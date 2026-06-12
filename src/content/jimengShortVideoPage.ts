@@ -54,56 +54,71 @@ export const iosSteps = [
 
 export const androidSteps = [
   {
-    title: '下載 APK 安裝包',
-    text: '使用上方 Android 快捷下載通道，點擊按鈕或直接用手機掃描 QR Code 下載 APK。若瀏覽器提示「檔案可能有害」或「可能有風險」，請選擇「仍要下載」或「繼續下載」。',
-    shot: '',
-    filename: ''
+    title: '下載與開啟安裝',
+    text: '在手機下載完 APK 檔案後，於瀏覽器下載清單或檔案管理員點擊開啟，開始進行安裝。',
+    shot: '下載完成開啟安裝',
+    filename: 'step-01.png'
   },
   {
-    title: '允許安裝未知來源',
-    text: '第一次安裝 APK 時，Android 可能會要求允許此瀏覽器或檔案管理員安裝應用程式。請開啟「允許來自此來源」設定，安裝完成後可再關閉。',
-    shot: '',
-    filename: ''
+    title: '同意服務協定',
+    text: '首次啟動抖音，請閱讀並點擊「同意並繼續」以載入應用程式。',
+    shot: '抖音隱私協定同意',
+    filename: 'step-02.png'
   },
   {
-    title: '完成安裝與登入',
-    text: '依序安裝即夢AI與抖音，開啟後使用手機號碼登入並完成簡訊驗證。如果安裝被擋，請檢查系統版本、儲存空間或系統安全防護設定。',
-    shot: '',
-    filename: ''
+    title: '系統安裝安全提示',
+    text: '若手機系統跳出安裝安全提示，請點擊「繼續安裝」，確認安裝抖音應用程式。',
+    shot: '繼續安裝提示',
+    filename: 'step-03.png'
+  },
+  {
+    title: '開啟允許安裝未知來源',
+    text: '當系統提示安全警示時，點選設定並開啟「允許來自此來源的應用程式」，以便順利安裝外部 APK 檔。',
+    shot: '允許安裝未知來源',
+    filename: 'step-04.png'
+  },
+  {
+    title: '抖音登入介面',
+    text: '安裝完成後開啟抖音，進入登入介面，準備進行帳號驗證。',
+    shot: '抖音登入介面',
+    filename: 'step-05.png'
+  },
+  {
+    title: '手機驗證碼登入',
+    text: '輸入手機號碼並獲取簡訊驗證碼，輸入後即可順利完成抖音帳號登入。',
+    shot: '手機驗證登入',
+    filename: 'step-06.png'
+  },
+  {
+    title: '即夢 AI 同意服務協定',
+    text: '安裝並開啟即夢 AI（Dreamina）後，勾選並同意用戶協定與隱私政策。',
+    shot: '即夢同意協定',
+    filename: 'step-07.png'
+  },
+  {
+    title: '選擇抖音快捷登入',
+    text: '在即夢登入畫面中，選擇「抖音登入」選項，此方式最為方便快速。',
+    shot: '即夢登入畫面',
+    filename: 'step-08.png'
+  },
+  {
+    title: '授權登入即夢 AI',
+    text: '系統會跳轉至抖音授權頁，請點擊「同意」以授權即夢 AI 連結您的抖音帳號登入。',
+    shot: '抖音授權登入即夢',
+    filename: 'step-09.png'
+  },
+  {
+    title: '建立 AI 分身頭像',
+    text: '首次進入即夢，可依指示建立個人 AI 分身或頭像，為後續的同款演繹做準備。',
+    shot: '建立 AI 分身',
+    filename: 'step-10.png'
+  },
+  {
+    title: '選擇「拍同款」進行創作',
+    text: '進入即夢 AI 首頁或探索頁，選擇您喜歡的影片範本，點選「拍同款」即可開始上傳素材生成您的 AI 短影音。',
+    shot: '拍同款畫面',
+    filename: 'step-11.png'
   }
-];
-
-export const sameStyleSteps = [
-  {
-    title: '找範例',
-    text: '在即夢AI的「探索」或抖音影片中找到想跟做的短影音範例。課堂建議先選畫面簡單、人物少、時長短的範例。',
-    shot: '拍探索頁或範例作品頁，畫面中能看到作品封面與入口。',
-    filename: 'same-style-01-template.webp'
-  },
-  {
-    title: '點做同款',
-    text: '在作品頁找到「做同款」或相近按鈕，進入範本頁。即夢AI的 App Store 介紹也列出「做同款」作為功能之一。',
-    shot: '拍「做同款」按鈕或進入同款流程的頁面。',
-    filename: 'same-style-02-button.webp'
-  },
-  {
-    title: '換成自己的素材',
-    text: '依畫面提示上傳照片、替換文字或調整提示詞。人物照片建議用正面、光線充足、背景簡單的照片。',
-    shot: '拍上傳照片、替換素材或提示詞設定畫面，照片請用測試素材。',
-    filename: 'same-style-03-replace.webp'
-  },
-  {
-    title: '生成與保存',
-    text: '送出生成後等待完成，先保存到手機相簿，再決定是否分享到抖音或其他平台。上課時不需要公開發布。',
-    shot: '拍生成等待頁與完成作品頁，避免露出個人帳號資訊。',
-    filename: 'same-style-04-export.webp'
-  }
-];
-
-export const screenshotChecklist = [
-  'iOS：ios-region-01-account.webp 到 ios-region-05-no-none.jpg。',
-  '做同款：same-style-01-template.webp 到 same-style-04-export.webp。',
-  '截圖請放在 public/images/jimeng/，並遮住完整手機號、驗證碼、付款資料、Apple ID 信箱與個人照片原圖。'
 ];
 
 export const screenshotAssetFolder = '/images/jimeng/';

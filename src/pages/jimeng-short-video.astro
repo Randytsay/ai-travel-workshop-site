@@ -12,9 +12,7 @@ import {
   faqItems,
   iosSteps,
   officialLinks,
-  sameStyleSteps,
   screenshotAssetFolder,
-  screenshotChecklist,
   setupSummary,
   tutorialReferences
 } from '../content/jimengShortVideoPage';
@@ -134,7 +132,11 @@ const hasImage = (filename: string) => {
         <div class="guide-copy">
           <h3>{step.title}</h3>
           <p>{step.text}</p>
+          {step.filename && !hasImage(step.filename) && <p class="shot-note">建議截圖：{step.shot}</p>}
         </div>
+        {step.filename && (
+          <AssetPlaceholder title={step.title} text={step.shot} type="圖片" filename={`${screenshotAssetFolder}${step.filename}`} />
+        )}
       </article>
     ))}
   </section>
@@ -161,47 +163,19 @@ const hasImage = (filename: string) => {
     </div>
   </section>
 
-  <section class="section-heading" id="same-style-flow">
-    <p class="eyebrow">課堂體驗</p>
-    <h2>用「做同款」完成第一支短影音</h2>
+  <section class="section-heading" id="tutorial-resources">
+    <p class="eyebrow">教學參考</p>
+    <h2>學習資源與手冊</h2>
   </section>
-  <section class="guide-flow">
-    {sameStyleSteps.map((step, index) => (
-      <article class="guide-step">
-        <div class="step-index">{String(index + 1).padStart(2, '0')}</div>
-        <div class="guide-copy">
-          <h3>{step.title}</h3>
-          <p>{step.text}</p>
-          {step.filename && !hasImage(step.filename) && <p class="shot-note">建議截圖：{step.shot}</p>}
-        </div>
-        {step.filename && (
-          <AssetPlaceholder title={step.title} text={step.shot} type="圖片" filename={`${screenshotAssetFolder}${step.filename}`} />
-        )}
-      </article>
+  <section class="resources-grid">
+    {tutorialReferences.map((item) => (
+      <a class="reference-card" href={item.href} target="_blank" rel="noreferrer">
+        <span>{item.source}</span>
+        <h3>{item.label}</h3>
+        <p>{item.note}</p>
+      </a>
     ))}
   </section>
-
-  <section class="two-col screenshot-section" id="screenshot-list">
-    <section class="card postcard-card">
-      <p class="eyebrow">教學設計</p>
-      <h2>截圖清單</h2>
-      <ul class="example-list">
-        {screenshotChecklist.map((item) => <li>{item}</li>)}
-      </ul>
-    </section>
-    <section class="card notice-card">
-      <p class="eyebrow">教學參考</p>
-      <h2>學習資源與手冊</h2>
-      {tutorialReferences.map((item) => (
-        <a class="reference-card" href={item.href} target="_blank" rel="noreferrer">
-          <span>{item.source}</span>
-          <h3>{item.label}</h3>
-          <p>{item.note}</p>
-        </a>
-      ))}
-    </section>
-  </section>
-  <p class="disclaimer-text">外部教學內容以連結方式提供；頁面截圖建議以自己的手機重拍後替換，避免使用他人網站或影片畫面。</p>
 
   <section class="section-heading">
     <p class="eyebrow">常見卡關</p>
@@ -373,5 +347,12 @@ const hasImage = (filename: string) => {
       max-width: 100%;
       margin: 0 auto;
     }
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
   }
 </style>
