@@ -34,8 +34,17 @@ import { stationRoles } from '../content/journeyGuide';
   <div class="card ai-intro-card">
     <div class="ai-intro-content">
       <div class="ai-intro-media">
-        <img src="/images/doll-maker/mobile-interface.jpg" alt="AI 操作介面介紹" class="step-real-image" />
-        <small class="qr-tip">📱 點擊圖片可放大觀看詳細介面</small>
+        <div class="ai-intro-images" style="display: flex; gap: 16px; justify-content: center; width: 100%; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 180px; text-align: center;">
+            <span style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); margin-bottom: 8px;">💻 電腦網頁版</span>
+            <img src="/images/doll-maker/ai-interface-intro.png" alt="AI 電腦網頁版操作介面" class="step-real-image zoomable-interface-img" style="max-height: 220px; object-fit: contain; width: 100%;" />
+          </div>
+          <div style="flex: 1; min-width: 180px; text-align: center;">
+            <span style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); margin-bottom: 8px;">📱 手機 App 版</span>
+            <img src="/images/doll-maker/mobile-interface.jpg" alt="AI 手機 App 版操作介面" class="step-real-image zoomable-interface-img" style="max-height: 220px; object-fit: contain; width: 100%;" />
+          </div>
+        </div>
+        <small class="qr-tip" style="margin-top: 12px; display: block;">💡 點擊圖片可放大觀看詳細介面</small>
       </div>
       <div class="ai-intro-text">
         <p class="intro-desc">在開始規劃前，讓我們先來熟悉一下 AI 的操作介面。對照左圖，操作步驟如下：</p>
@@ -352,6 +361,64 @@ import { stationRoles } from '../content/journeyGuide';
         copyBtn.addEventListener('click', copyPromptText);
       }
     });
+
+    // 點擊圖片放大燈箱 (電腦版 & 手機版)
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.classList.contains('zoomable-interface-img')) {
+        const src = target.getAttribute('src');
+        const alt = target.getAttribute('alt') || '圖片預覽';
+        if (!src) return;
+
+        // 創建燈箱
+        const lightbox = document.createElement('div');
+        lightbox.className = 'interface-lightbox';
+        Object.assign(lightbox.style, {
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0, 0, 0, 0.85)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: '99999',
+          cursor: 'zoom-out',
+          opacity: '0',
+          transition: 'opacity 0.25s ease'
+        });
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = alt;
+        Object.assign(img.style, {
+          maxWidth: '90%',
+          maxHeight: '90%',
+          objectFit: 'contain',
+          borderRadius: '8px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          transform: 'scale(0.95)',
+          transition: 'transform 0.25s ease'
+        });
+
+        lightbox.appendChild(img);
+        document.body.appendChild(lightbox);
+
+        requestAnimationFrame(() => {
+          lightbox.style.opacity = '1';
+          img.style.transform = 'scale(1)';
+        });
+
+        lightbox.addEventListener('click', () => {
+          lightbox.style.opacity = '0';
+          img.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            lightbox.remove();
+          }, 250);
+        });
+      }
+    });
   </script>
 </WorkshopLayout>
 
@@ -382,6 +449,13 @@ import { stationRoles } from '../content/journeyGuide';
     border: 1px solid var(--line);
     box-shadow: var(--shadow-soft);
     cursor: zoom-in;
+  }
+  .zoomable-interface-img {
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  .zoomable-interface-img:hover {
+    transform: scale(1.02);
+    filter: brightness(0.98);
   }
   .intro-desc {
     font-size: 1.05rem;
