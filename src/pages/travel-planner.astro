@@ -22,14 +22,17 @@ import { stationRoles } from '../content/journeyGuide';
 
   <section class="planner-actions-section" style="margin: 32px 0 48px; display: flex; justify-content: center;">
     <article class="card boarding-pass-card recommended-card" style="width: 100%; max-width: 650px; padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; position: relative;">
-      <p class="eyebrow">✈️ 專屬 GPT 航班</p>
-      <h2 style="margin: 0; font-size: 1.8rem; color: var(--night);">ChatGPT 旅遊規劃師</h2>
+      <p class="eyebrow">✈️ 專屬 AI 航班</p>
+      <h2 style="margin: 0; font-size: 1.8rem; color: var(--night);">AI 旅遊規劃師</h2>
       <p style="margin: 0; font-size: 1.05rem; color: #4a5568; line-height: 1.6; max-width: 500px;">
-        點擊下方按鈕開啟專屬的 GPTs。請回答 AI 規劃師提出的問題，它會引導您整理出自由行的核心需求摘要，方便您用於下一階段的研究。
+        點擊下方按鈕開啟專屬的 GPTs 或 Gemini Gem。請回答 AI 規劃師提出的問題，它會引導您整理出自由行的核心需求摘要，方便您用於下一階段的研究。
       </p>
-      <div style="margin-top: 12px; width: 100%; display: flex; justify-content: center;">
-        <a class="btn" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl} style="padding: 12px 36px; font-size: 1.1rem; font-weight: 700; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(255,122,92,0.3); text-decoration: none;">
+      <div class="planner-btn-group">
+        <a class="planner-btn chatgpt-btn-brand" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.travelPlannerGptUrl}>
           🚀 開啟 ChatGPT 規劃師
+        </a>
+        <a class="planner-btn gemini-btn-brand" target="_blank" rel="noreferrer" href={siteConfig.externalLinks.geminiUrl}>
+          ✨ 開啟 Gemini 規劃師 (Gem)
         </a>
       </div>
     </article>
@@ -52,3 +55,48 @@ import { stationRoles } from '../content/journeyGuide';
     secondaryHref="/doll-maker"
   />
 </WorkshopLayout>
+
+<style>
+  .planner-btn-group {
+    margin-top: 12px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .planner-btn {
+    padding: 12px 28px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+  .planner-btn:hover {
+    transform: translateY(-2px);
+  }
+  .chatgpt-btn-brand {
+    background: #10a37f !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(16, 163, 127, 0.3);
+  }
+  .chatgpt-btn-brand:hover {
+    background: #0d8a6b !important;
+    box-shadow: 0 6px 20px rgba(16, 163, 127, 0.4);
+  }
+  .gemini-btn-brand {
+    background: linear-gradient(135deg, #1a73e8 0%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(26, 115, 232, 0.3);
+  }
+  .gemini-btn-brand:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+  }
+</style>
