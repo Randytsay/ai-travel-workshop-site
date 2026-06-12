@@ -43,15 +43,36 @@ import StickerCropApp from '../components/sticker-tool/StickerCropApp.astro';
     <StickerCropApp />
   </div>
 
-  <section class="card" style="margin-top: 32px; background: linear-gradient(135deg, #fff5f2, #ffffff);">
-    <p class="eyebrow">💡 使用小提示</p>
-    <h2>給同學的 3 步驟</h2>
-    <ol style="margin: 0; padding-left: 24px; color: var(--night); line-height: 1.9;">
-      <li><strong>先用 AI 生成總圖</strong>（在工作坊前一站完成）</li>
-      <li><strong>把圖拖到上方工具</strong>，按「自動偵測」→ 預覽區出現透明背景 PNG</li>
-      <li><strong>下載 ZIP</strong>，到手機用「LINE 貼圖上架」APP 完成最後的主圖與 Tab 設定</li>
-    </ol>
-    <p style="margin-top: 16px; font-size: 0.9rem; color: var(--ink-soft);">⚠ 工具只產生 370×240 貼圖，<strong>主圖（240×240）與 Tab 圖示（96×74）請用手機 app 處理</strong>，這樣最快也最直覺。</p>
+  <section class="card" style="margin-top: 32px; background: linear-gradient(135deg, #f0faf6, #ffffff); border-left: 5px solid #22c55e;">
+    <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
+      <!-- 左欄：App 介紹與下載 -->
+      <div style="flex: 1 1 300px; display: flex; gap: 20px; align-items: center;">
+        <img src="/images/sticker-lab/line-creators-logo.png" alt="LINE 拍貼 App Logo" style="width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);" />
+        <div>
+          <p class="eyebrow" style="color: #22c55e; font-weight: 800; margin-bottom: 4px;">📱 官方推薦 App</p>
+          <h2 style="margin: 0 0 8px 0; font-size: 1.5rem;">LINE 拍貼</h2>
+          <p style="margin: 0 0 12px 0; font-size: 0.9rem; color: var(--ink-soft); line-height: 1.4;">
+            免電腦！直接使用手機將裁切好的透明 PNG 圖片上傳送審。若選擇「不分配販售收益」，創作者自己下載使用完全免費。
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="https://apps.apple.com/tw/app/line%E6%8B%8D%E8%B2%贴/id1239684967" target="_blank" rel="noopener noreferrer" class="btn alt" style="padding: 6px 14px; font-size: 0.8rem; border-color: #cbd5e1;"> App Store</a>
+            <a href="https://play.google.com/store/apps/details?id=com.linecorp.usersticker&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" class="btn alt" style="padding: 6px 14px; font-size: 0.8rem; border-color: #cbd5e1;">🤖 Google Play</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右欄：上傳與製作流程 -->
+      <div style="flex: 2 2 400px;">
+        <h3 style="margin-top: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 6px;">🚀 5 步驟快速製作與上架流程</h3>
+        <ol style="margin: 0; padding-left: 20px; color: var(--night); line-height: 1.8; font-size: 0.95rem;">
+          <li><strong>傳送圖片到手機</strong>：將此工具裁切並下載好的 ZIP 壓縮檔解壓縮，把透明 PNG 圖片傳到手機相簿中。</li>
+          <li><strong>建立新貼圖包</strong>：開啟「LINE 拍貼」APP，登入 LINE 帳號，點擊「＋」新增一組貼圖並填寫名稱。</li>
+          <li><strong>匯入去背貼圖</strong>：點擊對應的格子，選擇「照片」直接從手機相簿選取匯入 370×240 規格的去背 PNG。</li>
+          <li><strong>自動產生主圖與標籤</strong>：在 App 內設定主要圖片 (240×240) 與聊天標籤圖 (96×74)，可以直接指定剛才上傳的任意貼圖，系統會自動幫你產生符合規範的尺寸。</li>
+          <li><strong>送出申請與上架</strong>：填寫販售價格，選擇「不領取分配款（自用免費下載）」或「領取分配款」，點擊「申請審核」。審核通過後點擊「開始販售」即可在 LINE 使用！</li>
+        </ol>
+      </div>
+    </div>
   </section>
 
   <section class="card" style="margin-top: 16px;">
