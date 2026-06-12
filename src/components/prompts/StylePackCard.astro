@@ -17,6 +17,15 @@ const { pack } = Astro.props;
     </div>
   </div>
 
+  {pack.image && (
+    <div class="style-pack-preview" style="margin: 20px 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #fafafa; display: flex; justify-content: center; align-items: center; padding: 16px;">
+      <div style="text-align: center; width: 100%;">
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--ink-soft); margin-bottom: 8px; letter-spacing: 0.05em;">✨ 預期生成效果範例 (2×4 網格) · 點擊可放大</div>
+        <img class="style-pack-preview-img" src={pack.image} alt={`${pack.title} 預期成效範例`} style="max-width: 100%; height: auto; max-height: 280px; object-fit: contain; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); cursor: zoom-in; transition: transform 0.2s ease, filter 0.2s ease;" />
+      </div>
+    </div>
+  )}
+
   <div class="scenario-grid">
     {pack.scenarios.map((scenario:string, index:number) => (
       <span>{index + 1}. {scenario}</span>
@@ -25,3 +34,70 @@ const { pack } = Astro.props;
 
   <PromptGroup title={pack.title} description="選好照片後，依照平台複製對應版本。" prompts={pack.prompts} />
 </section>
+
+<style>
+  .style-pack-preview-img:hover {
+    transform: scale(1.015);
+    filter: brightness(0.97);
+  }
+</style>
+
+<script>
+  // 使用事件委派以相容 View Transitions 跨頁過場
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target && target.classList.contains('style-pack-preview-img')) {
+      const src = target.getAttribute('src');
+      const alt = target.getAttribute('alt') || '圖片預覽';
+      if (!src) return;
+
+      // 創建燈箱
+      const lightbox = document.createElement('div');
+      lightbox.className = 'sticker-pack-lightbox';
+      Object.assign(lightbox.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0, 0, 0, 0.85)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: '99999',
+        cursor: 'zoom-out',
+        opacity: '0',
+        transition: 'opacity 0.25s ease'
+      });
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt;
+      Object.assign(img.style, {
+        maxWidth: '90%',
+        maxHeight: '90%',
+        objectFit: 'contain',
+        borderRadius: '8px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+        transform: 'scale(0.95)',
+        transition: 'transform 0.25s ease'
+      });
+
+      lightbox.appendChild(img);
+      document.body.appendChild(lightbox);
+
+      requestAnimationFrame(() => {
+        lightbox.style.opacity = '1';
+        img.style.transform = 'scale(1)';
+      });
+
+      lightbox.addEventListener('click', () => {
+        lightbox.style.opacity = '0';
+        img.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          lightbox.remove();
+        }, 250);
+      });
+    }
+  });
+</script>

@@ -29,20 +29,20 @@ import '../../styles/sticker-tool.css';
 
     <div class="st-pack-select" role="group" aria-label="快速貼圖數量">
       <span>快速</span>
-      <button class="st-pack-btn" data-pack="2x4">8 張</button>
+      <button class="st-pack-btn is-active" data-pack="4x2">8 張</button>
       <button class="st-pack-btn" data-pack="3x3">9 張</button>
-      <button class="st-pack-btn is-active" data-pack="4x4">16 張</button>
+      <button class="st-pack-btn" data-pack="4x4">16 張</button>
       <button class="st-pack-btn" data-pack="5x4">20 張</button>
     </div>
 
     <div class="st-custom-pack" aria-label="自訂格線數量">
       <span>自訂</span>
       <label>寬 <input id="st-customCols" type="number" min="1" max="10" value="4" inputmode="numeric"></label>
-      <label>高 <input id="st-customRows" type="number" min="1" max="10" value="4" inputmode="numeric"></label>
+      <label>高 <input id="st-customRows" type="number" min="1" max="10" value="2" inputmode="numeric"></label>
       <button id="st-customApply" type="button">套用</button>
     </div>
 
-    <div class="st-counter">已裁切 <b id="st-cnt">0</b> / <span id="st-max">16</span></div>
+    <div class="st-counter">已裁切 <b id="st-cnt">0</b> / <span id="st-max">8</span></div>
   </div>
 
   <!-- Main 2-panel layout -->
@@ -51,7 +51,7 @@ import '../../styles/sticker-tool.css';
     <div class="st-panel">
       <div class="st-panel-header">
         <span id="st-phdr">把圖拖到這裡</span>
-        <span id="st-packTag" style="color:var(--sunset);font-weight:900;">4×4</span>
+        <span id="st-packTag" style="color:var(--sunset);font-weight:900;">4×2</span>
       </div>
 
       <div class="st-bg-row" id="st-bgRow" style="display:none">
@@ -125,7 +125,7 @@ import '../../styles/sticker-tool.css';
   <div class="st-preview">
     <div class="st-preview-head">
       <span class="st-preview-title">已裁切預覽</span>
-      <span class="st-preview-count" id="st-pcnt">0 / 16</span>
+      <span class="st-preview-count" id="st-pcnt">0 / 8</span>
     </div>
     <div class="st-preview-grid" id="st-pgrid">
       <div class="st-pi-empty" id="st-piEmpty">

@@ -3,13 +3,13 @@
  */
 
 export const PACK_SIZE_OPTIONS = [
-  { id: '2x4', label: '2×4 = 8 張', cols: 2, rows: 4, count: 8, total: 8 },
+  { id: '4x2', label: '4×2 = 8 張', cols: 4, rows: 2, count: 8, total: 8 },
   { id: '3x3', label: '3×3 = 9 張', cols: 3, rows: 3, count: 9, total: 9 },
   { id: '4x4', label: '4×4 = 16 張', cols: 4, rows: 4, count: 16, total: 16 },
   { id: '5x4', label: '5×4 = 20 張', cols: 5, rows: 4, count: 20, total: 20 },
 ] as const;
 
-export const DEFAULT_PACK_ID = '4x4' as const;
+export const DEFAULT_PACK_ID = '4x2' as const;
 
 export const LINE_STICKER_SPEC = {
   width: 370,
