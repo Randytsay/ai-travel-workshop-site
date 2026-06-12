@@ -1,89 +1,797 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
-import StepCard from '../components/common/StepCard.astro';
-import CTASection from '../components/common/CTASection.astro';
-import ImageCard from '../components/common/ImageCard.astro';
-import PromptGroup from '../components/prompts/PromptGroup.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import StationRole from '../components/common/StationRole.astro';
-import { dollPrompts } from '../content/prompts';
-import { dollSteps } from '../content/workshopPages';
-import { siteConfig } from '../content/siteConfig';
+import Icon from '../components/common/Icon.astro';
 import { stationRoles } from '../content/journeyGuide';
 ---
-<WorkshopLayout title="我的 3D 可愛公仔" currentPath="/doll-maker">
+<WorkshopLayout title="認識 AI 與旅遊人格測驗" currentPath="/doll-maker">
   <section class="hero">
     <div class="hero-home">
       <div>
-        <p class="eyebrow">✨ 第一個 Wow Moment</p>
-        <h1>把照片變成專屬 3D 可愛公仔</h1>
-        <p>這一站的目標很單純：選一張照片、複製魔法咒語、生成一張可以立刻做為旅行明信片分享的 3D 公仔成果。</p>
+        <p class="eyebrow">✨ 第一步：靈感發想</p>
+        <h1>探索你的旅遊人格與 AI 靈感</h1>
+        <p>在開始規劃行程前，讓我們先熟悉 AI 操作介面，並完成簡單的人格測驗，獲取您專屬的 AI 頭像生圖指令！</p>
         <div class="actions">
-          <a class="btn" href="#prompts">挑選風格</a>
-          <a class="btn alt" href="/travel-planner">完成後前往下一站</a>
+          <a class="btn" href="#quiz-section">開始性格測驗</a>
+          <a class="btn alt" href="#ai-intro">認識 AI 助手</a>
         </div>
       </div>
       <div class="hero-media">
-        <img src="/images/doll-maker/hero-before-after-01.webp" alt="照片轉換成 3D 可愛公仔的前後對照示意" loading="eager" decoding="async" />
+        <img src="/images/doll-maker/ai-interface-intro.png" alt="AI 介面示意圖" class="step-real-image" style="border-radius: var(--radius-md); box-shadow: var(--shadow-medium); cursor: zoom-in;" />
       </div>
     </div>
   </section>
 
   <StationRole role={stationRoles['/doll-maker']} />
 
-  <section class="feature-grid">
-    <article class="card postcard-card">
-      <p class="eyebrow">📸 紀念品清單</p>
-      <h2>一張專屬公仔圖</h2>
-      <p>適合放進 LINE 群組、現場快閃秀與後續成果明信片牆。</p>
-    </article>
-    <article class="card notice-card">
-      <p class="eyebrow">💡 免費額度提醒</p>
-      <h2>先求有，再求精緻</h2>
-      <p>第一次生成不完美很正常，優先用短指令修正表情、構圖與背景。</p>
-    </article>
-    <article class="card itinerary-card">
-      <p class="eyebrow">🛟 快速開關</p>
-      <h2>ChatGPT 與 Gemini 雙開</h2>
-      <p>提示詞已整合通用，點擊下方按鈕即可一鍵複製並直接在新分頁開啟任一 AI 工具。</p>
-    </article>
+  <!-- Step 1: AI Interface Intro -->
+  <section class="section-heading" id="ai-intro">
+    <p class="eyebrow">📱 Step 1: 認識你的 AI 助手</p>
+    <h2>像用 LINE 聊天一樣簡單！</h2>
+  </section>
+  
+  <div class="card ai-intro-card">
+    <div class="ai-intro-content">
+      <div class="ai-intro-media">
+        <img src="/images/doll-maker/ai-interface-intro.png" alt="AI 操作介面介紹" class="step-real-image" />
+        <small class="qr-tip">📱 點擊圖片可放大觀看詳細介面</small>
+      </div>
+      <div class="ai-intro-text">
+        <p class="intro-desc">在開始規劃前，讓我們先來熟悉一下 AI 的操作介面。其實非常簡單，就像在用 LINE 聊天一樣！</p>
+        <ul class="intro-steps">
+          <li>
+            <div class="step-badge">1</div>
+            <div>
+              <strong>💬 對話框 (Input)</strong>
+              <p>畫面最下方就是你對 AI 說話的地方，我們稱為「提示詞 (Prompt)」。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-badge">2</div>
+            <div>
+              <strong>📜 歷史紀錄 (History)</strong>
+              <p>通常在左側欄，AI 會幫你記住之前的對話，隨時可以回來找。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-badge">3</div>
+            <div>
+              <strong>🔄 重新生成 (Regenerate)</strong>
+              <p>如果 AI 回答得不滿意，可以點擊重新生成的按鈕，它會再想一個新答案。</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Personality Quiz -->
+  <section class="section-heading" id="quiz-section" style="margin-top: 56px;">
+    <p class="eyebrow">🔮 Step 2: 破冰初體驗</p>
+    <h2>專屬旅遊人格測驗與 AI 生圖</h2>
   </section>
 
-  <section class="section-heading">
-    <p class="eyebrow">🛠️ 紀念品製作流程</p>
-    <h2>照著 6 步走</h2>
-  </section>
-  <section class="step-grid">
-    {dollSteps.map(([title, text, note], index) => <StepCard index={index + 1} title={title} text={text} note={note} />)}
+  <section class="card quiz-card">
+    <div class="quiz-body">
+      <p class="quiz-subtitle">完成下方簡單的測驗，我們將為您生成專屬的 AI 生圖提示詞，讓您可以到 ChatGPT 畫出自己的旅遊角色！</p>
+      
+      <form id="quiz-form">
+        <div class="form-group mb-6">
+          <label class="form-label">您的名字 / 暱稱 <span class="required-tag">(必填)</span></label>
+          <input type="text" id="quiz-name" name="quiz-name" required class="form-input" placeholder="例如：Randy" />
+        </div>
+
+        <!-- Q1 -->
+        <div class="form-group mb-8">
+          <label class="form-label">1. ✈️ 你最嚮往哪種旅行基調？</label>
+          <div class="options-grid">
+            <label class="option-item">
+              <input type="radio" name="q1" value="A" required />
+              <div class="option-content">
+                <strong>🌿 悠閒慢活</strong>
+                <span>不趕行程，在咖啡廳坐一下午也無所謂</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="B" required />
+              <div class="option-content">
+                <strong>🏃 有效率打卡</strong>
+                <span>精準掌握時間，要把必去景點都集滿</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="C" required />
+              <div class="option-content">
+                <strong>🏺 深度文化</strong>
+                <span>走進歷史巷弄，聽當地的故事</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="D" required />
+              <div class="option-content">
+                <strong>⚡ 極限挑戰</strong>
+                <span>上山下海，體驗平時不敢做的事</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="form-group mb-8">
+          <label class="form-label">2. 😅 店家沒開、行程突發狀況，你通常怎麼做？</label>
+          <div class="options-grid">
+            <label class="option-item">
+              <input type="radio" name="q2" value="A" required />
+              <div class="option-content">
+                <strong>📱 立刻搜尋替代方案</strong>
+                <span>打開 AI 或地圖找周邊最高評分的地方</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="B" required />
+              <div class="option-content">
+                <strong>🦋 隨便逛逛看看</strong>
+                <span>附近走走說不定反而有驚喜</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="C" required />
+              <div class="option-content">
+                <strong>☕ 先找咖啡廳坐下</strong>
+                <span>沉澱一下，再慢慢想下一步去哪</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="D" required />
+              <div class="option-content">
+                <strong>📋 執行備用計畫</strong>
+                <span>早就準備好 Plan B，直接切換</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="form-group mb-8">
+          <label class="form-label">3. 🗓️ 你喜歡怎樣安排一天的行程密集度？</label>
+          <div class="options-grid">
+            <label class="option-item">
+              <input type="radio" name="q3" value="A" required />
+              <div class="option-content">
+                <strong>🌅 佛系節奏</strong>
+                <span>一天 1-2 個大點就好，其他隨緣</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="B" required />
+              <div class="option-content">
+                <strong>🚀 特種兵模式</strong>
+                <span>從早到晚行程填滿滿，體力不是問題</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="C" required />
+              <div class="option-content">
+                <strong>⚖️ 半糖主義</strong>
+                <span>早上跑行程，下午留白放空</span>
+              </div>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="D" required />
+              <div class="option-content">
+                <strong>📐 精準串聯</strong>
+                <span>依交通動線安排 3-4 個必去地點</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </form>
+
+      <!-- Quiz Result (Hidden by default) -->
+      <div id="quiz-result" class="result-box" style="display: none;">
+        <div class="result-header">
+          <span class="sparkle-icon">✨</span>
+          <h4>您的旅行人格分析報告</h4>
+        </div>
+        <div class="result-title" id="result-fullname"></div>
+        <p id="result-desc" class="result-description"></p>
+        
+        <div class="prompt-section">
+          <div class="prompt-header">
+            <strong>🎨 專屬生圖指令</strong>
+            <span>可複製下方指令貼給 AI 繪圖工具</span>
+          </div>
+          <textarea id="result-prompt" class="prompt-textarea" readonly></textarea>
+          
+          <div class="prompt-actions-row">
+            <button type="button" id="copy-prompt-btn" class="btn copy-btn">
+              <Icon name="sparkles" size={14} style="margin-right: 6px; pointer-events: none;" />
+              <span class="btn-text">📋 複製生圖指令</span>
+            </button>
+            <div class="ai-launch-buttons">
+              <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="btn alt ai-btn chatgpt-btn">
+                <svg class="ai-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.73 11.23a4.42 4.42 0 0 0-.8-2.92 4.46 4.46 0 0 0-2.45-1.63 4.41 4.41 0 0 0-3.32-.2 4.46 4.46 0 0 0-2.61-2.18 4.43 4.43 0 0 0-3.36.1 4.46 4.46 0 0 0-2.44 2.13 4.42 4.42 0 0 0-1.74 2.5 4.46 4.46 0 0 0 .15 3.36 4.42 4.42 0 0 0 .8 2.92 4.46 4.46 0 0 0 2.45 1.63 4.41 4.41 0 0 0 3.32.2A4.46 4.46 0 0 0 13.5 19.3a4.43 4.43 0 0 0 3.36-.1 4.46 4.46 0 0 0 2.44-2.13 4.42 4.42 0 0 0 1.74-2.5 4.46 4.46 0 0 0-.31-3.34zm-8.85 5.86a2.82 2.82 0 0 1-1.37-.36l.07-.04 2.87-1.66a.79.79 0 0 0 .4-.68v-4.06l1.2-.69a.05.05 0 0 1 .05 0l3.52 2.03a2.83 2.83 0 0 1-1.28 4.31 2.81 2.81 0 0 1-2.2-.18l-3.26-1.88zm-5.18-2.64a2.83 2.83 0 0 1-.36-2.5 2.81 2.81 0 0 1 1.48-1.75l3.23-1.87v3.74a.79.79 0 0 0 .4.68l3.52 2.03v1.38a.05.05 0 0 1-.03.04l-3.52 2.03a2.83 2.83 0 0 1-4.72-2.15l-.02-1.64zm1.96-5.83a2.82 2.82 0 0 1 2.19-.18l-.07.04-2.87 1.66a.79.79 0 0 0-.4.68v4.06l-1.2.69a.05.05 0 0 1-.05 0l-3.52-2.03a2.83 2.83 0 0 1 1.28-4.31 2.81 2.81 0 0 1 2.2.18l3.26 1.88zm8.07 1.41l-3.23 1.87v-3.74a.79.79 0 0 0-.4-.68l-3.52-2.03v-1.38a.05.05 0 0 1 .03-.04l3.52-2.03a2.83 2.83 0 0 1 4.72 2.15l.02 1.64a2.83 2.83 0 0 1 .86 4.25z"/></svg>
+                開啟 ChatGPT
+              </a>
+              <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="btn alt ai-btn gemini-btn">
+                <svg class="ai-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 2c-.3 0-.6.1-.8.4l-3 6.1-6.1 3c-.4.2-.6.6-.6.9s.2.7.6.9l6.1 3 3 6.1c.2.4.5.6.8.6s.6-.2.8-.6l3-6.1 6.1-3c.4-.2.6-.6.6-.9s-.2-.7-.6-.9l-.1-.1-6-3-3-6.1c-.2-.3-.5-.4-.8-.4z" fill="url(#gemini-gradient-quiz)"/>
+                  <defs>
+                    <linearGradient id="gemini-gradient-quiz" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#1a73e8" />
+                      <stop offset="100%" stop-color="#8ab4f8" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                開啟 Gemini
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section id="prompts" class="section-heading">
-    <p class="eyebrow">🏪 紀念品商店風格架</p>
-    <h2>3 種公仔提示詞盲盒</h2>
+  <!-- Step 3: Choose AI Planner -->
+  <section class="section-heading" style="margin-top: 56px;">
+    <p class="eyebrow">🤖 Step 3: 選擇 AI 領航員</p>
+    <h2>準備整理旅遊需求</h2>
   </section>
-  {dollPrompts.map((item) => <PromptGroup title={item.title} description={item.description} prompts={item.prompts} />)}
 
-  <section class="asset-grid" style="margin-top: 32px;">
-    <ImageCard src="/images/doll-maker/doll-sample-personal-01.webp" alt="個人旅行者 3D 公仔成果示意" title="個人版公仔" text="適合作為活動頭像、旅遊明信片或群組分享圖。" />
-    <ImageCard src="/images/doll-maker/doll-sample-family-01.webp" alt="親子或家庭旅行主題 3D 公仔成果示意" title="親子版公仔" text="把同行旅伴一起變成輕鬆可愛的旅行紀念。" />
-    <ImageCard src="/images/doll-maker/doll-sample-pet-01.webp" alt="寵物旅行主題 3D 公仔成果示意" title="寵物版公仔" text="毛孩也能一起登上這趟 AI 旅行。" />
-  </section>
+  <div class="planner-grid">
+    <div class="planner-card chatgpt-theme">
+      <div class="planner-icon">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+          <path d="M20.73 11.23a4.42 4.42 0 0 0-.8-2.92 4.46 4.46 0 0 0-2.45-1.63 4.41 4.41 0 0 0-3.32-.2 4.46 4.46 0 0 0-2.61-2.18 4.43 4.43 0 0 0-3.36.1 4.46 4.46 0 0 0-2.44 2.13 4.42 4.42 0 0 0-1.74 2.5 4.46 4.46 0 0 0 .15 3.36 4.42 4.42 0 0 0 .8 2.92 4.46 4.46 0 0 0 2.45 1.63 4.41 4.41 0 0 0 3.32.2A4.46 4.46 0 0 0 13.5 19.3a4.43 4.43 0 0 0 3.36-.1 4.46 4.46 0 0 0 2.44-2.13 4.42 4.42 0 0 0 1.74-2.5 4.46 4.46 0 0 0-.31-3.34zm-8.85 5.86a2.82 2.82 0 0 1-1.37-.36l.07-.04 2.87-1.66a.79.79 0 0 0 .4-.68v-4.06l1.2-.69a.05.05 0 0 1 .05 0l3.52 2.03a2.83 2.83 0 0 1-1.28 4.31 2.81 2.81 0 0 1-2.2-.18l-3.26-1.88zm-5.18-2.64a2.83 2.83 0 0 1-.36-2.5 2.81 2.81 0 0 1 1.48-1.75l3.23-1.87v3.74a.79.79 0 0 0 .4.68l3.52 2.03v1.38a.05.05 0 0 1-.03.04l-3.52 2.03a2.83 2.83 0 0 1-4.72-2.15l-.02-1.64zm1.96-5.83a2.82 2.82 0 0 1 2.19-.18l-.07.04-2.87 1.66a.79.79 0 0 0-.4.68v4.06l-1.2.69a.05.05 0 0 1-.05 0l-3.52-2.03a2.83 2.83 0 0 1 1.28-4.31 2.81 2.81 0 0 1 2.2.18l3.26 1.88zm8.07 1.41l-3.23 1.87v-3.74a.79.79 0 0 0-.4-.68l-3.52-2.03v-1.38a.05.05 0 0 1 .03-.04l3.52-2.03a2.83 2.83 0 0 1 4.72 2.15l.02 1.64a2.83 2.83 0 0 1 .86 4.25z"/></svg>
+      </div>
+      <h3>ChatGPT 旅遊規劃師</h3>
+      <p>專屬 GPTs 會以問答方式，一步步引導您整理出自由行的核心需求。</p>
+      <a href="https://chatgpt.com/g/g-69fe1ad574d081918dd240d5d47fceb0-ailu-you-gui-hua-shi-bang-ni-zheng-li-zi-you-xing-xu-qiu" target="_blank" rel="noopener noreferrer" class="btn">
+        開啟 ChatGPT 規劃師
+      </a>
+    </div>
+
+    <div class="planner-card gemini-theme">
+      <div class="planner-icon">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+          <path d="M12 2c-.3 0-.6.1-.8.4l-3 6.1-6.1 3c-.4.2-.6.6-.6.9s.2.7.6.9l6.1 3 3 6.1c.2.4.5.6.8.6s.6-.2.8-.6l3-6.1 6.1-3c.4-.2.6-.6.6-.9s-.2-.7-.6-.9l-.1-.1-6-3-3-6.1c-.2-.3-.5-.4-.8-.4z" fill="url(#gemini-gradient-planner)"/>
+          <defs>
+            <linearGradient id="gemini-gradient-planner" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1a73e8" />
+              <stop offset="100%" stop-color="#8ab4f8" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h3>Gemini 旅遊規劃師</h3>
+      <p>專屬 Gemini Gem 會透過簡潔對話，協助您梳理並匯出完美的行程基礎。</p>
+      <a href="https://gemini.google.com/gem/1tBw-WprmTYo9C-j9-nV0SqiEtWWbg1iI?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn">
+        開啟 Gemini 規劃師
+      </a>
+    </div>
+  </div>
+
   <CompleteTaskButton 
     taskId="doll-maker-complete" 
-    buttonLabel="我已完成公仔圖"
+    buttonLabel="我已完成旅遊人格測驗"
     nextLabel="旅遊需求整理" 
     nextHref="/travel-planner"
-    successMessage="太棒了！你已完成第一個 Wow Moment。記得把公仔圖下載下來喔！"
+    successMessage="太棒了！您已成功認識 AI 並獲得專屬旅遊人格，接下來我們將開始整理旅遊需求！"
   />
 
-  <CTASection
-    title="完成後請先分享到 LINE 群組"
-    text="還不用等到作品完美。先上傳，講師與助教才能挑選快閃展示，也方便後面投票。"
-    primaryLabel="上傳到工作坊 LINE 群組"
-    primaryHref={siteConfig.workshopGroupUrl}
-    primaryExternal={true}
-    secondaryLabel="前往下一關"
-    secondaryHref="/travel-planner"
-  />
-  <p class="disclaimer-text">上傳作品代表同意於本次工作坊成果展示與現場票選使用；若不希望公開展示，請於上傳前告知講師或助教。</p>
+  <script is:inline>
+    // ===== 旅遊人格測驗邏輯 =====
+    const BASE = {
+      A: { 
+        emoji: '🌿', 
+        name: '慢活旅行者', 
+        cartoonStyle: '可愛皮克斯 3D 渲染風格 (Pixar style 3D render)，場景：淺草寺馬卡龍色系，溫暖柔和光影，精緻質感，豐富細節', 
+        personality: '您是一個懂得在忙碌世界中尋找寧靜的人。對您而言，旅行不是為了抵達目的地，而是享受過程中的每一刻呼吸。您喜歡在陌生的城市尋找一家有質感的咖啡廳，坐下來觀察路人，或是讀一本想看很久的書。您對細節有著敏銳的觀察力，牆角的青苔或午後的陽光都能讓您感動。這種「慢」並非懶散，而是一種對生命品質的堅持，讓您在旅途中獲得真正的療癒與能量。您更傾向於深入感受一個地方的靈魂，而非僅僅在著名標誌前打卡。' 
+      },
+      B: { 
+        emoji: '🏃', 
+        name: '極速旅人', 
+        cartoonStyle: '可愛潮流 3D 渲染風格，場景：澀谷霓虹夜景，繽紛色彩，精緻細節，高品質光影，賽博龐克可愛化', 
+        personality: '您是效率與行動力的化身，時間對您來說是最珍貴的資源。您熱愛達成目標的成就感，看到行程表上的景點一個個被勾選，會讓您感到無比滿足。您的精力旺盛，總能在最短的時間內體驗最精采的活動。您擅長利用各種科技工具來優化路徑，不喜歡任何形式的拖延或浪費。朋友都非常依賴您的策劃與執行能力，因為跟著您走，絕對能玩得最充實、最精彩，在有限的假期間創造出最大化的回憶價值。' 
+      },
+      C: { 
+        emoji: '🏺', 
+        name: '文化沉澱者', 
+        cartoonStyle: '精緻手繪插畫風格 (Exquisite Hand-drawn Illustration)，場景：京都金閣寺，優雅溫潤色彩，富有層次感，高品質質感，文藝氣息', 
+        personality: '您擁有一顆充滿同理心與好奇心的靈魂，旅行對您來說是一場與土地的靈魂對話。您並不滿足於走馬看花的觀光，而是渴望深入了解當地的歷史、傳統與生活方式。您喜歡逛當地的傳統市場，與小販聊天，或是參與在地的節慶活動。您相信每座城市都有自己的心跳與脈絡，而您的使命就是去傾聽並理解它。您帶回家的不只是照片，更是滿滿的感動與深刻的哲學思考，這種深度的連結讓您的視野變得更寬廣。' 
+      },
+      D: { 
+        emoji: '⚡', 
+        name: '冒險先驅', 
+        cartoonStyle: '可愛冒險 3D 風格，場景：富士山日出雲海，精緻戶外裝備細節，壯麗柔和光影，電影級畫面質感', 
+        personality: '「挑戰」是您的生命密碼，您拒絕平庸與安逸的生活方式。旅行是您探索世界邊界的一種途徑，越是未知的領域越能激發您的鬥志與生命力。您熱愛體能上的挑戰，無論是攀登陡峭的高山還是潛入神秘的深海，都能讓您感受到生命的真實跳動與脈搏。您不怕困難，反而視挑戰為成長的養分。您有一種天生的領導氣質與勇氣，總能鼓勵身邊的人踏出舒適圈，去發現那個更強大的自己。' 
+      }
+    };
+    
+    const MOD = {
+      AA: { suffix: '·科技適應型', modPersonality: '再加上您對科技的高度敏感度，您是那種會用 AI 把旅程優化到極致的人。手機是您最強的數位旅伴，比起傳統地圖，您更信任數據與即時資訊。您懂得如何利用數位工具避開人群、尋找最高評分的店家，這種智能化的旅行方式，讓您的每一步都走得精準且優雅。' },
+      AB: { suffix: '·隨遇而安型', modPersonality: '突發狀況對您來說從來不是困擾，反而是驚喜冒險的開端。您擁有一種神奇的心理韌性，總能在計畫外的轉彎處，找到最動人的風景。您不拘泥於刻板的行程，這種靈活的生命態度，讓您的旅行充滿了詩意與未知的喜悅。' },
+      AC: { suffix: '·從容探索型', modPersonality: '遇到環境的變化，您總是保持著不慌不忙的優雅。您會先找一間安靜的咖啡廳坐下來，讓思緒在香氣中沉澱，等內心平靜後再決定下一步。這份難得的從容感，讓您的旅行永遠比別人多了一份深度與美學品味，這也是您獨特的魅力所在。' },
+      AD: { suffix: '·嚴謹慢活型', modPersonality: '您的行囊裡永遠備有 Plan B 甚至 Plan C，因為您相信充分的準備是享受自由的前提。這份嚴謹與細心，讓您的旅程幾乎不會出現令人尷尬的差錯。朋友們都說跟您一起出遊是最放心的，因為您總是能把細節掌控得恰到好處，讓慢活也能過得很精緻。' },
+      BA: { suffix: '·打卡爆肝型', modPersonality: '您的社交媒體限時動態，永遠是朋友圈裡最令人羨慕的焦點。您擅長捕捉最完美的角度，並利用最新科技提升打卡效率。對您來說，分享美的事物是一種生活態度，您那敏銳的視覺直覺，讓每張照片都像是精心設計的藝術品。' },
+      BB: { suffix: '·狂野隨興型', modPersonality: '您是旅行界真正的自由靈魂，對您來說「沒有計畫」就是最好的計畫。您熱愛那種臨時起意、說走就走的快感。在陌生的十字路口隨性轉個彎，往往就能開啟一段意想不到的精彩故事。這種狂野的生命力，讓您每次旅行都像是一場未知的慶典。' },
+      BC: { suffix: '·率真漫遊型', modPersonality: '您不需要冷冰冰的星星指南，路邊阿伯熱情推薦的小攤位才是您的真愛。您擁有一份純粹的率真，總能用最直接的方式與在地人連結。這種接地氣的旅行風格，讓您總能品嚐到最有溫度、最道地的生活滋味，這也是最讓您感到充實的時刻。' },
+      BD: { suffix: '·精算達人型', modPersonality: '您擁有一雙能瞬間看穿「價值」的利眼。在同樣的預算下，您總能策劃出比別人精彩三倍的體驗，這不僅是省錢，更是一種聰明生活的智慧。您懂得把資源花在刀口上，這種精算的能力讓您的每趟旅程都顯得無比聰明且充滿成就感。' },
+      CA: { suffix: '·智能導航型', modPersonality: '您完美地結合了文化探索與現代科技。在古蹟前您會用 AI 查閱歷史，在博物館裡您會利用數位導覽深入理解背景。這種「虛實整合」的旅行方式，讓您的每次參觀都具備了極高的含金量，也讓文化沉澱變得更有效率且現代化。' },
+      CB: { suffix: '·直覺冒險型', modPersonality: '您的直覺就是您最好的導航儀。您敢於跟著感覺走，不被繁雜的旅遊手冊所限制。往往在最意想不到的偏僻小巷，您就能發現最有故事的文化寶藏或私人秘境。這種靠著「第六感」引導的冒險，讓您的文化之旅充滿了命運般的奇遇。' },
+      CC: { suffix: '·創意漫遊型', modPersonality: '您的眼睛自帶藝術濾鏡，世界在您眼中是一幅流動的畫作。街頭色彩繽紛的塗鴉、獨立書店特有的紙張氣味、設計師小店裡充滿溫度的手作，都是您旅行中最珍貴的收藏。這種對美的執著與創意，讓您的文化探索充滿了靈性。' },
+      CD: { suffix: '·策展達人型', modPersonality: '您把每次旅行都視為一場精心策劃的個人展覽。預約制的深度講座、限量的職人工作坊，都是您行程表上的首選。您拒絕走馬看花，追求的是真正的文化沉浸與學術深度，這讓您的旅行經歷在質地上顯得格外厚實且迷人。' },
+      DA: { suffix: '·跳島遊走型', modPersonality: '您旺盛的冒險精神搭配精準的科技規劃，讓您在最短時間內能完成最多的挑戰。您的旅行地圖上總是佈滿了待開發的標記，這種高效的「跳點」模式，讓您在每次出遊中都能大幅拓寬生命的邊界，體驗多樣化的冒險樂趣。' },
+      DB: { suffix: '·荒野達人型', modPersonality: '越是艱困的環境，越能磨練出您堅韌的意志。您享受那種與大自然搏鬥的原始快感，無論是露宿荒野還是穿越叢林，都能讓您感到前所未有的自由。您那無畏的勇氣與卓越的野外生存技能，讓您成為冒險隊伍中不可或缺的靈魂人物。' },
+      DC: { suffix: '·熱血直覺型', modPersonality: '您是旅行中的一把火，走到哪裡都能燃起熱情。您不需要太多的思考，直覺會告訴您哪裡有最棒的挑戰。您那爆棚的行動力，讓您的冒險旅程永遠充滿了快節奏的驚喜與純粹的熱血，這種活在當下的生命力，極具感染力。' },
+      DD: { suffix: '·極限規劃型', modPersonality: '您把冒險視為一種修煉，每一分風險都在您的精密計算之中。您熱愛挑戰極限，但絕不盲目衝動。您對每個細節的極致追求，讓您即使在最危險的環境下，也能保持冷靜並帶領大家安全突圍，這就是您作為極限規劃者的強大實力。' }
+    };
+
+    function evaluateQuiz() {
+      const form = document.getElementById('quiz-form');
+      const formData = new FormData(form);
+      const q1 = formData.get('q1');
+      const q2 = formData.get('q2');
+      const q3 = formData.get('q3');
+      const nameInput = document.getElementById('quiz-name').value.trim();
+      
+      if (!q1 || !q2 || !q3 || !nameInput) return;
+      
+      const base = BASE[q1] || BASE['A'];
+      const modKey = q2 + q3;
+      const mod = MOD[modKey] || MOD['AA'];
+      
+      const fullName = base.name + mod.suffix;
+      const fullDesc = base.personality + '\n\n' + mod.modPersonality;
+      
+      const promptText = `請參考我上傳的照片，生成一張【可愛討喜且極具電影級質感】的 3D 卡通旅遊海報。\n\n🌟 視覺風格：${base.cartoonStyle}。請使用 Pixar 3D 渲染技術，呈現極致柔和的電影級光影、溫潤材質與 8K 高清細節，整體氛圍要溫馨且高級。\n👤 人物設定：請精確保留「附圖中的臉部特徵」，將其轉化為表情生動、比例可愛的討喜 3D 角色。\n✍️ 畫面文字：在合適位置加入精緻藝術字：「${nameInput} 的${base.name}之旅」\n🏷️ 隱藏彩蛋：請在畫面某個角落，以「旅行貼紙」、「城市街牌」或「復古印章」的形式，自然融入文字「AI 旅遊工作坊」，風格要像圖的一部分，完全不像廣告。\n比例：1:1`;
+      
+      document.getElementById('result-fullname').textContent = base.emoji + ' ' + fullName;
+      document.getElementById('result-desc').innerText = fullDesc;
+      document.getElementById('result-prompt').value = promptText;
+      
+      const resultDiv = document.getElementById('quiz-result');
+      if (resultDiv.style.display === 'none') {
+        resultDiv.style.display = 'block';
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // 複製文字
+    function copyPromptText() {
+      const textarea = document.getElementById('result-prompt');
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(textarea.value).then(() => {
+        const btnText = document.querySelector('#copy-prompt-btn .btn-text');
+        const originalText = btnText.textContent;
+        btnText.textContent = '✅ 已複製成功！';
+        setTimeout(() => {
+          btnText.textContent = originalText;
+        }, 2000);
+      });
+    }
+
+    // 初始化監聽事件
+    document.addEventListener('astro:page-load', () => {
+      const form = document.getElementById('quiz-form');
+      if (form) {
+        form.addEventListener('change', evaluateQuiz);
+        form.addEventListener('input', evaluateQuiz);
+      }
+      
+      const copyBtn = document.getElementById('copy-prompt-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', copyPromptText);
+      }
+    });
+  </script>
 </WorkshopLayout>
+
+<style>
+  /* AI Intro Card Styles */
+  .ai-intro-card {
+    padding: 32px;
+    background: #ffffff;
+    margin-bottom: 32px;
+    border-left: 5px solid var(--page-accent, var(--sunset)) !important;
+  }
+  .ai-intro-content {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .ai-intro-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ai-intro-media img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+    cursor: zoom-in;
+  }
+  .intro-desc {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .intro-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .intro-steps li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .step-badge {
+    background: var(--page-accent, var(--sunset));
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-soft);
+  }
+  .intro-steps strong {
+    color: var(--night);
+    font-size: 1.05rem;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .intro-steps p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Quiz Card Styles */
+  .quiz-card {
+    padding: 32px;
+    background: #ffffff;
+    border-top: 5px solid var(--page-accent, var(--sunset)) !important;
+  }
+  .quiz-subtitle {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .form-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--night);
+  }
+  .required-tag {
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: normal;
+  }
+  .form-input {
+    max-width: 360px;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-inset);
+    transition: border-color 0.2s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--page-accent, var(--sunset));
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .option-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+  }
+  .option-item:hover {
+    border-color: var(--page-accent, var(--sunset));
+    background: #fffaf9;
+    transform: translateY(-1px);
+  }
+  .option-item input[type="radio"] {
+    margin-top: 4px;
+    accent-color: var(--page-accent, var(--sunset));
+  }
+  .option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .option-content strong {
+    font-size: 1.05rem;
+    color: var(--night);
+  }
+  .option-content span {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  /* Result Box Styles */
+  .result-box {
+    margin-top: 32px;
+    background: #ffffff;
+    border: 2px solid var(--page-accent, var(--sunset));
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-medium);
+  }
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .sparkle-icon {
+    font-size: 1.5rem;
+  }
+  .result-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--page-accent, var(--sunset));
+  }
+  .result-title {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--night);
+    margin-bottom: 16px;
+  }
+  .result-description {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    background: #fafaf9;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    border: 1px solid var(--line);
+    white-space: pre-wrap;
+  }
+  .prompt-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .prompt-header strong {
+    font-size: 1.1rem;
+    color: var(--night);
+  }
+  .prompt-header span {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .prompt-textarea {
+    min-height: 160px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .prompt-textarea:focus {
+    outline: none;
+    border-color: var(--page-accent, var(--sunset));
+  }
+  .prompt-actions-row {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .copy-btn {
+    min-height: 40px !important;
+    padding: 8px 16px !important;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ai-launch-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ai-btn {
+    min-height: 40px !important;
+    padding: 8px 14px !important;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+  }
+  .chatgpt-btn {
+    background: #0f0f10 !important;
+    color: #10a37f !important;
+    border: 1px solid rgba(16, 163, 127, 0.4) !important;
+  }
+  .chatgpt-btn:hover {
+    background: #1a1a1c !important;
+    border-color: #10a37f !important;
+  }
+  .gemini-btn {
+    background: #f0f4f9 !important;
+    color: #1a73e8 !important;
+    border: 1px solid rgba(26, 115, 232, 0.3) !important;
+  }
+  .gemini-btn:hover {
+    background: #e3ecf5 !important;
+    border-color: #1a73e8 !important;
+  }
+  .ai-logo {
+    flex-shrink: 0;
+  }
+
+  /* Planner Grid Styles */
+  .planner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .planner-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .planner-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  .planner-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-soft);
+  }
+  .planner-card h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--night);
+    margin: 0;
+  }
+  .planner-card p {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
+  }
+  .planner-card .btn {
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chatgpt-theme {
+    border-top: 4px solid #10a37f !important;
+  }
+  .chatgpt-theme .planner-icon {
+    background: #10a37f;
+    color: white;
+  }
+  .chatgpt-theme .btn {
+    background: #10a37f;
+    color: white;
+    border-color: #10a37f;
+  }
+  .chatgpt-theme .btn:hover {
+    background: #0d8a6b;
+  }
+  .gemini-theme {
+    border-top: 4px solid #1a73e8 !important;
+  }
+  .gemini-theme .planner-icon {
+    background: #f0f4f9;
+    color: #1a73e8;
+  }
+  .gemini-theme .btn {
+    background: #1a73e8;
+    color: white;
+    border-color: #1a73e8;
+  }
+  .gemini-theme .btn:hover {
+    background: #155cb8;
+  }
+
+  @media (max-width: 992px) {
+    .ai-intro-content {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .ai-intro-media {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ai-intro-card, .quiz-card {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .prompt-actions-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .ai-launch-buttons {
+      width: 100%;
+    }
+    .ai-btn, .copy-btn {
+      width: 100%;
+      flex-grow: 1;
+    }
+  }
+</style>
