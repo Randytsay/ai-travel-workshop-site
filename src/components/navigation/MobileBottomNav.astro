@@ -4,7 +4,7 @@ const { currentPath } = Astro.props;
 const workshopQuickPaths = ['/jimeng-short-video', '/doll-maker', '/travel-planner', '/notebooklm', '/sticker-lab', '/sticker-crop-tool'];
 const quick = workshopQuickPaths.map((path) => navItems.find((item) => item.path === path)).filter(Boolean);
 ---
-<nav class="mobile-nav">
+<nav class="mobile-nav" id="mobileBottomNav">
   {quick.map((item, index) => (
     <a href={item?.path} class={currentPath === item?.path ? 'active' : ''}>
       <span class="mobile-nav-step">{index + 1}</span>
@@ -12,3 +12,23 @@ const quick = workshopQuickPaths.map((path) => navItems.find((item) => item.path
     </a>
   ))}
 </nav>
+
+<script>
+  function centerActiveNav() {
+    const nav = document.getElementById('mobileBottomNav');
+    if (!nav) return;
+    const activeLink = nav.querySelector('a.active') as HTMLElement;
+    if (!activeLink) return;
+
+    const navWidth = nav.clientWidth;
+    const linkWidth = activeLink.clientWidth;
+    const linkOffset = activeLink.offsetLeft;
+    const scrollPosition = linkOffset - (navWidth / 2) + (linkWidth / 2);
+
+    setTimeout(() => {
+      nav.scrollLeft = scrollPosition;
+    }, 100);
+  }
+
+  document.addEventListener('astro:page-load', centerActiveNav);
+</script>
