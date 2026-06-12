@@ -62,15 +62,51 @@ import StickerCropApp from '../components/sticker-tool/StickerCropApp.astro';
       </div>
 
       <!-- 右欄：上傳與製作流程 -->
-      <div style="flex: 2 2 400px;">
-        <h3 style="margin-top: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 6px;">🚀 5 步驟快速製作與上架流程</h3>
-        <ol style="margin: 0; padding-left: 20px; color: var(--night); line-height: 1.8; font-size: 0.95rem;">
-          <li><strong>傳送圖片到手機</strong>：將此工具裁切並下載好的 ZIP 壓縮檔解壓縮，把透明 PNG 圖片傳到手機相簿中。</li>
-          <li><strong>建立新貼圖包</strong>：開啟「LINE 拍貼」APP，登入 LINE 帳號，點擊「＋」新增一組貼圖並填寫名稱。</li>
-          <li><strong>匯入去背貼圖</strong>：點擊對應的格子，選擇「照片」直接從手機相簿選取匯入 370×240 規格的去背 PNG。</li>
-          <li><strong>自動產生主圖與標籤</strong>：在 App 內設定主要圖片 (240×240) 與聊天標籤圖 (96×74)，可以直接指定剛才上傳的任意貼圖，系統會自動幫你產生符合規範的尺寸。</li>
-          <li><strong>送出申請與上架</strong>：填寫販售價格，選擇「不領取分配款（自用免費下載）」或「領取分配款」，點擊「申請審核」。審核通過後點擊「開始販售」即可在 LINE 使用！</li>
+      <div style="flex: 2 2 450px;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 800; color: var(--night); margin-bottom: 16px;">🚀 使用「LINE 拍貼」App 上架商店教學</h3>
+        <ol style="margin: 0; padding-left: 20px; color: var(--night); line-height: 1.8; font-size: 0.92rem;">
+          <li style="margin-bottom: 12px;"><strong>下載 App：</strong>前往 App Store 或 Google Play 下載並開啟 「LINE拍貼（LINE STICKER MAKER）」 App。</li>
+          <li style="margin-bottom: 12px;">
+            <strong>新增貼圖專案：</strong>
+            <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 0.88rem; list-style-type: circle;">
+              <li>使用您的 LINE 帳號連動登入。</li>
+              <li>點選主畫面的 「+」 號（製作新貼圖）。</li>
+              <li>點選 「+」 > 選擇 「相簿中的照片」，選取您剛剛下載儲存好的透明背景貼圖。</li>
+              <li>調整貼圖大小與角度後，依序點選右上角的 「下一步」 > 「儲存」 > 「儲存」。</li>
+              <li>重複此動作，直到加滿您想上架的張數（LINE 規定張數必須為 8、16、24、32 或 40 張）。</li>
+            </ul>
+          </li>
+          <li style="margin-bottom: 12px;">
+            <strong>申請販售：</strong>
+            <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 0.88rem; list-style-type: circle;">
+              <li>貼圖加完後，點選下方的 「申請販售」。</li>
+              <li>勾選您要上架的張數（例如：16張），點選 「下一步」。</li>
+              <li>選取一張貼圖作為上架商店的 「主圖（Main Image）」，點選 「下一步」。</li>
+            </ul>
+          </li>
+          <li style="margin-bottom: 12px;">
+            <strong>設定販售資訊：</strong>
+            <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 0.88rem; list-style-type: circle;">
+              <li><strong>標題與說明：</strong>填寫您的貼圖名稱與介紹。</li>
+              <li><strong style="color: #22c55e;">【極重要】是否使用 AI：</strong>專案設定中有一題為「是否使用AI」，請務必勾選「使用 AI」。</li>
+            </ul>
+            <div style="margin: 10px 0; padding: 12px; background: #fff1f2; border-left: 4px solid #f43f5e; border-radius: 8px; font-size: 0.85rem; color: #9f1239; line-height: 1.5;">
+              <strong>⚠️ 著作權注意：</strong>貼圖與名稱中絕對不能出現任何品牌 Logo、商標或專利名稱（例如衣服上的 Nike 勾勾、飲料罐包裝、ChatGPT 等字樣），否則會被 LINE 官方直接退件。
+            </div>
+          </li>
+          <li style="margin-bottom: 12px;">
+            <strong>設定價格與銷售分配（二選一）：</strong>
+            <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 0.88rem; list-style-type: circle;">
+              <li>建議設定最低販售價格（NT$30 元）。</li>
+              <li><strong>免費下載（無銷售分配金額）：</strong>上架後創作者可免費下載，但其他人購買時您不會拿到分潤。</li>
+              <li><strong>付費下載（有銷售分配金額）：</strong>其他人購買時您可以獲得分潤，但創作者自己也必須付費購買。</li>
+            </ul>
+          </li>
+          <li style="margin-bottom: 12px;"><strong>送出申請：</strong>確認設定無誤後，點選「下一步」並點選「送出申請」即可完成。</li>
         </ol>
+        <p style="margin: 16px 0 0 0; padding-top: 12px; border-top: 1px dashed var(--st-border-strong); font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5;">
+          <strong>🕰 審核時間：</strong>送出後大約需要 <strong>1 至 2 天</strong> 的審核期。審核通過後，App 會傳送系統通知，您就可以直接下載或將貼圖分享給好友使用了。
+        </p>
       </div>
     </div>
   </section>
