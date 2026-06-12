@@ -65,6 +65,10 @@ const hasImage = (filename: string) => {
     <p class="eyebrow">iPhone / iOS</p>
     <h2>先切換 App Store 地區，再下載即夢AI與抖音</h2>
   </section>
+
+  <div class="video-container" style="max-width: 720px; margin: 0 auto 32px;">
+    <iframe src="https://www.youtube.com/embed/aL68IPDXx0o" title="iOS 抖音與即夢下載與使用教學" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
   <section class="guide-flow">
     {iosSteps.map((step, index) => (
       <article class="guide-step">
@@ -85,6 +89,10 @@ const hasImage = (filename: string) => {
     <p class="eyebrow">Android</p>
     <h2>從官方入口下載 APK，安裝後完成登入</h2>
   </section>
+
+  <div class="video-container" style="max-width: 720px; margin: 0 auto 32px;">
+    <iframe src="https://www.youtube.com/embed/prcCuYS2TZI" title="Android 抖音與即夢下載與使用教學" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
   
   <div class="card boarding-pass-card android-download-card">
     <div class="download-content">
@@ -328,5 +336,22 @@ const hasImage = (filename: string) => {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
     margin-bottom: 48px;
+  }
+  .video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 </style>
