@@ -8,8 +8,7 @@ const { title, description, prompts, defaultOpen = false } = Astro.props;
     <h2>{title}</h2>
     {description && <p>{description}</p>}
   </div>
-  <div class="prompt-grid">
-    <PromptCard title={`${title}｜ChatGPT`} platform="ChatGPT" prompt={prompts.chatgpt} defaultOpen={defaultOpen} />
-    <PromptCard title={`${title}｜Gemini 備援`} platform="Gemini" prompt={prompts.gemini} defaultOpen={defaultOpen} />
+  <div class="prompt-grid single-prompt" style="grid-template-columns: 1fr;">
+    <PromptCard title={title} prompt={prompts.chatgpt} defaultOpen={defaultOpen} />
   </div>
 </section>
