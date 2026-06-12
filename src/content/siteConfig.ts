@@ -1,5 +1,6 @@
 export const siteConfig = {
   surveyUrl: '#',
+  surveyApiUrl: '', // 貼上 Google Apps Script 部署後取得的網頁應用程式 URL
   officialLineUrl: '#',
   workshopGroupUrl: '#',
   cashbackInterestUrl: '#',

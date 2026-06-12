@@ -1,77 +1,210 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CTASection from '../components/common/CTASection.astro';
-import AssetPlaceholder from '../components/common/AssetPlaceholder.astro';
-import ImageCard from '../components/common/ImageCard.astro';
-import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import StationRole from '../components/common/StationRole.astro';
-import { surveyReasons, surveyRewards, lineSteps } from '../content/surveyPage';
 import { siteConfig } from '../content/siteConfig';
 import { stationRoles } from '../content/journeyGuide';
 ---
-<WorkshopLayout title="課後問卷與講義領取" currentPath="/survey">
-  <section class="hero with-image">
+
+<WorkshopLayout title="課後問卷" currentPath="/survey">
+  <section class="hero">
     <div>
-      <p class="eyebrow">🛍️ 歸國紀念與免稅店</p>
-      <h1>感謝參與今天的 AI 旅行</h1>
-      <p>最後一站，請完成旅客意見表（問卷），並加入 LINE 官方旅行管家。你會收到完整的數位旅遊手冊（網頁講義）與隨身版（PDF 重點），方便日後隨時出發。</p>
-    </div>
-    <div class="hero-media">
-      <img src="/images/survey/hero-finish-journey-01.webp" alt="工作坊結尾的旅行桌面與講義領取情境，呈現完成旅程的溫暖感" loading="eager" decoding="async" />
+      <p class="eyebrow">📋 旅程最後一站</p>
+      <h1>課後體驗與意見回饋</h1>
+      <p>感謝您參與今天的 AI 旅遊規劃師工作坊！請花 1 分鐘填寫以下問卷，您的寶貴建議將幫助我們持續優化後續的活動體驗。</p>
     </div>
   </section>
 
   <StationRole role={stationRoles['/survey']} />
 
-  <section class="feature-grid survey-reward-grid">
-    <article class="card"><h2>為什麼要填意見表</h2><ul class="example-list">{surveyReasons.map((r)=> <li>{r}</li>)}</ul></article>
-    <article class="card survey-reward-card boarding-pass-card"><h2>🎁 歸國紀念禮包解鎖</h2><ul class="example-list">{surveyRewards.map((r)=> <li>{r}</li>)}</ul></article>
-    <article class="card notice-card"><h2>🔑 通關密語提醒</h2><p>加入 LINE 官方旅行管家後，請輸入通關密語：<strong>「我要講義」</strong>。</p></article>
-  </section>
+  <div class="survey-container" style="margin-top: 32px; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <!-- Form Screen -->
+    <div class="form-screen" id="form-screen">
+      <div class="card" style="overflow: hidden; border: 1px solid var(--st-border, rgba(23,33,61,0.1)); border-radius: var(--radius-md, 16px); box-shadow: var(--shadow-card);">
+        <div class="card-header" id="form-header" style="background: linear-gradient(135deg, var(--sunset), #ffb199); color: #fff; padding: 24px; position: relative;">
+          <div class="card-header-flex" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div>
+              <h3 style="margin: 0; font-size: 1.35rem; font-weight: 800; color: #fff;" id="survey-title">🌸 新朋友體驗回饋</h3>
+              <p style="margin: 6px 0 0 0; font-size: 0.85rem; opacity: 0.9; color: rgba(255,255,255,0.9);" id="survey-subtitle">請完成問卷以提交您的想法！</p>
+            </div>
+            <div class="role-switcher">
+              <button type="button" class="active" id="role-guest">👋 新朋友</button>
+              <button type="button" id="role-member">🤝 夥伴</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 28px; background: #fff;">
+          <form id="survey-form">
+            <!-- 0. 姓名 (共用) -->
+            <div class="form-group">
+              <label class="form-label">您的姓名</label>
+              <input type="text" id="name" class="form-input" placeholder="請輸入個人姓名" required />
+            </div>
 
-  {siteConfig.featureFlags.enableCashbackBridgeCard && (
-    <section class="card cashback-bridge-card">
-      <p class="eyebrow">旅行消費小啟發</p>
-      <h2>旅行花得多，回饋能不能慢慢累積？</h2>
-      <p>一趟旅行花費不低，如果日常消費能逐步累積回饋，長期會是什麼感覺？這裡先不談產品，先從機制與思維開始理解。</p>
-      <a class="btn" href={siteConfig.cashbackInterestUrl}>我想了解這個機制</a>
-    </section>
-  )}
+            <!-- ===== 新朋友版題目 ===== -->
+            <div id="guest-questions">
+              <!-- 1. 邀請人 -->
+              <div class="form-group">
+                <label class="form-label">1. 邀請您參加的朋友是？</label>
+                <input type="text" id="inviter" class="form-input" placeholder="請輸入邀請人姓名" required />
+              </div>
 
-  <section class="two-col" style="margin-top:24px;">
-    <section class="card survey-entry-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-      <p class="eyebrow">📝 旅客意見表</p>
-      <h2>前往填寫問卷</h2>
-      <a class="btn" href={siteConfig.surveyUrl} target="_blank" rel="noreferrer" style="margin-top:16px;">前往課後問卷</a>
-    </section>
-    <section class="card line-task-card itinerary-card">
-      <p class="eyebrow">📲 紀念品領取流程</p>
-      <h2>「我要講義」三步驟</h2>
-      <ol class="example-list" style="margin-bottom:16px;">{lineSteps.map((s)=> <li>{s}</li>)}</ol>
-      <div class="actions" style="margin-top:auto;">
-        <a class="btn ghost" href={siteConfig.officialLineUrl} target="_blank" rel="noreferrer">加入 LINE 官方管家</a>
-        <a class="btn ghost" href={siteConfig.workshopGroupUrl} target="_blank" rel="noreferrer">工作坊旅行團 (LINE)</a>
+              <!-- 2. 吸收程度 -->
+              <div class="form-group">
+                <label class="form-label">2. 您覺得自己今天對課程內容的吸收程度？ (1-5分)</label>
+                <div class="rating-group-10" id="rating-absorption-guest">
+                  <button type="button" class="rating-btn-10" data-value="1">1</button>
+                  <button type="button" class="rating-btn-10" data-value="2">2</button>
+                  <button type="button" class="rating-btn-10" data-value="3">3</button>
+                  <button type="button" class="rating-btn-10" data-value="4">4</button>
+                  <button type="button" class="rating-btn-10" data-value="5">5</button>
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--ink-soft); margin-top: 6px;">1=完全聽不懂 ~ 5=收穫滿滿，完全掌握</div>
+              </div>
+
+              <!-- 3. 整體評分 -->
+              <div class="form-group">
+                <label class="form-label">3. 今天的 AI 旅遊規劃教學，滿分 5 分您給幾分？</label>
+                <div class="rating-group-10" id="rating-overall">
+                  <button type="button" class="rating-btn-10" data-value="1">1</button>
+                  <button type="button" class="rating-btn-10" data-value="2">2</button>
+                  <button type="button" class="rating-btn-10" data-value="3">3</button>
+                  <button type="button" class="rating-btn-10" data-value="4">4</button>
+                  <button type="button" class="rating-btn-10" data-value="5">5</button>
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--ink-soft); margin-top: 6px;">1=非常不滿意 ~ 5=非常滿意</div>
+              </div>
+
+              <!-- 4. Wow Moment -->
+              <div class="form-group">
+                <label class="form-label">4. 今天哪個部分讓您覺得最驚艷 (Wow Moment)？</label>
+                <select id="wow-moment" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="AI生成可愛的個人頭像">AI生成可愛的個人頭像</option>
+                  <option value="AI 一鍵生成詳細行程">AI 一鍵生成詳細行程</option>
+                  <option value="手繪風格視覺地圖及簡報">手繪風格視覺地圖及簡報</option>
+                  <option value="AI podcast語音導覽">AI podcast語音導覽</option>
+                  <option value="消費轉收入概念">消費轉收入概念</option>
+                </select>
+              </div>
+
+              <!-- 5. AI 興趣主題 -->
+              <div class="form-group">
+                <label class="form-label">5. 未來若有其他 AI 生活應用主題，您對哪個感興趣？</label>
+                <div class="checkbox-group" id="ai-interests">
+                  <label class="checkbox-item">
+                    <input type="checkbox" value="AI 健康管理 (減重/飲食)" /> 🥗 AI 健康管理 (減重/飲食)
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" value="AI 繪圖創作 (頭貼/商品圖/Line貼圖)" /> 🎨 AI 繪圖創作 (頭貼/商品圖/Line貼圖)
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" value="AI 網拍經營 (選品+上架+客服)" /> 🛒 AI 網拍經營 (選品+上架+客服)
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" value="AI 生命靈數 (命盤解讀/流年運勢)" /> 🔮 AI 生命靈數 (命盤解讀/流年運勢)
+                  </label>
+                </div>
+              </div>
+
+              <!-- 6. Shop.com 興趣 -->
+              <div class="form-group">
+                <label class="form-label">6. 今天的「消費轉收入」概念，您有興趣進一步了解嗎？</label>
+                <select id="shopcom-interest" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="非常有興趣，想了解如何開始">🤩 非常有興趣，想了解如何開始</option>
+                  <option value="有點興趣，想先聽聽看制度">🤔 有點興趣，想先聽聽看制度</option>
+                  <option value="只想當消費者，賺現金回饋就好">🛒 只想當消費者，賺現金回饋就好</option>
+                  <option value="目前先專注學習 AI 技能就好">💻 目前先專注學習 AI 技能就好</option>
+                </select>
+              </div>
+
+              <!-- 7. 推薦意願 -->
+              <div class="form-group">
+                <label class="form-label">7. 您會推薦朋友來參加這個工作坊嗎？</label>
+                <div class="rating-group-10" id="rating-recommend">
+                  <button type="button" class="rating-btn-10" data-value="1">1</button>
+                  <button type="button" class="rating-btn-10" data-value="2">2</button>
+                  <button type="button" class="rating-btn-10" data-value="3">3</button>
+                  <button type="button" class="rating-btn-10" data-value="4">4</button>
+                  <button type="button" class="rating-btn-10" data-value="5">5</button>
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--ink-soft); margin-top: 6px;">1=絕對不會 ~ 5=一定會</div>
+              </div>
+            </div>
+
+            <!-- ===== 夥伴版題目 ===== -->
+            <div id="member-questions" style="display: none;">
+              <!-- 1. 流程順暢度 -->
+              <div class="form-group">
+                <label class="form-label">1. 今日活動流程順暢度</label>
+                <select id="flow-rating" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="5">5 - 非常順暢</option>
+                  <option value="4">4 - 順暢</option>
+                  <option value="3">3 - 普通</option>
+                  <option value="2">2 - 有些卡頓</option>
+                  <option value="1">1 - 需要改進</option>
+                </select>
+              </div>
+
+              <!-- 2. 吸收程度 -->
+              <div class="form-group">
+                <label class="form-label">2. 您覺得自己今天對課程內容的吸收程度？ (1-5分)</label>
+                <div class="rating-group-10" id="rating-absorption-member">
+                  <button type="button" class="rating-btn-10" data-value="1">1</button>
+                  <button type="button" class="rating-btn-10" data-value="2">2</button>
+                  <button type="button" class="rating-btn-10" data-value="3">3</button>
+                  <button type="button" class="rating-btn-10" data-value="4">4</button>
+                  <button type="button" class="rating-btn-10" data-value="5">5</button>
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--ink-soft); margin-top: 6px;">1=完全聽不懂 ~ 5=收穫滿滿，完全掌握</div>
+              </div>
+
+              <!-- 3. AI 銜接 Shop.com 轉場 -->
+              <div class="form-group">
+                <label class="form-label">3. 關於「AI 技能」銜接 shop.com 事業」的轉場，您覺得？</label>
+                <select id="transition-feedback" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="很自然，朋友不會覺得突兀">很自然，朋友不會覺得突兀</option>
+                  <option value="還可以，但可以更順一點">還可以，但可以更順一點</option>
+                  <option value="有點生硬，朋友可能會覺得在推銷">有點生硬，朋友可能會覺得在推銷</option>
+                </select>
+              </div>
+
+              <!-- 4. 新朋友反應 -->
+              <div class="form-group">
+                <label class="form-label">4. 您觀察到您帶來的新朋友，反應最熱烈的是？</label>
+                <input type="text" id="guest-reaction" class="form-input" placeholder="例如：手繪地圖時大家都在驚呼..." />
+              </div>
+
+              <!-- 5. 下次建議 -->
+              <div class="form-group">
+                <label class="form-label">5. 下次舉辦的建議：</label>
+                <textarea id="next-suggestion" class="form-textarea" rows="3" placeholder="場地、時間、內容等任何建議..."></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; padding: 14px; font-size: 1rem; background: var(--sunset); color: #fff; border: 0; box-shadow: var(--shadow-button); border-radius: 12px; margin-top: 24px; cursor: pointer; font-weight: 800;" id="submit-btn">
+              📤 提交問卷
+            </button>
+          </form>
+        </div>
       </div>
-    </section>
-  </section>
+    </div>
 
-  <section class="asset-grid" style="margin-top: 32px;">
-    <AssetPlaceholder title="旅客意見表 QR Code" text="正式活動前替換成問卷工具的 QR Code。" type="QR Code" />
-    <AssetPlaceholder title="LINE 官方管家 QR Code" text="正式活動前替換成官方帳號加入 QR Code。" type="QR Code" />
-    <ImageCard src="/images/survey/workbook-preview-01.webp" alt="數位講義與 PDF 小冊預覽，呈現課後領取成果" title="講義領取預覽" text="完成問卷與 LINE 任務後，可依指引取得數位導覽與隨身 PDF。" />
-  </section>
-
-  <section class="card" style="margin-top:32px;">
-    <p class="eyebrow">📖 手冊形式說明</p>
-    <h2>主體是數位導覽，PDF 是隨身小冊</h2>
-    <p>數位導覽（網頁）可保留一鍵複製提示詞、操作影片、更新版流程與成果明信片牆；隨身小冊（PDF）則適合快速回顧重點。</p>
-  </section>
-
-  <CompleteTaskButton 
-    taskId="survey-complete" 
-    buttonLabel="我已完成問卷與講義領取流程"
-    successMessage="恭喜！你已完成所有流程，講義已在 LINE 等著你。"
-  />
+    <!-- Success Screen -->
+    <div class="success-screen" id="success-screen" style="display: none; text-align: center;">
+      <div class="card" style="background: #fff; border: 1px solid var(--st-border, rgba(23,33,61,0.1)); border-radius: var(--radius-md, 16px); box-shadow: var(--shadow-card);">
+        <div class="card-body" style="padding: 48px 24px;">
+          <div style="font-size: 4.5rem; margin-bottom: 16px;">🎉</div>
+          <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--night); margin: 0 0 12px 0;">感謝您的寶貴回饋！</h2>
+          <p style="color: var(--ink-soft); margin: 0 0 24px 0; font-size: 1rem;">您的問卷已成功送出，非常感謝您的支持。</p>
+          <a href="/" class="btn" style="background: var(--ocean); color: #fff; border: 0; padding: 12px 28px; border-radius: 999px; font-weight: 800;">🏠 回到首頁</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <CTASection 
     title="下段旅程見" 
@@ -82,3 +215,293 @@ import { stationRoles } from '../content/journeyGuide';
     secondaryHref={siteConfig.featureFlags.enableGallery ? "/gallery" : "/sticker-lab"} 
   />
 </WorkshopLayout>
+
+<style>
+  .rating-group-10 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .rating-btn-10 {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #e8e8e8;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--night);
+    transition: all 0.2s ease;
+  }
+
+  .rating-btn-10:hover {
+    border-color: var(--sunset);
+    background: #fff5f2;
+  }
+
+  .rating-btn-10.selected {
+    background: var(--sunset) !important;
+    color: #fff !important;
+    border-color: var(--sunset) !important;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 122, 92, 0.35);
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #fbfbfb;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: all 0.25s ease;
+  }
+
+  .checkbox-item:hover {
+    background: #fff5f2;
+    border-color: rgba(255, 122, 92, 0.4);
+  }
+
+  .checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--sunset);
+    cursor: pointer;
+  }
+
+  .checkbox-item:has(input[type="checkbox"]:checked) {
+    background: #fff5f2;
+    border-color: var(--sunset);
+    font-weight: 700;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--night);
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    border: 2px solid #e8e8e8;
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: var(--night);
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: var(--sunset);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(255, 122, 92, 0.15);
+    outline: none;
+  }
+
+  .role-switcher {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.12);
+    padding: 3px;
+    border-radius: 50px;
+  }
+
+  .role-switcher button {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .role-switcher button.active {
+    background: #fff;
+    color: var(--sunset);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<script>
+  import { markTaskComplete, isTaskComplete } from '../utils/progressStore';
+  import { siteConfig } from '../content/siteConfig';
+
+  let currentRole = 'guest';
+  const ratings: Record<string, number> = {
+    overall: 0,
+    recommend: 0,
+    absorptionGuest: 0,
+    absorptionMember: 0
+  };
+
+  const btnGuest = document.getElementById('role-guest') as HTMLButtonElement;
+  const btnMember = document.getElementById('role-member') as HTMLButtonElement;
+  const guestQuestions = document.getElementById('guest-questions') as HTMLDivElement;
+  const memberQuestions = document.getElementById('member-questions') as HTMLDivElement;
+  const surveyTitle = document.getElementById('survey-title') as HTMLHeadingElement;
+  const surveySubtitle = document.getElementById('survey-subtitle') as HTMLParagraphElement;
+  const inviterInput = document.getElementById('inviter') as HTMLInputElement;
+  const surveyForm = document.getElementById('survey-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+  function switchRole(role: 'guest' | 'member') {
+    currentRole = role;
+    btnGuest.classList.toggle('active', role === 'guest');
+    btnMember.classList.toggle('active', role === 'member');
+
+    if (role === 'guest') {
+      surveyTitle.textContent = '🌸 新朋友體驗回饋';
+      surveySubtitle.textContent = '請完成問卷以提交您的想法！';
+      guestQuestions.style.display = 'block';
+      memberQuestions.style.display = 'none';
+      inviterInput.setAttribute('required', '');
+    } else {
+      surveyTitle.textContent = '🤝 夥伴流程優化回饋';
+      surveySubtitle.textContent = '感謝您的協助，讓活動越來越好！';
+      guestQuestions.style.display = 'none';
+      memberQuestions.style.display = 'block';
+      inviterInput.removeAttribute('required');
+    }
+  }
+
+  const handleGuestClick = () => switchRole('guest');
+  const handleMemberClick = () => switchRole('member');
+
+  btnGuest?.addEventListener('click', handleGuestClick);
+  btnMember?.addEventListener('click', handleMemberClick);
+
+  // Rating buttons logic
+  document.querySelectorAll('.rating-group-10').forEach(group => {
+    group.querySelectorAll('.rating-btn-10').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const val = parseInt((btn as HTMLButtonElement).dataset.value || '0');
+        const groupId = group.id.replace('rating-', '');
+
+        let targetKey = groupId;
+        if (groupId === 'absorption-guest') targetKey = 'absorptionGuest';
+        if (groupId === 'absorption-member') targetKey = 'absorptionMember';
+
+        ratings[targetKey] = val;
+
+        group.querySelectorAll('.rating-btn-10').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+  });
+
+  function getSelectedInterests() {
+    const checkboxes = document.querySelectorAll('#ai-interests input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map(cb => (cb as HTMLInputElement).value).join(', ');
+  }
+
+  // 頁面載入時檢查是否已填寫過問卷
+  const initPage = () => {
+    if (isTaskComplete('survey-complete')) {
+      const formScreen = document.getElementById('form-screen');
+      const successScreen = document.getElementById('success-screen');
+      if (formScreen && successScreen) {
+        formScreen.style.display = 'none';
+        successScreen.style.display = 'block';
+      }
+    }
+  };
+
+  initPage();
+
+  surveyForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    const origText = submitBtn.textContent;
+    submitBtn.textContent = '⏳ 提交中...';
+
+    const data: Record<string, string | number> = {
+      timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }),
+      role: currentRole === 'guest' ? '新朋友' : '夥伴',
+      name: (document.getElementById('name') as HTMLInputElement).value,
+      inviter: currentRole === 'guest' ? (document.getElementById('inviter') as HTMLInputElement).value : '',
+      ratingAbsorptionGuest: currentRole === 'guest' ? ratings.absorptionGuest : '',
+      ratingOverall: currentRole === 'guest' ? ratings.overall : '',
+      wowMoment: currentRole === 'guest' ? (document.getElementById('wow-moment') as HTMLSelectElement).value : '',
+      aiInterests: currentRole === 'guest' ? getSelectedInterests() : '',
+      shopcomInterest: currentRole === 'guest' ? (document.getElementById('shopcom-interest') as HTMLSelectElement).value : '',
+      ratingRecommend: currentRole === 'guest' ? ratings.recommend : '',
+      flowRating: currentRole === 'member' ? (document.getElementById('flow-rating') as HTMLSelectElement).value : '',
+      ratingAbsorptionMember: currentRole === 'member' ? ratings.absorptionMember : '',
+      transitionFeedback: currentRole === 'member' ? (document.getElementById('transition-feedback') as HTMLSelectElement).value : '',
+      guestReaction: currentRole === 'member' ? (document.getElementById('guest-reaction') as HTMLInputElement).value : '',
+      nextSuggestion: currentRole === 'member' ? (document.getElementById('next-suggestion') as HTMLTextAreaElement).value : '',
+    };
+
+    if (!siteConfig.surveyApiUrl) {
+      alert('尚未設定 Google Sheets API 連結，請先參考說明設定。');
+      submitBtn.disabled = false;
+      submitBtn.textContent = origText;
+      return;
+    }
+
+    try {
+      const params = new URLSearchParams();
+      for (const key in data) {
+        params.append(key, String(data[key]));
+      }
+
+      await fetch(siteConfig.surveyApiUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params.toString()
+      });
+
+      // 標記任務完成
+      markTaskComplete('survey-complete');
+
+      const formScreen = document.getElementById('form-screen');
+      const successScreen = document.getElementById('success-screen');
+      if (formScreen && successScreen) {
+        formScreen.style.display = 'none';
+        successScreen.style.display = 'block';
+      }
+    } catch (err) {
+      alert('提交失敗，請檢查網路連線後再試。');
+      console.error(err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = origText;
+    }
+  });
+</script>
