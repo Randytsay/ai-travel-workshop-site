@@ -1,4 +1,7 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+
 const { title, text, type = '圖片', hint = '', filename = '' } = Astro.props;
 
 const typeMeta = {
@@ -8,20 +11,78 @@ const typeMeta = {
 } as const;
 
 const meta = typeMeta[type as keyof typeof typeMeta] ?? { icon: '🧩', ratio: '4:3', usage: '可放活動素材', cssClass: 'asset-misc' };
+
+// 檢測 public 資料夾下是否存在該圖片檔案
+let hasRealFile = false;
+if (type === '圖片' && filename && filename.startsWith('/')) {
+  try {
+    const localPath = path.join(process.cwd(), 'public', filename);
+    if (fs.existsSync(localPath)) {
+      hasRealFile = true;
+    }
+  } catch (e) {
+    hasRealFile = false;
+  }
+}
 ---
-<!-- 正式上線前，請將此 <article> 替換為真實的 <img>, <video> 或 iframe 元件 -->
-<article class={`asset-placeholder media-slot-card ${meta.cssClass}`} data-asset-type={type}>
-  <div class="media-slot-head">
-    <p class="eyebrow">{type}</p>
-    <span class="slot-icon" aria-hidden="true">{meta.icon}</span>
-  </div>
-  <div class="media-ratio-box">
-    <div class="media-ratio-inner">
-      <strong>{meta.ratio}</strong>
-      <small>{hint || meta.usage}</small>
+<article class={`asset-placeholder media-slot-card ${meta.cssClass} ${hasRealFile ? 'has-real-file' : ''}`} data-asset-type={type}>
+  {!hasRealFile && (
+    <div class="media-slot-head">
+      <p class="eyebrow">{type}</p>
+      <span class="slot-icon" aria-hidden="true">{meta.icon}</span>
     </div>
-  </div>
-  <h3>{title}</h3>
-  <p>{text}</p>
-  {filename && <p class="asset-filename">建議檔名：<code>{filename}</code></p>}
+  )}
+  
+  {hasRealFile ? (
+    <div class="image-frame-wrap">
+      <img src={filename} alt={title} loading="lazy" decoding="async" class="step-real-image" />
+    </div>
+  ) : (
+    <>
+      <div class="media-ratio-box">
+        <div class="media-ratio-inner">
+          <strong>{meta.ratio}</strong>
+          <small>{hint || meta.usage}</small>
+        </div>
+      </div>
+      <h3>{title}</h3>
+      <p>{text}</p>
+      {filename && <p class="asset-filename">建議檔名：<code>{filename}</code></p>}
+    </>
+  )}
 </article>
+
+<style>
+  .asset-placeholder.has-real-file {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+  .image-frame-wrap {
+    width: 100%;
+    max-height: 520px;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    margin: 8px 0 0;
+    border: 1px solid var(--line);
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-soft);
+  }
+  .step-real-image {
+    max-width: 100%;
+    max-height: 520px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.24s ease;
+    cursor: zoom-in;
+  }
+  .asset-placeholder:hover .step-real-image {
+    transform: scale(1.02);
+  }
+</style>

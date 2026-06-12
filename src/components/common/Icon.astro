@@ -1,0 +1,78 @@
+---
+const { name, size = 20, class: className = "" } = Astro.props;
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  fill-opacity="0.12"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`travel-icon travel-icon-${name} ${className}`}
+>
+  {name === 'plane' && (
+    <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" />
+  )}
+  
+  {name === 'compass' && (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </>
+  )}
+  
+  {name === 'map' && (
+    <path d="M3 6L9 3L15 6L21 3V18L15 21L9 18L3 21V6Z M9 3V18 M15 6V21" />
+  )}
+  
+  {name === 'camera' && (
+    <>
+      <path d="M23 19C23 20.1 22.1 21 21 21H3C1.9 21 1 20.1 1 19V8C1 6.9 1.9 6 3 6H7L9 3H15L17 6H21C22.1 6 23 6.9 23 8V19Z" />
+      <circle cx="12" cy="13" r="4" />
+    </>
+  )}
+  
+  {name === 'luggage' && (
+    <>
+      <path d="M6 9H18V20C18 21.1 17.1 22 16 22H8C6.9 22 6 21.1 6 20V9Z" />
+      <path d="M9 9V4C9 3.4 9.4 3 10 3H14C14.6 3 15 3.4 15 4V9" />
+      <line x1="10" y1="9" x2="10" y2="22" />
+      <line x1="14" y1="9" x2="14" y2="22" />
+    </>
+  )}
+  
+  {name === 'crown' && (
+    <path d="M2 4L5 12L12 6L19 12L22 4L18 20H6L2 4Z" />
+  )}
+  
+  {name === 'sparkles' && (
+    <>
+      <path d="M12 3C12 3 13 8 13 8C13 8 18 9 18 9C18 9 13 10 13 10C13 10 12 15 12 15C12 15 11 10 11 10C11 10 6 9 6 9C6 9 11 8 11 8C11 8 12 3 12 3Z" />
+      <path d="M5 3C5 3 5.5 5 5.5 5C5.5 5 7.5 5.5 7.5 5.5C7.5 5.5 5.5 6 5.5 6C5.5 6 5 8 5 8C5 8 4.5 6 4.5 6C4.5 6 2.5 5.5 2.5 5.5C2.5 5.5 4.5 5 4.5 5C4.5 5 5 3 5 3Z" opacity="0.6" />
+      <path d="M19 17C19 17 19.3 18.3 19.3 18.3C19.3 18.3 20.7 18.7 20.7 18.7C20.7 18.7 19.3 19 19.3 19C19.3 19 19 20.3 19 20.3C19 20.3 18.7 19 18.7 19C18.7 19 17.3 18.7 17.3 18.7C17.3 18.7 18.7 18.3 18.7 18.3C18.7 18.3 19 17 19 17Z" opacity="0.8" />
+    </>
+  )}
+  
+  {name === 'check' && (
+    <path d="M20 6L9 17L4 12" />
+  )}
+  
+  {name === 'book' && (
+    <>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    </>
+  )}
+</svg>
+
+<style>
+  .travel-icon {
+    display: inline-block;
+    vertical-align: middle;
+    transition: transform 0.2s ease, stroke-width 0.2s ease;
+  }
+</style>

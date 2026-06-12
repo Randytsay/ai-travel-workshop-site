@@ -15,34 +15,40 @@ export const setupSummary = [
 
 export const iosSteps = [
   {
-    title: '確認 Apple 帳號狀態',
-    text: '先確認沒有未結束的訂閱、預購、租借或帳戶餘額。Apple 官方說明指出，這些項目可能會影響你更改國家或地區。',
-    shot: '設定 App > 你的姓名 > 媒體與購買項目，拍下進入帳號設定前的畫面。',
+    title: '打開 Apple ID 設定',
+    text: '首先我們打開 iPhone 的「設定」，點擊上方的「Apple ID」＞「媒體與購買項目」。',
+    shot: '媒體與購買項目選單',
     filename: 'ios-region-01-account.webp'
   },
   {
-    title: '進入國家 / 地區',
-    text: '打開「設定」App，點自己的姓名，進入「媒體與購買項目」，選「檢視帳號」，再點「國家 / 地區」。',
-    shot: '拍「媒體與購買項目」與「國家 / 地區」兩張截圖。',
-    filename: 'ios-region-02-country.webp'
+    title: '進入檢視帳號',
+    text: '接下來點選「檢視帳號」，進行驗證或輸入解鎖密碼，再按下「國家或地區」的選項。',
+    shot: '進入國家與地區畫面',
+    filename: 'ios-region-02-country.jpg'
   },
   {
-    title: '切換成中國大陸',
-    text: '選「更改國家或地區」，找到「中國大陸」，同意條款後依畫面填寫付款方式與帳單地址。若只是短期上課使用，建議先準備一個教學用 Apple 帳號。',
-    shot: '拍「中國大陸」選項與條款同意頁。注意不要露出完整個資。',
-    filename: 'ios-region-03-china-mainland.webp'
+    title: '切換國家或地區',
+    text: '按下「更改國家或地區」＞「中國大陸」，並確認條款沒問題後，點選「同意」。',
+    shot: '同意條款與選擇中國大陸',
+    filename: 'ios-region-03-china-mainland.jpg'
   },
   {
-    title: '下載即夢AI與抖音',
-    text: '回到 App Store，搜尋「即夢AI」與「抖音」。即夢AI 的中國大陸 App Store 頁面列出圖片創作、影片創作與「做同款」等功能，目前頁面也標示僅適用 iPhone。',
-    shot: '拍 App Store 搜尋結果、即夢AI 下載頁、抖音下載頁。',
-    filename: 'ios-download-04-app-store.webp'
+    title: '填寫付款與郵編資訊',
+    text: '接下來我們在「付款方式」的地方選擇「無」，下方的「郵政編碼」請任意輸入「6位數字」，其他必填項目皆不必提供真實資訊；輸入好點選「下一頁」。',
+    shot: '付款方式選無，輸入六位郵政編碼',
+    filename: 'ios-region-04-billing.jpg'
   },
   {
-    title: '用手機號登入',
-    text: '開啟即夢AI與抖音，選手機號登入，國碼可依學員手機號碼所在地選擇，輸入簡訊驗證碼完成登入。',
-    shot: '拍登入方式選擇頁與國碼選擇頁，驗證碼畫面請遮住號碼。',
-    filename: 'ios-login-05-phone.webp'
+    title: '無法選擇「無」的排除方法',
+    text: '而有些人的付款方式無法選擇「無」，可能是因為你目前有購買紀錄尚未付清款項（例如：iCloud 雲端空間），才會遭到系統拒絕；沒問題的話，只要按下「完成」就OK了！',
+    shot: '付款方式若無「無」選項的排除提示',
+    filename: 'ios-region-05-no-none.jpg'
+  },
+  {
+    title: '跨區下載抖音與即夢',
+    text: '最後前往 App Store，就會發現介面變成簡體中文，代表你成功跨區了！只要搜尋「抖音」、「即夢」，就可以下載陸版的 App 啦！',
+    shot: 'App Store 中搜尋並下載即夢與抖音',
+    filename: ''
   }
 ];
 

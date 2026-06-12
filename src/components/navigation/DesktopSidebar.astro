@@ -1,11 +1,32 @@
 ---
 import { navItems } from '../../content/navigation';
 import ProgressTracker from '../progress/ProgressTracker.astro';
+import Icon from '../common/Icon.astro';
 const { currentPath } = Astro.props;
+
+const getIconForPath = (path: string) => {
+  switch (path) {
+    case '/': return 'plane';
+    case '/prep': return 'map';
+    case '/ai-basics': return 'sparkles';
+    case '/jimeng-short-video': return 'camera';
+    case '/doll-maker': return 'luggage';
+    case '/travel-planner': return 'compass';
+    case '/notebooklm': return 'book';
+    case '/sticker-lab': return 'sparkles';
+    case '/sticker-crop-tool': return 'camera';
+    case '/voting': return 'crown';
+    case '/gallery': return 'camera';
+    case '/survey': return 'check';
+    default: return 'plane';
+  }
+};
 ---
 <aside class="sidebar" data-sidebar>
   <div class="sidebar-brand">
-    <span class="brand-mark" aria-hidden="true">AI</span>
+    <div class="brand-logo-wrap">
+      <Icon name="plane" size={24} className="brand-logo-icon" />
+    </div>
     <div class="sidebar-title">
       <h3>AI 旅遊規劃師</h3>
       <p>Workshop Route</p>
@@ -39,8 +60,11 @@ const { currentPath } = Astro.props;
         href={item.path}
         title={item.label}
       >
-        <span class="nav-step">{String(index + 1).padStart(2, '0')}</span>
+        <span class="nav-icon-wrap">
+          <Icon name={getIconForPath(item.path)} size={18} />
+        </span>
         <span class="nav-label">{item.label}</span>
+        <span class="nav-index-hint">{String(index + 1).padStart(2, '0')}</span>
       </a>
     ))}
   </div>
@@ -50,64 +74,124 @@ const { currentPath } = Astro.props;
   </div>
 </aside>
 
+<style>
+  .brand-logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+    box-shadow: var(--shadow-soft);
+    color: var(--page-accent, var(--sunset));
+  }
+  .brand-logo-icon {
+    animation: float 4s ease-in-out infinite;
+  }
+  .nav-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: var(--ink-soft);
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .nav-link.active .nav-icon-wrap {
+    color: var(--page-accent, var(--sunset));
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-soft);
+  }
+  .nav-link:hover .nav-icon-wrap {
+    color: var(--page-accent, var(--sunset));
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .nav-index-hint {
+    margin-left: auto;
+    font-size: 0.72rem;
+    font-weight: 800;
+    opacity: 0.35;
+    color: var(--night);
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(3deg); }
+  }
+</style>
+
 <script>
-  const SIDEBAR_MODE_KEY = 'workshop_sidebar_mode';
-  type SidebarMode = 'auto' | 'pinned';
+  const initSidebar = () => {
+    const SIDEBAR_MODE_KEY = 'workshop_sidebar_mode';
+    type SidebarMode = 'auto' | 'pinned';
 
-  const sidebar = document.querySelector('[data-sidebar]') as HTMLElement | null;
-  const expandButton = document.querySelector('[data-sidebar-expand]') as HTMLButtonElement | null;
-  const pinButton = document.querySelector('[data-sidebar-pin]') as HTMLButtonElement | null;
-  const body = document.body;
+    const sidebar = document.querySelector('[data-sidebar]') as HTMLElement | null;
+    const expandButton = document.querySelector('[data-sidebar-expand]') as HTMLButtonElement | null;
+    const pinButton = document.querySelector('[data-sidebar-pin]') as HTMLButtonElement | null;
+    const body = document.body;
 
-  const getMode = (): SidebarMode => {
-    try {
-      return localStorage.getItem(SIDEBAR_MODE_KEY) === 'pinned' ? 'pinned' : 'auto';
-    } catch {
-      return 'auto';
-    }
+    if (!sidebar) return;
+
+    const getMode = (): SidebarMode => {
+      try {
+        return localStorage.getItem(SIDEBAR_MODE_KEY) === 'pinned' ? 'pinned' : 'auto';
+      } catch {
+        return 'auto';
+      }
+    };
+
+    const saveMode = (mode: SidebarMode) => {
+      try {
+        localStorage.setItem(SIDEBAR_MODE_KEY, mode);
+      } catch {
+        // Keep the visual toggle working even if storage is blocked.
+      }
+    };
+
+    const setExpanded = (expanded: boolean) => {
+      body.classList.toggle('sidebar-expanded', expanded);
+      expandButton?.setAttribute('aria-expanded', String(expanded));
+      if (expandButton) expandButton.setAttribute('aria-label', expanded ? '收合側邊欄' : '展開側邊欄');
+    };
+
+    const applyMode = (mode: SidebarMode) => {
+      body.classList.toggle('sidebar-pinned', mode === 'pinned');
+      body.classList.toggle('sidebar-auto', mode === 'auto');
+      pinButton?.setAttribute('aria-pressed', String(mode === 'pinned'));
+      if (pinButton) {
+        const pinLabel = pinButton.querySelector('.pin-label');
+        if (pinLabel) {
+          pinLabel.textContent = mode === 'pinned' ? '固定中' : '固定顯示';
+        }
+      }
+      setExpanded(mode === 'pinned');
+    };
+
+    // Apply mode initially
+    applyMode(getMode());
+
+    // Re-bind listeners
+    expandButton?.addEventListener('click', () => {
+      setExpanded(!body.classList.contains('sidebar-expanded'));
+    });
+
+    pinButton?.addEventListener('click', () => {
+      const nextMode: SidebarMode = getMode() === 'pinned' ? 'auto' : 'pinned';
+      saveMode(nextMode);
+      applyMode(nextMode);
+    });
+
+    sidebar.addEventListener('mouseenter', () => {
+      if (getMode() === 'auto') setExpanded(true);
+    });
+
+    sidebar.addEventListener('mouseleave', () => {
+      if (getMode() === 'auto') setExpanded(false);
+    });
   };
 
-  const saveMode = (mode: SidebarMode) => {
-    try {
-      localStorage.setItem(SIDEBAR_MODE_KEY, mode);
-    } catch {
-      // Keep the visual toggle working even if storage is blocked.
-    }
-  };
-
-  const setExpanded = (expanded: boolean) => {
-    body.classList.toggle('sidebar-expanded', expanded);
-    expandButton?.setAttribute('aria-expanded', String(expanded));
-    if (expandButton) expandButton.setAttribute('aria-label', expanded ? '收合側邊欄' : '展開側邊欄');
-  };
-
-  const applyMode = (mode: SidebarMode) => {
-    body.classList.toggle('sidebar-pinned', mode === 'pinned');
-    body.classList.toggle('sidebar-auto', mode === 'auto');
-    pinButton?.setAttribute('aria-pressed', String(mode === 'pinned'));
-    if (pinButton) {
-      pinButton.querySelector('.pin-label')!.textContent = mode === 'pinned' ? '固定中' : '固定顯示';
-    }
-    setExpanded(mode === 'pinned');
-  };
-
-  applyMode(getMode());
-
-  expandButton?.addEventListener('click', () => {
-    setExpanded(!body.classList.contains('sidebar-expanded'));
-  });
-
-  pinButton?.addEventListener('click', () => {
-    const nextMode: SidebarMode = getMode() === 'pinned' ? 'auto' : 'pinned';
-    saveMode(nextMode);
-    applyMode(nextMode);
-  });
-
-  sidebar?.addEventListener('mouseenter', () => {
-    if (getMode() === 'auto') setExpanded(true);
-  });
-
-  sidebar?.addEventListener('mouseleave', () => {
-    if (getMode() === 'auto') setExpanded(false);
-  });
+  // Run on page load
+  document.addEventListener('astro:page-load', initSidebar);
 </script>

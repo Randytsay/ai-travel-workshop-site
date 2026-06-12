@@ -3,6 +3,8 @@ import '../styles/theme.css';
 import DesktopSidebar from '../components/navigation/DesktopSidebar.astro';
 import MobileBottomNav from '../components/navigation/MobileBottomNav.astro';
 import ProgressTracker from '../components/progress/ProgressTracker.astro';
+import Icon from '../components/common/Icon.astro';
+import { ClientRouter } from 'astro:transitions';
 import { navItems } from '../content/navigation';
 const { title, currentPath, presentationMode = false } = Astro.props;
 const currentIndex = navItems.findIndex((item) => item.path === currentPath);
@@ -19,11 +21,12 @@ const nextItem = currentIndex >= 0 && currentIndex < navItems.length - 1 ? navIt
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
+    <ClientRouter />
   </head>
-  <body class:list={[presentationMode && 'presentation-body']}>
+  <body class:list={[presentationMode && 'presentation-body']} data-page={currentPath}>
     {!presentationMode && (
       <script is:inline>
-        (() => {
+        const updateSidebarMode = () => {
           try {
             const pinned = localStorage.getItem('workshop_sidebar_mode') === 'pinned';
             document.body.classList.toggle('sidebar-pinned', pinned);
@@ -32,7 +35,9 @@ const nextItem = currentIndex >= 0 && currentIndex < navItems.length - 1 ? navIt
           } catch {
             document.body.classList.add('sidebar-auto');
           }
-        })();
+        };
+        updateSidebarMode();
+        document.addEventListener('astro:after-swap', updateSidebarMode);
       </script>
     )}
     <div class:list={['shell', presentationMode && 'presentation-shell']}>
@@ -44,9 +49,12 @@ const nextItem = currentIndex >= 0 && currentIndex < navItems.length - 1 ? navIt
               <ProgressTracker />
             </div>
             <nav class="route-compass" aria-label="目前旅程位置">
-              <div>
-                <span class="route-kicker">現在位置</span>
-                <strong>{currentItem.label}</strong>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <Icon name="compass" size={24} className="compass-icon" />
+                <div>
+                  <span class="route-kicker">現在位置</span>
+                  <strong>{currentItem.label}</strong>
+                </div>
               </div>
               <div class="route-actions">
                 {previousItem && <a class="route-link" href={previousItem.path}>上一站</a>}
@@ -59,62 +67,170 @@ const nextItem = currentIndex >= 0 && currentIndex < navItems.length - 1 ? navIt
       </main>
     </div>
     {!presentationMode && <MobileBottomNav currentPath={currentPath} />}
+    <div id="global-lightbox" class="lightbox-overlay" aria-hidden="true">
+      <button class="lightbox-close" aria-label="關閉圖片">&times;</button>
+      <img class="lightbox-img" src="" alt="" />
+    </div>
     <style>
       .mobile-progress-wrap { display: none; margin-bottom: 16px; }
       @media (max-width: 900px) {
         .mobile-progress-wrap { display: block; }
       }
+      .compass-icon {
+        color: var(--page-accent, var(--sunset));
+        animation: spin-slow 20s linear infinite;
+      }
+      @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
     </style>
     <script>
-      const toast = document.createElement('div');
-      toast.className = 'copy-toast';
-      toast.setAttribute('role', 'status');
-      document.body.appendChild(toast);
+      let toast: HTMLDivElement;
       let toastTimer: number | undefined;
+
       const showToast = (message: string) => {
+        if (!toast) return;
         toast.textContent = message;
         toast.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = window.setTimeout(() => toast.classList.remove('show'), 1400);
       };
 
-      document.querySelectorAll('.copy-btn').forEach((b) => {
-        const btn = b as HTMLElement;
-        btn.addEventListener('click', async () => {
-          const text = btn.dataset.text || '';
-          const raw = btn.textContent || '';
-          let copied = false;
+      const initLayoutScripts = () => {
+        // Ensure toast exists
+        const existingToast = document.querySelector('.copy-toast') as HTMLDivElement | null;
+        if (!existingToast) {
+          toast = document.createElement('div');
+          toast.className = 'copy-toast';
+          toast.setAttribute('role', 'status');
+          document.body.appendChild(toast);
+        } else {
+          toast = existingToast;
+        }
 
-          try {
-            if (navigator.clipboard && window.isSecureContext) {
-              await navigator.clipboard.writeText(text);
-              copied = true;
+        // Copy button listeners
+        document.querySelectorAll('.copy-btn').forEach((b) => {
+          const btn = b as HTMLElement;
+          if (btn.dataset.hasListener) return;
+          btn.dataset.hasListener = 'true';
+
+          btn.addEventListener('click', async () => {
+            const text = btn.dataset.text || '';
+            const btnTextEl = btn.querySelector('.btn-text') as HTMLElement | null;
+            const raw = btnTextEl ? btnTextEl.textContent || '' : btn.textContent || '';
+            let copied = false;
+
+            try {
+              if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+                copied = true;
+              }
+            } catch {
+              copied = false;
             }
-          } catch {
-            copied = false;
-          }
 
-          if (!copied) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.setAttribute('readonly', '');
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            copied = document.execCommand('copy');
-            textarea.remove();
-          }
+            if (!copied) {
+              const textarea = document.createElement('textarea');
+              textarea.value = text;
+              textarea.setAttribute('readonly', '');
+              textarea.style.position = 'fixed';
+              textarea.style.opacity = '0';
+              document.body.appendChild(textarea);
+              textarea.select();
+              copied = document.execCommand('copy');
+              textarea.remove();
+            }
 
-          if (copied) showToast('已複製，可直接貼上使用');
-          btn.textContent = copied ? '已複製' : '請手動複製';
-          btn.classList.toggle('is-copied', copied);
-          setTimeout(() => {
-            btn.textContent = raw;
-            btn.classList.remove('is-copied');
-          }, 1200);
+            if (copied) {
+              showToast('已複製，可直接貼上使用');
+              // Trigger border glow animation on parent PromptCard
+              const card = btn.closest('.prompt-card');
+              if (card) {
+                card.classList.add('is-copied-active');
+                setTimeout(() => card.classList.remove('is-copied-active'), 1200);
+              }
+            }
+            if (btnTextEl) {
+              btnTextEl.textContent = copied ? '已複製' : '請手動複製';
+            } else {
+              btn.textContent = copied ? '已複製' : '請手動複製';
+            }
+            btn.classList.toggle('is-copied', copied);
+            setTimeout(() => {
+              if (btnTextEl) {
+                btnTextEl.textContent = raw;
+              } else {
+                btn.textContent = raw;
+              }
+              btn.classList.remove('is-copied');
+            }, 1200);
+          });
         });
-      });
+
+        // Scroll Reveal animation setup
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-active');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }
+        );
+
+        document.querySelectorAll('.scroll-reveal, .card').forEach((el) => {
+          el.classList.add('scroll-reveal');
+          observer.observe(el);
+        });
+
+        // Lightbox script
+        const lightbox = document.getElementById('global-lightbox');
+        const lightboxImg = lightbox?.querySelector('.lightbox-img') as HTMLImageElement | null;
+        const lightboxClose = lightbox?.querySelector('.lightbox-close');
+
+        if (lightbox && lightboxImg) {
+          // Listen to clicks on zoomable images
+          document.querySelectorAll('.zoomable-img, .step-real-image').forEach((img) => {
+            const imageEl = img as HTMLImageElement;
+            if (imageEl.dataset.hasZoomListener) return;
+            imageEl.dataset.hasZoomListener = 'true';
+
+            imageEl.addEventListener('click', () => {
+              lightboxImg.src = imageEl.src;
+              lightboxImg.alt = imageEl.alt;
+              lightbox.setAttribute('aria-hidden', 'false');
+            });
+          });
+
+          // Close lightbox
+          const closeLightbox = () => {
+            lightbox.setAttribute('aria-hidden', 'true');
+            setTimeout(() => {
+              lightboxImg.src = '';
+            }, 280);
+          };
+
+          lightboxClose?.addEventListener('click', closeLightbox);
+          lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+          });
+          
+          const escapeListener = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') closeLightbox();
+          };
+          window.addEventListener('keydown', escapeListener);
+          
+          document.addEventListener('astro:before-swap', () => {
+            window.removeEventListener('keydown', escapeListener);
+          }, { once: true });
+        }
+      };
+
+      // Set up on page-load for view-transitions
+      document.addEventListener('astro:page-load', initLayoutScripts);
     </script>
   </body>
 </html>

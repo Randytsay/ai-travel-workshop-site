@@ -1,4 +1,5 @@
 ---
+import Icon from '../common/Icon.astro';
 const { title, platform, prompt, defaultOpen = false } = Astro.props;
 ---
 <details class="prompt-card card" open={defaultOpen}>
@@ -10,5 +11,23 @@ const { title, platform, prompt, defaultOpen = false } = Astro.props;
     <span class="summary-hint">查看提示詞</span>
   </summary>
   <pre>{prompt}</pre>
-  <button class="btn copy-btn" type="button" data-text={prompt}>一鍵複製</button>
+  <button class="btn copy-btn" type="button" data-text={prompt}>
+    <Icon name="sparkles" size={14} style="margin-right: 6px; pointer-events: none;" />
+    <span class="btn-text">一鍵複製</span>
+  </button>
 </details>
+
+<style>
+  .copy-btn {
+    margin-top: 12px;
+    min-height: 40px !important;
+    padding: 8px 16px !important;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-text {
+    pointer-events: none;
+  }
+</style>

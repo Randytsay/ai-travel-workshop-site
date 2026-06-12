@@ -1,7 +1,8 @@
 ---
 const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, successMessage = '太棒了！這項任務已完成。' } = Astro.props;
 ---
-<div class="task-completion-zone" data-task-id={taskId}>
+<div class="task-completion-zone passport-stamp-wrap" data-task-id={taskId}>
+  <div class="passport-stamp" data-passport-stamp>PASSPORT COMPLETED</div>
   <div class="task-status-initial">
     <p class="task-kicker">完成這一站後再前進</p>
     <button class="btn complete-task-btn" type="button">
@@ -26,10 +27,12 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
     margin: 24px 0;
     padding: 26px;
     background: linear-gradient(135deg, #fff, #f7fcff);
-    border: 1px solid rgba(53,183,212,0.22);
+    border: 1px solid var(--page-accent-glow, rgba(53,183,212,0.22));
     border-radius: 16px;
     text-align: center;
     box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: visible;
   }
   .task-kicker {
     margin: 0 0 12px;
@@ -41,14 +44,14 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
     min-width: 200px;
   }
   .link-next {
-    color: var(--coral);
+    color: var(--page-accent, var(--coral));
     font-weight: 700;
     text-decoration: underline;
   }
   .task-status-complete .notice {
     text-align: left;
     background: linear-gradient(145deg, #f0f9ff, #ffffff);
-    border-left: 4px solid var(--sky);
+    border-left: 4px solid var(--page-accent, var(--sky));
     border-radius: 12px;
     padding: 14px 16px;
   }
@@ -57,42 +60,71 @@ const { taskId, buttonLabel = '我已完成這項任務', nextLabel, nextHref, s
 <script>
   import { markTaskComplete, isTaskComplete } from '../../utils/progressStore';
 
-  document.querySelectorAll('.task-completion-zone').forEach((z) => {
-    const zone = z as HTMLElement;
-    const taskId = zone.getAttribute('data-task-id');
-    const initial = zone.querySelector('.task-status-initial');
-    const complete = zone.querySelector('.task-status-complete');
-    const btn = zone.querySelector('.complete-task-btn');
+  const initCompleteTaskButtons = () => {
+    document.querySelectorAll('.task-completion-zone').forEach((z) => {
+      const zone = z as HTMLElement;
+      if (zone.dataset.hasListener) return;
+      zone.dataset.hasListener = 'true';
 
-    const setCompleted = () => {
-      initial?.setAttribute('hidden', 'true');
-      complete?.removeAttribute('hidden');
-      zone.style.borderStyle = 'solid';
-      zone.style.borderColor = 'var(--sky)';
-      zone.style.background = '#f7fcff';
-    };
+      const taskId = zone.getAttribute('data-task-id');
+      const initial = zone.querySelector('.task-status-initial');
+      const complete = zone.querySelector('.task-status-complete');
+      const btn = zone.querySelector('.complete-task-btn');
+      const stamp = zone.querySelector('[data-passport-stamp]') as HTMLElement | null;
 
-    const setIncomplete = () => {
-      initial?.removeAttribute('hidden');
-      complete?.setAttribute('hidden', 'true');
-      zone.style.borderStyle = '';
-      zone.style.borderColor = '';
-      zone.style.background = '';
-    };
+      const setCompleted = (animate = false) => {
+        initial?.setAttribute('hidden', 'true');
+        complete?.removeAttribute('hidden');
+        zone.style.borderStyle = 'solid';
+        zone.style.borderColor = 'var(--page-accent)';
+        zone.style.background = 'rgba(255, 255, 255, 0.9)';
+        
+        if (stamp) {
+          if (animate) {
+            stamp.classList.add('passport-stamp-active');
+          } else {
+            stamp.style.opacity = '0.82';
+            stamp.style.transform = 'rotate(-14deg) scale(1)';
+          }
+        }
+      };
 
-    if (taskId && isTaskComplete(taskId)) {
-      setCompleted();
-    }
+      const setIncomplete = () => {
+        initial?.removeAttribute('hidden');
+        complete?.setAttribute('hidden', 'true');
+        zone.style.borderStyle = '';
+        zone.style.borderColor = '';
+        zone.style.background = '';
+        if (stamp) {
+          stamp.classList.remove('passport-stamp-active');
+          stamp.style.opacity = '';
+          stamp.style.transform = '';
+        }
+      };
 
-    btn?.addEventListener('click', () => {
-      if (taskId) {
-        markTaskComplete(taskId);
-        setCompleted();
-        // Trigger a custom event for local UI feedback if needed
-        window.dispatchEvent(new CustomEvent('task-completed-ui', { detail: { taskId } }));
+      if (taskId && isTaskComplete(taskId)) {
+        setCompleted(false);
       }
-    });
 
-    window.addEventListener('progress-reset', setIncomplete);
-  });
+      btn?.addEventListener('click', () => {
+        if (taskId) {
+          markTaskComplete(taskId);
+          setCompleted(true);
+          window.dispatchEvent(new CustomEvent('task-completed-ui', { detail: { taskId } }));
+        }
+      });
+
+      const handleReset = () => {
+        setIncomplete();
+      };
+      
+      window.addEventListener('progress-reset', handleReset);
+      
+      document.addEventListener('astro:before-swap', () => {
+        window.removeEventListener('progress-reset', handleReset);
+      }, { once: true });
+    });
+  };
+
+  document.addEventListener('astro:page-load', initCompleteTaskButtons);
 </script>
