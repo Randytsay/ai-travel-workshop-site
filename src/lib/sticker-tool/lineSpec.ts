@@ -69,7 +69,6 @@ export function normalizeToLineSpec(
   };
 }
 
-/** 直接從圖片 + crop rect 走到最終 LINE 規格 canvas */
 export function cropAndNormalize(
   img: HTMLImageElement,
   rect: { x: number; y: number; w: number; h: number },
@@ -77,12 +76,24 @@ export function cropAndNormalize(
   bgColor: RgbColor,
   thresh: number,
 ): { canvas: HTMLCanvasElement; wasTrimmed: boolean } {
-  const { canvas: off, ctx: offCtx } = createCanvas(rect.w, rect.h);
-  offCtx.drawImage(img, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+  // 擴展單格裁剪邊界（往外擴張 16px）。去背時，多餘的鄰格背景像素會被去背清除，
+  // 但原本因為超出切割線而被截斷的字體，會因為這 16px 的緩衝而被完美保留！
+  const pad = enableRmbg ? 16 : 0;
+  const imgW = img.naturalWidth;
+  const imgH = img.naturalHeight;
+  const x1 = Math.max(0, rect.x - pad);
+  const y1 = Math.max(0, rect.y - pad);
+  const x2 = Math.min(imgW, rect.x + rect.w + pad);
+  const y2 = Math.min(imgH, rect.y + rect.h + pad);
+  const cw = x2 - x1;
+  const ch = y2 - y1;
+
+  const { canvas: off, ctx: offCtx } = createCanvas(cw, ch);
+  offCtx.drawImage(img, x1, y1, cw, ch, 0, 0, cw, ch);
 
   if (enableRmbg) {
-    removeBackground(offCtx, rect.w, rect.h, bgColor, thresh);
-    const trimmed = autoTrimCanvas(offCtx, rect.w, rect.h, 2);
+    removeBackground(offCtx, cw, ch, bgColor, thresh);
+    const trimmed = autoTrimCanvas(offCtx, cw, ch, 2);
     const result = normalizeToLineSpec(trimmed, bgColor);
     return { canvas: result.canvas, wasTrimmed: true };
   } else {
