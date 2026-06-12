@@ -433,15 +433,7 @@ import { siteConfig } from '../content/siteConfig';
       return Array.from(checkboxes).map(cb => (cb as HTMLInputElement).value).join(', ');
     }
 
-    // 檢查是否已完成
-    if (isTaskComplete('survey-complete')) {
-      const formScreen = document.getElementById('form-screen');
-      const successScreen = document.getElementById('success-screen');
-      if (formScreen && successScreen) {
-        formScreen.style.display = 'none';
-        successScreen.style.display = 'block';
-      }
-    }
+
 
     surveyForm.addEventListener('submit', async (e) => {
       e.preventDefault();
