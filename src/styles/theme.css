@@ -34,6 +34,11 @@
 
 * { box-sizing: border-box; }
 
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body { 
   margin: 0; 
   font-family: "Inter", "Noto Sans TC", system-ui, sans-serif; 
@@ -46,6 +51,8 @@ body {
   min-height: 100vh;
   text-rendering: optimizeLegibility;
   transition: background 0.3s ease;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* Page Specific Themes */
