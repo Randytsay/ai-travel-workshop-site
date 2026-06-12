@@ -1,9 +1,7 @@
 ---
 import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CTASection from '../components/common/CTASection.astro';
-import StationRole from '../components/common/StationRole.astro';
 import { siteConfig } from '../content/siteConfig';
-import { stationRoles } from '../content/journeyGuide';
 ---
 
 <WorkshopLayout title="課後問卷" currentPath="/survey">
@@ -17,8 +15,6 @@ import { stationRoles } from '../content/journeyGuide';
       <img src="/images/survey/hero-finish-journey-01.webp" alt="工作坊結尾的旅行桌面，呈現完成旅程的溫暖感" loading="eager" decoding="async" />
     </div>
   </section>
-
-  <StationRole role={stationRoles['/survey']} />
 
   <!-- Form Screen -->
   <div class="form-screen" id="form-screen" style="margin-top: 32px;">
