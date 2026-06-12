@@ -134,11 +134,7 @@ const hasImage = (filename: string) => {
         <div class="guide-copy">
           <h3>{step.title}</h3>
           <p>{step.text}</p>
-          {step.filename && !hasImage(step.filename) && <p class="shot-note">建議截圖：{step.shot}</p>}
         </div>
-        {step.filename && (
-          <AssetPlaceholder title={step.title} text={step.shot} type="圖片" filename={`${screenshotAssetFolder}${step.filename}`} />
-        )}
       </article>
     ))}
   </section>

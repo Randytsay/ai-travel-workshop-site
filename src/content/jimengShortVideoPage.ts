@@ -54,28 +54,22 @@ export const iosSteps = [
 
 export const androidSteps = [
   {
-    title: '開啟官方入口',
-    text: '用 Android 手機瀏覽器開啟即夢官方網站與抖音官方下載頁。優先使用官方入口，不從來路不明的第三方 APK 站下載。',
-    shot: '拍瀏覽器打開 jimeng.com 與 douyin.com 下載頁的畫面。',
-    filename: 'android-download-01-official-site.webp'
-  },
-  {
-    title: '下載 APK',
-    text: '點頁面上的下載或立即下載。若瀏覽器提醒「可能有風險」，先確認網址是官方網域，再依主辦方課前測試結果決定是否繼續。',
-    shot: '拍下載按鈕與瀏覽器下載提示。',
-    filename: 'android-download-02-apk.webp'
+    title: '下載 APK 安裝包',
+    text: '使用上方 Android 快捷下載通道，點擊按鈕或直接用手機掃描 QR Code 下載 APK。若瀏覽器提示「檔案可能有害」或「可能有風險」，請選擇「仍要下載」或「繼續下載」。',
+    shot: '',
+    filename: ''
   },
   {
     title: '允許安裝未知來源',
-    text: '第一次安裝 APK 時，Android 可能會要求允許此瀏覽器安裝應用程式。只對目前瀏覽器開啟權限，安裝完成後可再關閉。',
-    shot: '拍 Android「允許來自此來源」設定頁。',
-    filename: 'android-install-03-permission.webp'
+    text: '第一次安裝 APK 時，Android 可能會要求允許此瀏覽器或檔案管理員安裝應用程式。請開啟「允許來自此來源」設定，安裝完成後可再關閉。',
+    shot: '',
+    filename: ''
   },
   {
     title: '完成安裝與登入',
-    text: '依序安裝即夢AI與抖音，開啟後用手機號登入並完成簡訊驗證。如果安裝被擋，檢查系統版本、儲存空間與安全掃描設定。',
-    shot: '拍安裝完成頁、桌面 App 圖示、登入首頁。',
-    filename: 'android-login-04-complete.webp'
+    text: '依序安裝即夢AI與抖音，開啟後使用手機號碼登入並完成簡訊驗證。如果安裝被擋，請檢查系統版本、儲存空間或系統安全防護設定。',
+    shot: '',
+    filename: ''
   }
 ];
 
@@ -107,8 +101,7 @@ export const sameStyleSteps = [
 ];
 
 export const screenshotChecklist = [
-  'iOS：ios-region-01-account.webp 到 ios-login-05-phone.webp。',
-  'Android：android-download-01-official-site.webp 到 android-login-04-complete.webp。',
+  'iOS：ios-region-01-account.webp 到 ios-region-05-no-none.jpg。',
   '做同款：same-style-01-template.webp 到 same-style-04-export.webp。',
   '截圖請放在 public/images/jimeng/，並遮住完整手機號、驗證碼、付款資料、Apple ID 信箱與個人照片原圖。'
 ];
