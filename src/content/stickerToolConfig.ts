@@ -130,7 +130,7 @@ export const BG_REMOVAL = {
   threshMin: 5,
   threshMax: 60,
   cornerMarginRatio: 0.05,
-  minComponentRatio: 0.0025,
+  minComponentRatio: 0.0001,
   fringeAlpha: 0.25,
   opaqueAlpha: 30,
   opaqueAlphaBgSample: 128,
