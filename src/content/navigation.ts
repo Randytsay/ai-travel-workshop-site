@@ -1,6 +1,8 @@
+import { siteConfig } from './siteConfig';
+
 export interface NavItem { label: string; path: string; short: string }
 
-export const navItems: NavItem[] = [
+const allNavItems: NavItem[] = [
   { label: '工作坊首頁', path: '/', short: '首頁' },
   { label: '課前準備', path: '/prep', short: '任務' },
   { label: 'AI 入門簡報', path: '/ai-basics', short: 'AI' },
@@ -14,3 +16,9 @@ export const navItems: NavItem[] = [
   { label: '成果牆', path: '/gallery', short: '成果' },
   { label: '問卷與講義', path: '/survey', short: '問卷' }
 ];
+
+export const navItems = allNavItems.filter((item) => {
+  if (item.path === '/voting' && !siteConfig.featureFlags.enableVoting) return false;
+  if (item.path === '/gallery' && !siteConfig.featureFlags.enableGallery) return false;
+  return true;
+});

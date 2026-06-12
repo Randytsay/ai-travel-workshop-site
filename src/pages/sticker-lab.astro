@@ -10,6 +10,12 @@ import { stickerLabContent } from '../content/prompts';
 import { stickerSteps } from '../content/workshopPages';
 import { siteConfig } from '../content/siteConfig';
 import { stationRoles } from '../content/journeyGuide';
+
+const nextHref = siteConfig.featureFlags.enableVoting ? '/voting' : '/survey';
+const nextLabel = siteConfig.featureFlags.enableVoting ? '參與人氣投票' : '填寫問卷與領取講義';
+const successMessage = siteConfig.featureFlags.enableVoting 
+  ? '貼圖素材總圖完成了！記得分享到群組，讓大家為你的創意投票喔。' 
+  : '貼圖素材總圖完成了！別忘了填寫問卷並領取精美講義喔。';
 ---
 <WorkshopLayout title="LINE 貼圖工坊" currentPath="/sticker-lab">
   <section class="hero">
@@ -67,19 +73,21 @@ import { stationRoles } from '../content/journeyGuide';
   <CompleteTaskButton 
     taskId="sticker-lab-complete" 
     buttonLabel="我已完成貼圖素材"
-    nextLabel="參與人氣投票" 
-    nextHref="/voting"
-    successMessage="貼圖素材總圖完成了！記得分享到群組，讓大家為你的創意投票喔。"
+    nextLabel={nextLabel} 
+    nextHref={nextHref}
+    successMessage={successMessage}
   />
 
   <CTASection
     title="先把 8 格素材總圖上傳到群組"
-    text="還沒裁切也沒關係。先讓大家看到你的作品，後續就能參加人氣票選。"
-    primaryLabel="上傳群組參加人氣票選"
+    text="還沒裁切也沒關係。先讓大家看到你的作品，後續就能分享作品。"
+    primaryLabel="上傳群組分享作品"
     primaryHref={siteConfig.workshopGroupUrl}
     primaryExternal={true}
-    secondaryLabel="前往現場投票頁"
-    secondaryHref="/voting"
+    secondaryLabel={siteConfig.featureFlags.enableVoting ? "前往現場投票頁" : "前往問卷與講義"}
+    secondaryHref={nextHref}
   />
-  <p class="disclaimer-text">上傳作品代表同意於本次工作坊成果展示與現場票選使用；若不希望公開展示，請於上傳前告知講師或助教。</p>
+  {siteConfig.featureFlags.enableVoting && (
+    <p class="disclaimer-text">上傳作品代表同意於本次工作坊成果展示與現場票選使用；若不希望公開展示，請於上傳前告知講師或助教。</p>
+  )}
 </WorkshopLayout>

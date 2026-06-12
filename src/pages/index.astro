@@ -8,7 +8,21 @@ import { schedule } from '../content/schedule';
 import { homeAudience, homeInteractions, homeOutcomes } from '../content/workshopPages';
 import { navItems } from '../content/navigation';
 import { journeyConcept } from '../content/journeyGuide';
-const journeyStopPaths = ['/ai-basics', '/jimeng-short-video', '/doll-maker', '/travel-planner', '/notebooklm', '/sticker-lab', '/voting'];
+import { siteConfig } from '../content/siteConfig';
+
+const journeyStopPaths = [
+  '/ai-basics',
+  '/jimeng-short-video',
+  '/doll-maker',
+  '/travel-planner',
+  '/notebooklm',
+  '/sticker-lab'
+];
+
+if (siteConfig.featureFlags.enableVoting) {
+  journeyStopPaths.push('/voting');
+}
+
 const journeyStops = journeyStopPaths
   .map((path) => navItems.find((item) => item.path === path))
   .filter((item) => item !== undefined);
@@ -30,7 +44,9 @@ const journeyStops = journeyStopPaths
       <div class="actions">
         <a class="btn" href="/prep">開始我的 AI 旅行</a>
         <a class="btn alt" href="/ai-basics">前往第一站：AI 入門簡報</a>
-        <a class="btn ghost" href="/voting">前往頒獎舞台</a>
+        {siteConfig.featureFlags.enableVoting && (
+          <a class="btn ghost" href="/voting">前往頒獎舞台</a>
+        )}
       </div>
       <div class="hero-stats" aria-label="工作坊重點">
         <span><strong>3.5h</strong> 現場實作</span>

@@ -73,5 +73,12 @@ import { stationRoles } from '../content/journeyGuide';
     successMessage="恭喜！你已完成所有流程，講義已在 LINE 等著你。"
   />
 
-  <CTASection title="下段旅程見" text="課後可以依照網站導航重新操作一次，把今天的魔法變成自己的日常裝備。" primaryLabel="回到旅行入口 (首頁)" primaryHref="/" secondaryLabel="查看明信片牆" secondaryHref="/gallery" />
+  <CTASection 
+    title="下段旅程見" 
+    text="課後可以依照網站導航重新操作一次，把今天的魔法變成自己的日常裝備。" 
+    primaryLabel="回到旅行入口 (首頁)" 
+    primaryHref="/" 
+    secondaryLabel={siteConfig.featureFlags.enableGallery ? "查看明信片牆" : "回到貼圖工坊"} 
+    secondaryHref={siteConfig.featureFlags.enableGallery ? "/gallery" : "/sticker-lab"} 
+  />
 </WorkshopLayout>

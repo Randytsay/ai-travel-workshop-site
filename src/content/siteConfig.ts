@@ -10,6 +10,8 @@ export const siteConfig = {
     notebookLmUrl: 'https://notebooklm.google.com/'
   },
   featureFlags: {
-    enableCashbackBridgeCard: true
+    enableCashbackBridgeCard: true,
+    enableVoting: false,
+    enableGallery: false
   }
 } as const;
