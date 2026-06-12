@@ -34,14 +34,14 @@ import { stationRoles } from '../content/journeyGuide';
   <div class="card ai-intro-card">
     <div class="ai-intro-content">
       <div class="ai-intro-media">
-        <div class="ai-intro-images" style="display: flex; gap: 16px; justify-content: center; width: 100%; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 180px; text-align: center;">
-            <span style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); margin-bottom: 8px;">💻 電腦網頁版</span>
-            <img src="/images/doll-maker/ai-interface-intro.png" alt="AI 電腦網頁版操作介面" class="step-real-image zoomable-interface-img" style="max-height: 220px; object-fit: contain; width: 100%;" />
+        <div class="ai-intro-images">
+          <div class="ai-intro-img-box">
+            <span class="ai-intro-img-label">💻 電腦網頁版</span>
+            <img src="/images/doll-maker/ai-interface-intro.png" alt="AI 電腦網頁版操作介面" class="step-real-image zoomable-interface-img" />
           </div>
-          <div style="flex: 1; min-width: 180px; text-align: center;">
-            <span style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--ink-soft); margin-bottom: 8px;">📱 手機 App 版</span>
-            <img src="/images/doll-maker/mobile-interface.jpg" alt="AI 手機 App 版操作介面" class="step-real-image zoomable-interface-img" style="max-height: 220px; object-fit: contain; width: 100%;" />
+          <div class="ai-intro-img-box">
+            <span class="ai-intro-img-label">📱 手機 App 版</span>
+            <img src="/images/doll-maker/mobile-interface.jpg" alt="AI 手機 App 版操作介面" class="step-real-image zoomable-interface-img" />
           </div>
         </div>
         <small class="qr-tip" style="margin-top: 12px; display: block;">💡 點擊圖片可放大觀看詳細介面</small>
@@ -450,12 +450,46 @@ import { stationRoles } from '../content/journeyGuide';
     box-shadow: var(--shadow-soft);
     cursor: zoom-in;
   }
+  /* AI Intro Images Layout */
+  .ai-intro-images {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    width: 100%;
+  }
+  .ai-intro-img-box {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+  }
+  .ai-intro-img-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
   .zoomable-interface-img {
+    max-height: 220px;
+    width: 100%;
+    object-fit: contain;
     transition: transform 0.2s ease, filter 0.2s ease;
   }
   .zoomable-interface-img:hover {
     transform: scale(1.02);
     filter: brightness(0.98);
+  }
+
+  @media (max-width: 480px) {
+    .ai-intro-images {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .ai-intro-img-box {
+      width: 100%;
+      max-width: 240px;
+    }
   }
   .intro-desc {
     font-size: 1.05rem;
