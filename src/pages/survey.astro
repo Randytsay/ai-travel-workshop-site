@@ -10,6 +10,16 @@ import { siteConfig } from '../content/siteConfig';
       <p class="eyebrow">📋 旅程最後一站</p>
       <h1>課後體驗與意見回饋</h1>
       <p>感謝您參與今天的 AI 旅遊規劃師工作坊！請花 1 分鐘填寫以下問卷，您的寶貴建議將幫助我們持續優化後續的活動體驗。</p>
+      
+      <!-- 填寫前講義預告 -->
+      <div class="gift-preview" style="background: #fff5f2; border: 2px dashed var(--sunset); border-radius: 12px; padding: 16px; margin-top: 16px; max-width: 540px; box-shadow: var(--shadow-sm);">
+        <h4 style="margin: 0 0 6px 0; color: var(--sunset); font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+          🎁 填完即送：3.5H 實戰課後講義
+        </h4>
+        <p style="margin: 0; font-size: 0.88rem; color: var(--ink-dark); line-height: 1.5;">
+          填寫問卷即可解鎖「精美圖文網頁版講義」與「完整版 PDF 講義下載」，方便您回家隨時複習！
+        </p>
+      </div>
     </div>
     <div class="hero-media">
       <img src="/images/survey/q.png" alt="工作坊結尾的旅行桌面，呈現完成旅程的溫暖感" loading="eager" decoding="async" />
@@ -23,7 +33,7 @@ import { siteConfig } from '../content/siteConfig';
         <div class="card-header-flex" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
           <div>
             <h3 style="margin: 0; font-size: 1.35rem; font-weight: 800; color: #fff;" id="survey-title">🌸 新朋友體驗回饋</h3>
-            <p style="margin: 6px 0 0 0; font-size: 0.85rem; opacity: 0.9; color: rgba(255,255,255,0.9);" id="survey-subtitle">請完成問卷以提交您的想法！</p>
+            <p style="margin: 6px 0 0 0; font-size: 0.85rem; opacity: 0.9; color: rgba(255,255,255,0.9);" id="survey-subtitle">填完即可解鎖網頁版及 PDF 精美實操講義！</p>
           </div>
           <div class="role-switcher">
             <button type="button" class="active" id="role-guest">👋 新朋友</button>
@@ -204,11 +214,38 @@ import { siteConfig } from '../content/siteConfig';
 
   <!-- Success Screen -->
   <div class="success-screen" id="success-screen" style="display: none; text-align: center; margin-top: 32px;">
-    <section class="card" style="background: #fff; padding: 48px 24px;">
-      <div style="font-size: 4.5rem; margin-bottom: 16px;">🎉</div>
-      <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--night); margin: 0 0 12px 0;">感謝您的寶貴回饋！</h2>
-      <p style="color: var(--ink-soft); margin: 0 0 24px 0; font-size: 1rem;">您的問卷已成功送出，非常感謝您的支持。</p>
-      <a href="/" class="btn" style="background: var(--ocean); color: #fff; border: 0; padding: 12px 28px; border-radius: 999px; font-weight: 800;">🏠 回到首頁</a>
+    <section class="card" style="background: #fff; padding: 40px 24px; max-width: 600px; margin: 0 auto;">
+      <div style="font-size: 4rem; margin-bottom: 16px;">🎉</div>
+      <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--night); margin: 0 0 12px 0;">問卷已成功提交！</h2>
+      <p style="color: var(--ink-soft); margin: 0 0 32px 0; font-size: 0.95rem;">感謝您的寶貴回饋，以下為您的專屬課後講義禮物：</p>
+      
+      <!-- 講義領取專區 -->
+      <div style="background: #fffdfb; border: 2px dashed var(--sunset); border-radius: 16px; padding: 24px; margin-bottom: 32px; text-align: left;">
+        <h4 style="margin: 0 0 12px 0; color: var(--sunset); font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          📚 AI 旅遊規劃師 課後實操講義
+        </h4>
+        <p style="margin: 0 0 20px 0; font-size: 0.9rem; color: var(--ink-dark); line-height: 1.6;">
+          內含今日 3D 可愛公仔生圖咒語、AI 旅遊規劃 5 步流程、NotebookLM 使用框架，以及 LINE 貼圖製作教學。
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- 線上直接看 -->
+          <a href="/handbook_v2.html" target="_blank" rel="noopener noreferrer" class="btn" style="background: var(--sunset); color: #fff; border: 0; padding: 14px; border-radius: 12px; font-weight: 800; text-align: center; display: block; text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-button);">
+            📖 直接線上閱讀 (網頁版)
+          </a>
+          
+          <!-- PDF 下載 -->
+          <a href="/AI_Travel_Planner_Workshop_Handout.pdf" download="AI 旅遊規劃師工作坊 課後講義.pdf" class="btn" style="background: var(--ocean); color: #fff; border: 0; padding: 14px; border-radius: 12px; font-weight: 800; text-align: center; display: block; text-decoration: none; transition: all 0.2s;">
+            📥 打包下載完整 PDF 講義 (58MB)
+          </a>
+        </div>
+        
+        <p style="margin: 16px 0 0 0; font-size: 0.8rem; color: var(--ink-soft); text-align: center; line-height: 1.4;">
+          💡 貼心提醒：可以把這份網頁講義的連結分享給帶您來的朋友，一起研究討論喔！
+        </p>
+      </div>
+
+      <a href="/" class="btn" style="background: #6c757d; color: #fff; border: 0; padding: 12px 28px; border-radius: 999px; font-weight: 800; text-decoration: none; display: inline-block;">🏠 回到首頁</a>
     </section>
   </div>
 

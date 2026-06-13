@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 旅遊規劃師工作坊 課後講義</title>
+</head>
+<body>
+<style>*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;font-size:14px;line-height:1.65;color:#1a1c2e;background:#fefaf5}
+.page{width:210mm;min-height:297mm;margin:0 auto;padding:18mm 18mm 22mm 18mm;background:#fff;position:relative;page-break-after:always}
+.page.cover{padding:0;background:linear-gradient(135deg,#fce4d6 0%,#f8c8a0 30%,#e8b4a0 60%,#d4a5c4 100%);display:flex;align-items:center;justify-content:center;text-align:center}
+.cover-bg{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.12;object-fit:cover}
+.cover-content{position:relative;z-index:1;padding:40px}
+.cover-content h1{font-size:42px;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,.15);margin-bottom:12px}
+.cover-content .subtitle{font-size:18px;color:#fff;text-shadow:1px 1px 4px rgba(0,0,0,.1);margin-bottom:24px;line-height:1.6}
+.cover-content .info{font-size:13px;color:rgba(255,255,255,.9);margin-top:30px;line-height:2}
+.page.toc{background:#fefaf5}
+.toc-header{text-align:center;padding:30px 0 20px;border-bottom:2px solid #e8b4a0;margin-bottom:24px}
+.toc-header h2{font-size:28px;color:#d4845a}
+.toc-list{columns:2;column-gap:32px;list-style:none}
+.toc-list li{break-inside:avoid;padding:6px 0;font-size:14px;border-bottom:1px dotted #e8d5c8;color:#333}
+.toc-num{display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;background:#f0c8b0;color:#fff;border-radius:50%;margin-right:8px;font-size:12px;font-weight:700}
+.section-header{padding:20px 0 14px;border-bottom:3px solid #f0c8b0;margin-bottom:16px}
+.section-num{font-size:10px;color:#d4845a;text-transform:uppercase;letter-spacing:3px;margin-bottom:4px}
+.section-title{font-size:28px;color:#c26a3a;margin-bottom:4px}
+.section-sub{font-size:14px;color:#555;line-height:1.5}
+.section-hero{max-height:140px;width:auto;border-radius:8px;margin:10px 0;object-fit:cover}
+h3{font-size:18px;color:#c26a3a;margin:16px 0 8px;padding-left:10px;border-left:4px solid #f0c8b0}
+h4{font-size:14px;color:#333;margin:12px 0 6px}
+p{margin-bottom:8px}
+.content-block{margin-bottom:14px}
+.knowledge-box{background:#fff8f0;border-left:4px solid #f0a860;border-radius:6px;padding:10px 14px;margin:12px 0;display:flex;gap:10px;align-items:flex-start}
+.kb-icon{font-size:20px;flex-shrink:0}
+.kb-title{font-weight:700;color:#c26a3a;margin-bottom:3px}
+.kb-text{color:#333;font-size:13px}
+.prompt-card{background:#fafaf9;border:1px solid #e8e0d8;border-radius:10px;margin:12px 0}
+.prompt-header{background:#f5ede4;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.prompt-icon{font-size:16px}
+.prompt-title{font-weight:700;color:#c26a3a;flex:1}
+.prompt-platform-tag{font-size:9px;padding:2px 8px;border-radius:10px;color:#fff;font-weight:700}
+.tag-openai{background:#10a37f}.tag-gemini{background:#4285f4}.tag-notebooklm{background:#e8a0bf}
+.prompt-note{font-size:13px;color:#666;padding:6px 14px 0;font-style:italic}
+.prompt-body{background:#fff;padding:12px 14px;border-top:1px solid #eee;border-bottom:1px solid #eee}
+.prompt-body pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:12px;line-height:1.55;color:#222}
+.prompt-copy-hint{font-size:10px;color:#aaa;text-align:right;padding:6px 14px;background:#fafaf9}
+.tool-link-card{background:#f8f6f2;border-radius:8px;padding:10px 14px;margin:8px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px}
+.tool-name{font-weight:700;color:#c26a3a;white-space:nowrap}
+.tool-link{color:#d4845a;font-size:11px;word-break:break-all;flex:1;min-width:200px}
+.tool-desc{color:#888;font-size:11px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+th{background:#f5ede4;color:#c26a3a;padding:8px 10px;text-align:left;font-weight:700}
+td{padding:7px 10px;border-bottom:1px solid #eee}
+tr:nth-child(even) td{background:#fefaf5}
+.flow-diagram{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.flow-step{background:#f0c8b0;color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.flow-arrow{color:#d4845a;font-size:16px;font-weight:700}
+.step-list{list-style:none;padding:0}
+.step-list li{padding:6px 0;border-bottom:1px dotted #e8e0d8;font-size:13px;line-height:1.55}
+.step-num{display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;background:#f0c8b0;color:#fff;border-radius:50%;margin-right:6px;font-size:10px;font-weight:700}
+.sticker-pack-card{background:#fff;border:1px solid #e8e0d8;border-radius:10px;margin:14px 0;display:flex;gap:0}
+.sticker-pack-img{width:160px;flex-shrink:0;background:#f8f6f2;display:flex;align-items:center;justify-content:center;padding:8px}
+.sticker-pack-img img{max-width:100%;max-height:260px;border-radius:6px}
+.sticker-pack-info{flex:1;padding:12px}
+.sticker-pack-info h4{font-size:15px;color:#c26a3a;margin:0 0 4px}
+.sticker-pack-scenes{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.sticker-pack-scenes span{background:#f5ede4;color:#c26a3a;font-size:9px;padding:2px 8px;border-radius:10px}
+.jimeng-steps{list-style:none;padding:0}
+.jimeng-steps li{padding:8px 0;border-bottom:1px dotted #e8e0d8;display:flex;gap:10px;align-items:flex-start}
+.jimeng-step-num{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;background:#d4845a;color:#fff;border-radius:50%;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.jimeng-step-img{width:60px;flex-shrink:0;text-align:center}
+.jimeng-step-img img{max-width:60px;max-height:60px;border-radius:4px}
+.jimeng-step-text{flex:1;font-size:13px}
+.jimeng-step-text strong{display:block;color:#c26a3a;margin-bottom:2px;font-size:14px}
+.friend-card{display:flex;gap:14px;align-items:flex-start;margin:14px 0;background:#fff;border-radius:10px;padding:14px;border:1px solid #e8e0d8}
+.friend-card img{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.friend-card h4{color:#c26a3a;margin:0 0 4px;font-size:15px}
+.friend-quote{color:#d4845a;font-size:11px;font-style:italic;margin-bottom:4px}
+.friend-examples{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.friend-examples span{background:#f0f8e8;color:#6a9a3a;font-size:9px;padding:2px 8px;border-radius:10px}
+.scenario-card{background:#fff;border:1px solid #e8e0d8;border-radius:10px;padding:12px 14px;margin:10px 0}
+.scenario-card h4{color:#c26a3a;margin:0 0 4px}
+.scenario-meta{color:#888;font-size:11px}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.info-card{background:#fff;border:1px solid #e8e0d8;border-radius:8px;padding:12px;text-align:center}
+.info-card .icon{font-size:24px;margin-bottom:6px}
+.info-card h4{font-size:13px;color:#c26a3a;margin:0 0 4px}
+.info-card p{font-size:12px;color:#555;margin:0}
+.back-cover{background:linear-gradient(135deg,#d4a5c4 0%,#e8b4a0 50%,#f8c8a0 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:40px}
+.back-cover h2{font-size:28px;color:#fff;margin-bottom:16px}
+.back-cover p{font-size:15px;color:rgba(255,255,255,.9);line-height:1.8}
+.back-cover .keyword{font-size:20px;color:#fff;font-weight:700;background:rgba(255,255,255,.2);padding:8px 24px;border-radius:30px;display:inline-block;margin-top:12px}
+.no-break{page-break-inside:avoid}
+.page-break{page-break-before:always}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.footer-note{position:absolute;bottom:12mm;right:18mm;font-size:9px;color:#ccc}
+.header-line{position:absolute;top:12mm;left:18mm;right:18mm;height:2px;background:#f0c8b0;border-radius:1px}
+@page{size:A4;margin:0}
+@page{@bottom-center{content:counter(page);font-size:9px;color:#aaa;font-family:sans-serif}}
+@media print{.page{box-shadow:none;margin:0;width:auto;min-height:auto}}
+@media screen{.page{box-shadow:0 0 20px rgba(0,0,0,.08);margin:20px auto}}</style><div class="page cover">
+  <img src="images/home/hero-slide-01.webp" class="cover-bg" style="" loading="lazy" />
+  <div class="cover-content">
+    <div style="font-size:14px;color:rgba(255,255,255,.8);letter-spacing:4px;margin-bottom:12px">AI 旅遊規劃師</div>
+    <h1>工作坊課後講義</h1>
+    <div class="subtitle">3.5 小時 × AI 實戰 × 帶走 3 大成果</div>
+    <div class="info">
+      講師｜耀文 Randy<br>
+      日期｜2026 年 6 月
+    </div>
+  </div>
+</div><div class="page toc">
+  <div class="header-line"></div>
+  <div class="toc-header"><h2>📖 目錄索引</h2></div>
+  <ul class="toc-list"><li><span class="toc-num">01</span>AI 入門 × AI 是你的益友</li>
+<li><span class="toc-num">02</span>課前準備</li>
+<li><span class="toc-num">03</span>即夢 AI 短影音暖身</li>
+<li><span class="toc-num">04</span>我的 3D 可愛公仔</li>
+<li><span class="toc-num">05</span>AI 旅遊規劃師</li>
+<li><span class="toc-num">06</span>NotebookLM 研究升級 × 工作室</li>
+<li><span class="toc-num">07</span>LINE 貼圖工坊</li></ul>
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">如何使用本講義</div>
+    <div class="kb-text">每個單元包含操作步驟、提示詞卡片與小知識補充。所有提示詞均可複製到 ChatGPT 或 Gemini 使用。可點擊的工具連結會以藍色標註，回家後仍可照著重做。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 01</div>
+  <h1 class="section-title">AI 入門 × AI 是你的益友</h1>
+  <p class="section-sub">理解 AI 是什麼、能為你做什麼，以及如何把 AI 當成你的學習夥伴。</p>
+</div>
+  <img src="images/ai-guide/hero-ai-beneficial-friend-01.webp" class="section-hero" style="" loading="lazy" />
+
+  <div class="content-block">
+    <h3>AI 是什麼？三張圖解</h3>
+    <div class="info-grid">
+      <div class="info-card"><div class="icon">🤖</div><h4>AI 是會學習規則的助手</h4><p>你給它目標、語氣與限制，它會快速整理可執行的答案。</p></div>
+      <div class="info-card"><div class="icon">⚡</div><h4>AI 擅長加速，不是取代你</h4><p>AI 先給草稿，你再加上個人判斷，成果通常更快更好。</p></div>
+      <div class="info-card"><div class="icon">🔍</div><h4>AI 要查證，才安心採用</h4><p>對於簽證、票價、法規等資訊，務必再回官方來源確認。</p></div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <h3>AI 可以幫我們做什麼？</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">
+      <span style="background:#f5ede4;color:#c26a3a;font-size:11px;padding:4px 12px;border-radius:12px">旅遊行程草案</span><span style="background:#f5ede4;color:#c26a3a;font-size:11px;padding:4px 12px;border-radius:12px">聚餐與送禮靈感</span><span style="background:#f5ede4;color:#c26a3a;font-size:11px;padding:4px 12px;border-radius:12px">貼文文案潤稿</span><span style="background:#f5ede4;color:#c26a3a;font-size:11px;padding:4px 12px;border-radius:12px">學習重點整理</span><span style="background:#f5ede4;color:#c26a3a;font-size:11px;padding:4px 12px;border-radius:12px">活動主持稿</span><span style="background:#f5ede4;color:#c26a3a;font-size:11px;padding:4px 12px;border-radius:12px">親子行前清單</span>
+    </div>
+  </div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>AI 時代的三種益友</h3>
+  </div>
+  <div class="friend-card">
+    <img src="images/ai-guide/friend-honest-mirror-01.webp" class="" style="" loading="lazy" />
+    <div>
+      <h4>友直：幫你照見盲點</h4>
+      <div class="friend-quote">像一面不刺人的鏡子</div>
+      <p style="font-size:12px;color:#555;margin:4px 0">當你不知道問題出在哪裡，AI 可以幫你拆解需求、指出矛盾、提醒遺漏，讓你重新看見自己的想法。</p>
+      <div class="friend-examples"><span>檢查企劃是否完整</span><span>提醒資料還缺什麼</span><span>把含糊需求問清楚</span></div>
+    </div>
+  </div><div class="friend-card">
+    <img src="images/ai-guide/friend-patient-coach-01.webp" class="" style="" loading="lazy" />
+    <div>
+      <h4>友諒：陪你慢慢練習</h4>
+      <div class="friend-quote">像一位不會嫌你問太多次的教練</div>
+      <p style="font-size:12px;color:#555;margin:4px 0">小白最需要的不是一次學完，而是有人願意用不同說法重講。AI 很適合當練習夥伴，陪你改、陪你問、陪你再試一次。</p>
+      <div class="friend-examples"><span>用白話解釋專有名詞</span><span>改寫成更自然的句子</span><span>陪你演練簡報或銷售</span></div>
+    </div>
+  </div><div class="friend-card">
+    <img src="images/ai-guide/friend-wide-reader-01.webp" class="" style="" loading="lazy" />
+    <div>
+      <h4>友多聞：幫你打開視野</h4>
+      <div class="friend-quote">像一位讀過很多資料的旅伴</div>
+      <p style="font-size:12px;color:#555;margin:4px 0">AI 可以快速比較工具、整理資料、給你多種角度。它不是最終裁判，但能讓你先看到更多可能。</p>
+      <div class="friend-examples"><span>比較不同工具適合情境</span><span>整理文件重點</span><span>提供多個創作方向</span></div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <h3>本次工作坊四大工具定位</h3>
+    <table>
+      <tr><th>工具</th><th>最適合做什麼</th><th>何時選用它</th></tr>
+      <tr><td><strong>ChatGPT</strong></td><td>問問題、寫初稿、整理想法、生成圖片</td><td>你不知道怎麼開始，或想先做出第一版</td></tr><tr><td><strong>Gemini</strong></td><td>Google 生態、拍照提問、資料查找</td><td>你常用 Google 工具，想用手機快速查</td></tr><tr><td><strong>NotebookLM</strong></td><td>把自己的資料變成可查詢筆記本</td><td>你有講義、報告、網站資料，想讓 AI 只根據這些內容回答</td></tr><tr><td><strong>即夢 AI</strong></td><td>短影音、圖片變影片、做同款</td><td>你想快速做出視覺內容、社群短影音</td></tr>
+    </table>
+  </div>
+
+  <div class="content-block">
+    <h3>萬能提示詞公式（Prompt Formula）</h3>
+    <ol class="step-list">
+      <li><span class='step-num'>1</span>你是誰：請 AI 扮演明確角色，例如旅遊規劃師、簡報教練</li><li><span class='step-num'>2</span>我要做什麼：說出任務，不只丟關鍵字</li><li><span class='step-num'>3</span>背景資料：補充對象、限制、時間、預算、語氣、用途</li><li><span class='step-num'>4</span>輸出格式：指定表格、清單、步驟、簡報大綱或文案版本</li><li><span class='step-num'>5</span>檢查標準：請它提醒風險、列出待確認事項，重要資訊再回官方來源查證</li>
+    </ol>
+  </div>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">使用 AI 的重要提醒</div>
+    <div class="kb-text">重複性的文字整理、客服、初階設計與剪輯會被大量自動化。假資訊、假圖片增加，查證能力更重要。個資、版權、公司資料外流風險提高。只會照抄 AI 的人會變弱，會提問、判斷、修正的人會變強。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 02</div>
+  <h1 class="section-title">課前準備</h1>
+  <p class="section-sub">把工具準備好，現場操作更順暢。請在課前完成以下檢查。</p>
+</div>
+  <img src="images/prep/prep-tools-concept-01.webp" class="section-hero" style="" loading="lazy" />
+
+  <div class="content-block">
+    <h3>課前檢查清單</h3>
+    <ol class="step-list">
+      <li><span class="step-num">1</span><strong>登入 ChatGPT</strong> — 確認可登入（建議手機＋電腦雙裝置），這是主力對話與生圖工具</li>
+      <li><span class="step-num">2</span><strong>開啟 Gemini</strong> — 確認 Gemini 可正常開啟，作為現場備援工具</li>
+      <li><span class="step-num">3</span><strong>開啟 NotebookLM</strong> — 確認可建立新筆記本，後續用於旅遊研究</li>
+      <li><span class="step-num">4</span><strong>安裝 LINE 拍貼</strong> — 手機安裝 LINE 拍貼並允許照片存取權限</li>
+      <li><span class="step-num">5</span><strong>加入工作坊 LINE 群組</strong> — 方便上傳作品與接收通知</li>
+      <li><span class="step-num">6</span><strong>準備照片素材</strong> — 準備 2-3 張清楚人物／親子／寵物照片</li>
+    </ol>
+  </div>
+
+  <div class="content-block no-break">
+    <h3>重要工具連結</h3>
+    <div class="tool-link-card">
+  <span class="tool-name">ChatGPT</span>
+  <a href="https://chatgpt.com/" class="tool-link" target="_blank">https://chatgpt.com/</a>
+  <span class="tool-desc">主力對話與生圖工具，製作 3D 公仔與整理需求</span>
+</div>
+    <div class="tool-link-card">
+  <span class="tool-name">Gemini</span>
+  <a href="https://gemini.google.com/" class="tool-link" target="_blank">https://gemini.google.com/</a>
+  <span class="tool-desc">ChatGPT 額度不足時的備援方案</span>
+</div>
+    <div class="tool-link-card">
+  <span class="tool-name">NotebookLM</span>
+  <a href="https://notebooklm.google.com/" class="tool-link" target="_blank">https://notebooklm.google.com/</a>
+  <span class="tool-desc">把你的旅遊需求升級成研究與簡報</span>
+</div>
+  </div>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">沒有付費版可以上課嗎？</div>
+    <div class="kb-text">可以。本工作坊已設計免費版可完成流程。若 ChatGPT 圖片生成額度不足，有 Gemini 備援方案。圖片生成失敗時，先簡化提示詞再試一次，或切換 Gemini。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 03</div>
+  <h1 class="section-title">即夢 AI 短影音暖身</h1>
+  <p class="section-sub">用 AI 短影音練習「選範本 → 換素材 → 生成」的創作流程，為後續公仔與貼圖暖身。</p>
+</div>
+
+  <div class="content-block">
+    <h3>三種裝置路線</h3>
+    <div class="info-grid">
+      <div class="info-card"><div class="icon">📱</div><h4>iPhone / iOS</h4><p>需切換 Apple ID 國家至「中國大陸」，下載抖音與即夢 AI，完成後安全切回台灣。</p></div>
+      <div class="info-card"><div class="icon">🤖</div><h4>Android</h4><p>使用專屬 APK 快捷通道下載抖音與即夢 AI，安裝後即可生成影片。</p></div>
+      <div class="info-card"><div class="icon">🎬</div><h4>課堂體驗</h4><p>選擇喜歡的影片範本，點擊「拍同款」替換為自己的相片或提示詞，產出專屬短影音。</p></div>
+    </div>
+  </div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>📱 iPhone / iOS 操作步驟</h3>
+    <p style="font-size:11px;color:#888">共 10 步驟，完成後即可在即夢 AI 中生成短影音。最後一步請務必將 Apple ID 切回台灣。</p>
+  </div>
+  <ul class="jimeng-steps"><li>
+  <span class="jimeng-step-num">1</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/ios-region-01-account.webp" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>開啟 Apple ID 設定</strong>開啟 iPhone「設定」→ 點選上方 Apple ID →「媒體與購買項目」</div>
+</li>
+<li>
+  <span class="jimeng-step-num">2</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/ios-region-02-country.jpg" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>進入檢視帳號與地區</strong>點選「檢視帳號」→ Face ID 驗證 →「國家或地區」</div>
+</li>
+<li>
+  <span class="jimeng-step-num">3</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/ios-region-03-china-mainland.jpg" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>切換至「中國大陸」</strong>點擊「更改國家或地區」→ 選擇「中國大陸」→ 同意條款</div>
+</li>
+<li>
+  <span class="jimeng-step-num">4</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/ios-region-04-billing.jpg" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>填寫付款方式與地址</strong>付款方式選「無」，街道填「朝陽路」，郵編「123456」，省份「北京」，電話「1234567890」</div>
+</li>
+<li>
+  <span class="jimeng-step-num">5</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/ios-region-05-no-none.jpg" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>無法選「無」的排除方法</strong>若有訂閱項目（iCloud / Apple Music）或未付清帳單，會無法選「無」。先取消訂閱或付清後再試</div>
+</li>
+<li>
+  <span class="jimeng-step-num">6</span>
+  
+  <div class="jimeng-step-text"><strong>下載抖音與即夢 AI</strong>App Store 搜尋下載「抖音」與「即夢 AI」→ 開啟抖音 → Apple 登錄 → 設定暱稱、性別、年齡</div>
+</li>
+<li>
+  <span class="jimeng-step-num">7</span>
+  
+  <div class="jimeng-step-text"><strong>登入即夢 AI 並授權</strong>開啟即夢 AI → 同意協議 →「通過抖音登錄」→ 同意授權完成綁定</div>
+</li>
+<li>
+  <span class="jimeng-step-num">8</span>
+  
+  <div class="jimeng-step-text"><strong>錄製面部資料建立 AI 分身</strong>點選「立即創建」→ 允許相機與麥克風 →「開始錄製」→ 讀出數字 + 轉頭錄製多角度</div>
+</li>
+<li>
+  <span class="jimeng-step-num">9</span>
+  
+  <div class="jimeng-step-text"><strong>套用範本生成影片與發布</strong>「出鏡」分頁選範本 →「拍同款」→「生成」→ 草稿箱查看進度 →「一鍵分享至抖音」→ 發布</div>
+</li>
+<li>
+  <span class="jimeng-step-num">10</span>
+  
+  <div class="jimeng-step-text"><strong>將 Apple ID 安全切回「台灣」</strong>重複步驟進入「國家或地區」→ 選「台灣」→ 付款方式「無」→ 填台灣地址完成</div>
+</li></ul>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>🤖 Android 操作步驟</h3>
+    <p style="font-size:11px;color:#888">共 7 步驟，需允許瀏覽器安裝未知來源應用程式。</p>
+  </div>
+  <ul class="jimeng-steps"><li>
+  <span class="jimeng-step-num">1</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-01.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>下載與安裝「抖音」App</strong>瀏覽器開啟本站 APK 快速下載通道，下載 douyin.apk → 允許瀏覽器安裝未知應用 → 安裝</div>
+</li>
+<li>
+  <span class="jimeng-step-num">2</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-02.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>同意服務協定並進入登入</strong>開啟抖音 →「同意並繼續」→ 點右下角「我」進入登入畫面</div>
+</li>
+<li>
+  <span class="jimeng-step-num">3</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-06.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>切換國碼並登入</strong>登入頁點國碼「+86」→ 切換「台灣（+886）」→ 輸入手機號碼 → 簡訊驗證碼登入 → 設定暱稱</div>
+</li>
+<li>
+  <span class="jimeng-step-num">4</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-07.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>下載與安裝「即夢 AI」</strong>點即夢 AI 網頁邀請連結 →「去一起出鏡」→「立即下載」→ 安裝 APK → 開啟 → 同意隱私政策</div>
+</li>
+<li>
+  <span class="jimeng-step-num">5</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-08.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>透過抖音授權登入</strong>即夢 AI 登入畫面勾選同意 →「通過抖音登錄」→ 跳轉抖音 →「同意授權」完成綁定</div>
+</li>
+<li>
+  <span class="jimeng-step-num">6</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-10.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>錄製臉部資料建立分身</strong>「立即創建」→ 允許相機與麥克風 → 對齊虛線圓圈 →「開始錄製」→ 轉頭錄製 → 上傳建立</div>
+</li>
+<li>
+  <span class="jimeng-step-num">7</span>
+  <div class="jimeng-step-img"><img src="images/jimeng/step-11.png" class="" style="" loading="lazy" /></div>
+  <div class="jimeng-step-text"><strong>套用範本拍同款生成影片</strong>「出鏡」分頁選範本 →「拍同款」→「生成」→ 草稿箱查看渲染進度</div>
+</li></ul>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">即夢 AI 課後延伸資源</div>
+    <div class="kb-text">即夢 AI 完整操作手冊：runyoung0613.github.io/jimeng-tutorial/。Dreamina AI 教學：futureweb.pro/tools/ai/dreamina-ai/。即夢 AI 視頻生成全站教程：articles.waytoagi.com。抖音官方「如何拍同款」教學影片：douyin.com。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 04</div>
+  <h1 class="section-title">我的 3D 可愛公仔</h1>
+  <p class="section-sub">創造第一個 Wow Moment！上傳照片，生成專屬的 AI 3D 可愛公仔圖。</p>
+</div>
+  <img src="images/doll-maker/hero-before-after-01.webp" class="section-hero" style="" loading="lazy" />
+
+  <div class="content-block">
+    <h3>操作 6 步驟</h3>
+    <ol class="step-list">
+      <li><span class="step-num">1</span><strong>開啟 ChatGPT</strong> — 前往 chatgpt.com 登入你的帳號</li>
+      <li><span class="step-num">2</span><strong>上傳照片</strong> — 點擊輸入框旁的「上傳」按鈕，選擇你要的照片</li>
+      <li><span class="step-num">3</span><strong>複製提示詞</strong> — 從下方卡片複製對應的提示詞</li>
+      <li><span class="step-num">4</span><strong>貼上並送出</strong> — 在 ChatGPT 輸入框貼上提示詞，按送出</li>
+      <li><span class="step-num">5</span><strong>下載圖片</strong> — AI 生成完成後，點擊圖片下載</li>
+      <li><span class="step-num">6</span><strong>上傳到 LINE 群組</strong> — 把作品分享到工作坊 LINE 群組，參加人氣展示！</li>
+    </ol>
+  </div>
+
+  <div class="info-grid">
+    <img src="images/doll-maker/doll-sample-personal-01.webp" class="" style="width:100%;border-radius:8px" loading="lazy" />
+    <img src="images/doll-maker/doll-sample-family-01.webp" class="" style="width:100%;border-radius:8px" loading="lazy" />
+    <img src="images/doll-maker/doll-sample-pet-01.webp" class="" style="width:100%;border-radius:8px" loading="lazy" />
+  </div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>三款提示詞（依照片類型選擇）</h3>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="prompt-card 適用 chatgpt 或 gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">個人 3D 可愛公仔提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt 或 gemini">適用 CHATGPT 或 GEMINI</span>
+  </div>
+  <p class="prompt-note">適合上傳自己的清楚半身照或全身照；想先做出最有驚喜感、最好分享的個人形象。</p>
+  <div class="prompt-body"><pre>請以我上傳的照片作為主要人物參考，保留我的臉部特徵、髮型與整體氣質，將我轉化為一位精緻可愛的 3D 公仔角色。
+
+風格要求：
+1. 頭身比例可愛，約 1:2.5，呈現精品收藏玩偶感。
+2. 臉部要親切、自然、有精神，保留與本人相似的辨識感，但整體可以更討喜、更有親和力。
+3. 材質像高級霧面樹脂公仔，細節精緻、立體感佳。
+4. 服裝請依照照片中的穿著風格做可愛化與精緻化處理，不要完全改掉原本的形象。
+5. 角色姿勢自然自信，可微笑站立或微微招手。
+6. 背景請使用乾淨、溫暖、柔和的淺色工作室背景，帶有些許旅行感的小元素，例如小行李箱、迷你地圖、相機或飛機吊飾，但不要喧賓奪主。
+7. 畫面光線柔和、質感高級、色彩清爽溫暖。
+8. 請生成一張完整、構圖乾淨、適合分享到 LINE 群組或社群貼文的單張圖片。
+
+請不要加入任何文字、浮水印、品牌 Logo 或多餘標語。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+    </div>
+    <div style="text-align:center;display:flex;align-items:flex-start;padding-top:12px">
+      <img src="images/doll-maker/doll-sample-personal-01.webp" class="" style="max-width:100%;max-height:340px;border-radius:8px" loading="lazy" />
+    </div>
+  </div>
+  <p style="font-size:10px;color:#999;text-align:center;margin-top:4px">▲ 上傳個人照後 AI 生成效果參考</p>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="two-col">
+    <div>
+      <div class="prompt-card 適用 chatgpt 或 gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">親子 3D 可愛公仔提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt 或 gemini">適用 CHATGPT 或 GEMINI</span>
+  </div>
+  <p class="prompt-note">適合上傳家長與孩子合照；想做出溫馨、可愛、有故事感的家庭形象。</p>
+  <div class="prompt-body"><pre>請以我上傳的親子照片作為人物參考，保留照片中大人與孩子的主要臉部特徵、髮型、互動關係與溫馨氛圍，將他們轉化成一組精緻可愛的 3D 親子公仔。
+
+風格要求：
+1. 整體為高質感 3D 收藏公仔風，頭身比例略帶可愛 Q 感，但人物仍要保有相似度。
+2. 大人與孩子之間要有自然互動，例如牽手、並肩站立、一起開心微笑，呈現溫暖陪伴感。
+3. 服裝依照原照片的色系與風格做可愛化處理，不要完全換成不相關服飾。
+4. 材質像精緻霧面公仔，五官柔和、光影立體。
+5. 背景請用溫暖、明亮、乾淨的旅行情境，例如輕柔的出遊背景、小行李箱、旅行背包、地圖板、親子拍照小道具，但元素要簡潔。
+6. 畫面要傳達「一起出發」、「家庭旅行好幸福」的感覺。
+7. 生成單張完整構圖，人物不可被裁切，適合直接分享。
+
+請不要加入任何文字、浮水印、品牌 Logo 或多餘標語。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+    </div>
+    <div style="text-align:center;display:flex;align-items:flex-start;padding-top:12px">
+      <img src="images/doll-maker/doll-sample-family-01.webp" class="" style="max-width:100%;max-height:340px;border-radius:8px" loading="lazy" />
+    </div>
+  </div>
+  <p style="font-size:10px;color:#999;text-align:center;margin-top:4px">▲ 上傳親子合照後 AI 生成效果參考</p>
+  <div class="two-col" style="margin-top:14px">
+    <div>
+      <div class="prompt-card 適用 chatgpt 或 gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">寵物 3D 可愛公仔提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt 或 gemini">適用 CHATGPT 或 GEMINI</span>
+  </div>
+  <p class="prompt-note">適合上傳狗狗、貓咪或其他毛孩照片；想做出可愛、討喜、容易引發分享的寵物公仔圖。</p>
+  <div class="prompt-body"><pre>請以我上傳的寵物照片作為主要參考，保留牠最具辨識度的外觀特徵，例如毛色、耳朵形狀、眼神、臉部花紋、體型與個性神態，將牠轉化為一隻精緻可愛的 3D 寵物公仔。
+
+風格要求：
+1. 呈現高級收藏級 3D 公仔質感，整體可愛但不要失去牠原本的特色。
+2. 臉部表情要有靈氣、療癒、讓人看了想微笑。
+3. 可以讓牠戴上簡單的旅行小配件，例如小圍巾、迷你帽子、小背包，或坐在小行李箱旁邊，但不要過度裝飾。
+4. 背景乾淨、柔和、溫暖，帶有輕旅行氛圍。
+5. 光線細膩、材質有霧面公仔或柔亮樹脂質感。
+6. 生成單張完整構圖，寵物主體清楚，不要被裁切。
+7. 適合直接分享到 LINE 群組或作為寵物主題創作素材。
+
+請不要加入任何文字、浮水印、品牌 Logo 或多餘標語。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+    </div>
+    <div style="text-align:center;display:flex;align-items:flex-start;padding-top:12px">
+      <img src="images/doll-maker/doll-sample-pet-01.webp" class="" style="max-width:100%;max-height:340px;border-radius:8px" loading="lazy" />
+    </div>
+  </div>
+  <p style="font-size:10px;color:#999;text-align:center;margin-top:4px">▲ 上傳寵物照後 AI 生成效果參考</p>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">為何 AI 生圖有時會多手指？</div>
+    <div class="kb-text">AI 是根據訓練資料中的機率來生成圖片，並非真正「理解」人體構造。當訓練資料中手指角度或數量變化多，模型就可能生成 6 根手指。解決方式：重新生成、或在提示詞中加「手指自然、完整」等指引。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 05</div>
+  <h1 class="section-title">AI 旅遊規劃師</h1>
+  <p class="section-sub">把「想出去玩」變成一份可研究、可執行的旅遊需求報告。</p>
+</div>
+  <img src="images/travel-planner/travel-planner-flow-01.webp" class="section-hero" style="" loading="lazy" />
+
+  <div class="content-block">
+    <h3>三種使用路徑</h3>
+    <div class="info-grid">
+      <div class="info-card"><div class="icon">⭐</div><h4>方法 1：開啟專屬 GPT</h4><p>直接點擊下方連結開啟「AI 旅遊規劃師｜工作坊版」GPT，照著回答 3 輪問題即可。</p></div>
+      <div class="info-card"><div class="icon">📋</div><h4>方法 2：貼到 ChatGPT</h4><p>若 GPT 額度不足，複製下方備援提示詞，貼到一般 ChatGPT 聊天框使用。</p></div>
+      <div class="info-card"><div class="icon">🔁</div><h4>方法 3：改用 Gemini</h4><p>若 ChatGPT 無法使用，將下方提示詞貼到 Gemini 也可完成。</p></div>
+    </div>
+  </div>
+
+  <div class="content-block no-break">
+    <h3>AI 工具連結</h3>
+    <div class="tool-link-card">
+  <span class="tool-name">AI 旅遊規劃師｜工作坊版 GPT</span>
+  <a href="https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban" class="tool-link" target="_blank">https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban</a>
+  <span class="tool-desc">推薦首選：一鍵開啟專屬 GPT，回答 3 輪問題即可產出旅遊需求報告</span>
+</div>
+    <div class="tool-link-card">
+  <span class="tool-name">ChatGPT</span>
+  <a href="https://chatgpt.com/" class="tool-link" target="_blank">https://chatgpt.com/</a>
+  <span class="tool-desc">備援方案：貼入下方提示詞，在一般 ChatGPT 中使用</span>
+</div>
+    <div class="tool-link-card">
+  <span class="tool-name">Gemini</span>
+  <a href="https://gemini.google.com/" class="tool-link" target="_blank">https://gemini.google.com/</a>
+  <span class="tool-desc">備援方案：如 ChatGPT 無法使用，可改用 Gemini</span>
+</div>
+  </div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>旅遊規劃師工作流程</h3>
+    <div class="flow-diagram">
+      <div class="flow-step">回答 3 輪問題</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">確認需求摘要</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">產出 NotebookLM 內容</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">前往 NotebookLM 研究</div>
+    </div>
+  </div>
+
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">AI 旅遊規劃師｜工作坊版 完整提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  <p class="prompt-note">這份提示詞會引導 AI 扮演旅遊規劃顧問，透過 3 輪問答整理需求，最後輸出 NotebookLM 可用的研究提示詞。</p>
+  <div class="prompt-body"><pre>你是「AI 旅遊規劃師｜工作坊版」，一位親切、細心、有效率的自由行需求整理顧問。
+
+你的服務對象大多是 AI 初學者，正在參加一場實體工作坊。你的任務不是一開始就幫他排出完整旅遊行程，而是要在有限的互動次數內，快速幫他整理出清楚的旅遊需求，並產出可以接續交給 NotebookLM 做深入研究的內容。
+
+一、整體任務目標
+請透過簡潔、溫暖、好回答的方式，協助使用者完成以下流程：
+1. 用最多 3 輪提問，整理出一趟旅行的核心需求。
+2. 當資訊足夠後，先輸出「旅遊需求摘要」，請使用者確認是否要修改。
+3. 使用者確認後，輸出以下三份可直接複製使用的內容：
+   A. NotebookLM 旅客需求總表
+   B. NotebookLM Deep Research prompt
+   C. 匯入來源後追問 prompt
+
+二、語氣與風格
+- 全程使用繁體中文。
+- 語氣親切、溫暖、自然，像一位善於引導的旅遊顧問。
+- 不要太制式，不要像冷冰冰的問卷。
+- 每次回覆要簡潔清楚，讓 AI 初學者容易閱讀與回答。
+
+三、第一輪固定問題
+1. 這次最想去哪個目的地？如果還沒決定，也可以給我 2～3 個候選地。
+2. 大約什麼時候出發、想玩幾天？
+3. 這趟旅行是誰要去？例如自己、情侶、朋友、親子、夫妻、長輩同行，總共幾人？
+
+四、第二輪問題
+1. 這趟旅行大概抓多少預算？可以是每人預算或全體預算，請註明幣別。
+2. 你比較喜歡哪種旅行風格？可從以下選擇 1～3 個：輕鬆放鬆 / 美食 / 購物 / 文化歷史 / 自然景觀 / 親子樂園 / 深度探索 / 拍照打卡
+3. 有沒有需要特別注意的人員條件？例如：小孩年齡、長輩體力、少走路、懷孕、行動不便、飲食禁忌等。
+
+五、第三輪問題
+1. 住宿偏好是什麼？例如：交通方便、飯店舒適、親子友善、有洗衣機、預算優先、景觀好。
+2. 交通偏好是什麼？例如：大眾運輸為主、可接受計程車、租車自駕、包車、少走路。
+3. 有沒有特別想去的景點、想吃的東西，或想避開的安排？
+
+六、最終輸出
+使用者確認需求後，產出：
+A. NotebookLM 旅客需求總表（條列所有需求）
+B. NotebookLM Deep Research Prompt
+C. 匯入來源後追問 Prompt
+
+七、重要限制
+- 不要憑空捏造票價、簽證、營業時間、交通班次等高變動資訊。
+- 若涉及高變動資訊，請明確提醒需透過 NotebookLM 或官方來源查證。
+- 不要要求使用者提供護照號碼、電話等敏感資料。
+- 若使用者回答不完整，請提供合理選項幫助他快速前進。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">好的提示詞三大要素</div>
+    <div class="kb-text">1. 角色（Role）：請 AI 扮演明確角色，如「你是旅遊規劃師」。2. 任務（Task）：說清楚要做什麼，不要只丟關鍵字。3. 格式（Format）：指定輸出格式，如表格、步驟、清單、簡報大綱。這三要素可以套用到任何 AI 提問場景。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 06</div>
+  <h1 class="section-title">NotebookLM 研究升級</h1>
+  <p class="section-sub">把 AI 旅遊規劃師的結果，接力交給 NotebookLM 做深度研究、簡報與資訊圖表。</p>
+</div>
+  <img src="images/notebooklm/hero-research-studio-01.webp" class="section-hero" style="" loading="lazy" />
+
+  <div class="content-block">
+    <h3>為什麼要用 NotebookLM？</h3>
+    <p>ChatGPT 的知識有截止日期，且無法針對你提供的「專屬資料」做深度引用。NotebookLM 讓你把旅遊需求總表當作「知識庫」，AI 只基於你給的資料來回答——更精準、更能產出可直接執行的行程。</p>
+  </div>
+
+  <div class="content-block no-break">
+    <h3>研究流程圖</h3>
+    <div class="flow-diagram">
+      <div class="flow-step">旅遊需求總表</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">貼成 Note</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">轉成 Source</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Deep Research</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">行程／簡報／圖表</div>
+    </div>
+  </div>
+
+  <div class="tool-link-card">
+  <span class="tool-name">NotebookLM</span>
+  <a href="https://notebooklm.google.com/" class="tool-link" target="_blank">https://notebooklm.google.com/</a>
+  <span class="tool-desc">開啟 NotebookLM 建立新的筆記本</span>
+</div>
+
+  <div class="content-block">
+    <h3>操作 6 步驟</h3>
+    <ol class="step-list">
+      <li><span class="step-num">1</span><strong>建立筆記本</strong> — 開啟 notebooklm.google.com，建立新的筆記本</li>
+      <li><span class="step-num">2</span><strong>貼入旅客需求總表</strong> — 把旅遊規劃師產出的「旅客需求總表」貼成 Note</li>
+      <li><span class="step-num">3</span><strong>轉成 Source</strong> — 將 Note 轉成 Source，讓 NotebookLM 以此為回答依據</li>
+      <li><span class="step-num">4</span><strong>貼入 Deep Research Prompt</strong> — 把下方提示詞貼入 Deep Research 開始研究</li>
+      <li><span class="step-num">5</span><strong>匯入研究報告</strong> — 研究完成後，將報告與來源匯入筆記本</li>
+      <li><span class="step-num">6</span><strong>追問產出最終行程</strong> — 貼入追問提示詞，產出完整行程</li>
+    </ol>
+  </div>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">NotebookLM 最多支援 50 個來源文件</div>
+    <div class="kb-text">你可以上傳 PDF、網頁連結、Google 文件、貼上的文字等作為知識來源。NotebookLM 會基於這些「你指定的資料」來回答問題，不會憑空編造。Audio Overview 功能甚至可以生成雙人對話形式的 podcast 摘要，非常適合分享給同行旅伴。</div>
+  </div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>提示詞 A｜Deep Research Prompt</h3>
+    <p><strong>🔬 何時使用：</strong>當你把旅遊需求整理好、準備讓 AI 做深度資料蒐集時使用。將此提示詞貼入 NotebookLM 的 Deep Research 功能，AI 會基於你提供的旅客需求總表，蒐集最新、可信的旅遊資訊。</p>
+<p><strong>🎯 產出成果：</strong>住宿比較表、交通建議、景點清單、餐飲建議、預算估算、風險提醒、多套行程策略。</p>
+  </div>
+  <div class="prompt-card notebooklm">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">NotebookLM Deep Research Prompt</span>
+    <span class="prompt-platform-tag tag-notebooklm">NOTEBOOKLM</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我提供的旅客需求總表，進行一份可支援自由行規劃的深度研究。
+
+請將「旅客需求總表」視為最高優先限制。所有住宿、交通、景點、餐廳、票券、預算與行程建議，都必須回扣這份需求；若某項建議不完全符合，請明確說明原因，並提供替代方案。
+
+請研究並整理以下內容：
+1. 目的地在旅行時間的天氣、旺淡季、人潮、節慶或注意事項。
+2. 入境、簽證、交通、安全、付款、通訊與文化禮儀相關資訊。
+3. 適合此旅客條件的住宿區域比較，包含各區優缺點與適合對象。
+4. 當地主要交通方式、交通卡、票券、機場或車站往返方式。
+5. 適合此行程的景點、活動、體驗、雨天備案、預約需求與官方資訊。
+6. 餐飲建議，包括在地美食、市場、咖啡廳、親子或飲食限制友善選項。
+7. 每日行程動線建議，避免過度繞路或太趕。
+8. 預算估算，區分主要交通、住宿、當地交通、餐飲、景點、購物與備用金。
+9. 風險提醒，例如天候、治安、詐騙、交通延誤、熱門景點預約額滿等。
+10. 至少提出 2 套不同風格的行程策略，並說明各自適合什麼樣的旅客。
+
+請以繁體中文輸出，並盡可能引用可信來源。對於可能變動的資訊，請標註「需出發前再次確認」。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>提示詞 B｜匯入來源後追問 Prompt</h3>
+    <p><strong>🔄 何時使用：</strong>Deep Research 完成、研究報告匯入筆記本後使用。將此提示詞貼入 NotebookLM 聊天框，讓 AI 根據所有研究資料產出可直接執行的最終旅遊規劃。</p>
+<p><strong>🎯 產出成果：</strong>完整每日行程表、交通動線、餐飲安排、住宿建議、預約清單、預算估算、雨天備案。</p>
+  </div>
+  <div class="prompt-card notebooklm">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">NotebookLM 匯入來源後追問 Prompt</span>
+    <span class="prompt-platform-tag tag-notebooklm">NOTEBOOKLM</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據目前筆記本中的所有來源，以及「旅客需求總表」，產出一份可直接執行的最終旅遊規劃。
+
+請務必以「旅客需求總表」為最高優先限制，不要產出泛泛的旅遊攻略。若不同來源有互相衝突的地方，請指出差異，並以較可信或較新的資訊為主。
+
+請輸出以下內容：
+1. 最推薦的行程策略與理由。
+2. 完整每日行程表，依早上／下午／晚上分段。
+3. 每天交通動線、交通工具與預估移動方式。
+4. 每天餐飲安排，若有飲食限制請特別標註。
+5. 住宿區域建議與理由。
+6. 景點、餐廳、交通或活動預約清單。
+7. 預算估算表。
+8. 雨天或突發狀況備案。
+9. 出發前再次確認事項。
+10. 本行程如何符合旅客需求的檢核表。
+
+請在所有可能變動的資訊旁標註來源與查詢日期，並提醒哪些項目需要在出發前再次確認。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>提示詞 C｜旅遊簡報生成 Prompt</h3>
+    <p><strong>📊 何時使用：</strong>行程規劃完成後，想做成簡報向家人朋友說明旅程時使用。將此提示詞貼入 NotebookLM，它會根據已匯入的研究資料產出簡報大綱。</p>
+<p><strong>🎯 產出成果：</strong>8～10 頁簡報大綱，含封面、行程總覽、住宿交通、景點亮點、美食推薦、預算概覽。</p>
+  </div>
+  <div class="prompt-card notebooklm">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">NotebookLM 旅遊簡報生成 Prompt</span>
+    <span class="prompt-platform-tag tag-notebooklm">NOTEBOOKLM</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據這份旅遊研究資料與最終行程規劃，整理成一份適合分享給同行家人或朋友的旅遊簡報內容。
+
+簡報目的：
+- 讓同行者快速理解這趟旅行的主軸與亮點
+- 讓大家知道每日行程重點
+- 方便討論是否需要調整
+
+請規劃 8～10 頁簡報，內容包含：
+1. 封面：旅行名稱、目的地、天數
+2. 這趟旅行的核心風格與規劃原則
+3. 旅伴需求摘要
+4. 每日行程總覽
+5. 住宿區域與交通策略
+6. 必去景點與期待亮點
+7. 美食與特色體驗
+8. 預算概覽
+9. 出發前要確認的事項
+10. 結尾：這趟旅行最值得期待的 3 件事
+
+請使用清楚、輕快、容易閱讀的繁體中文，標題要簡潔，內容不要過度冗長。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>提示詞 D｜旅遊資訊圖表生成 Prompt</h3>
+    <p><strong>📈 何時使用：</strong>想製作一張視覺化的旅遊資訊圖表、快速讓旅伴或社群看懂行程重點時使用。將提示詞貼入 NotebookLM，產出結構化內容後再交給 AI 繪圖工具生成圖表。</p>
+<p><strong>🎯 產出成果：</strong>結構化的圖表內容（標題、行程摘要、亮點、預算、注意事項），適合交給 AI 繪圖工具製成視覺圖表。</p>
+  </div>
+  <div class="prompt-card notebooklm">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">NotebookLM 旅遊資訊圖表生成 Prompt</span>
+    <span class="prompt-platform-tag tag-notebooklm">NOTEBOOKLM</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據目前的旅遊研究資料與最終行程規劃，整理出一張適合分享的旅遊資訊圖表內容。
+
+資訊圖表目標：
+- 讓人一眼看懂這趟旅行的重點
+- 適合傳給同行家人或朋友
+- 適合放在 LINE 群組或社群分享
+
+請整理以下資訊：
+1. 目的地與旅行天數
+2. 旅遊主題關鍵字 3～5 個
+3. 每日重點行程摘要
+4. 交通策略
+5. 住宿區域建議
+6. 必吃／必看／必體驗各 3 項
+7. 預算區間簡表
+8. 出發前 5 個提醒
+
+請用繁體中文輸出，文字精簡、有條理。</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>🎨 NotebookLM 簡報風格場景（4 選 1）</h3>
+    <p style="font-size:11px;color:#888">將 Deep Research 結果進一步升級為不同風格的簡報。選一種最適合你旅伴的場景，貼入 NotebookLM 要求產出對應大綱。</p>
+  </div>
+  <div class="scenario-card no-break">
+    <h4>🏠 家族親情版</h4>
+    <div class="scenario-meta">視覺風格：溫馨手繪風｜目標觀眾：長輩與家人</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">向家人說明這次旅遊的舒適度、安全性與溫馨亮點，強調安全、節奏慢、不累人。</p>
+  </div><div class="scenario-card no-break">
+    <h4>💼 商務考察版</h4>
+    <div class="scenario-meta">視覺風格：簡約商務風｜目標觀眾：公司同事或上司</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">展示行程的效率、CP 值與產業連結亮點，適合考察、團隊建設或商務合作。</p>
+  </div><div class="scenario-card no-break">
+    <h4>🥂 熱血好友版</h4>
+    <div class="scenario-meta">視覺風格：現代流行風｜目標觀眾：熱血好友或死黨</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">點燃大家的旅遊魂！強調必拍位、極限美食、潮流體驗與 IG 爆紅點。</p>
+  </div><div class="scenario-card no-break">
+    <h4>🎈 親子探險版</h4>
+    <div class="scenario-meta">視覺風格：可愛黏土風｜目標觀眾：兒童與親子家庭</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">將旅遊包裝成一場「史詩冒險挑戰」，讓孩子充滿參與感。</p>
+  </div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>🖼️ 資訊圖表 6 大風格</h3>
+    <p style="font-size:11px;color:#888">選一個風格描述，貼給 AI 繪圖工具（如 ChatGPT / Gemini），生成你的專屬旅遊資訊圖表。</p>
+  </div>
+  <table>
+    <tr><th>風格</th><th>適合對象</th><th>視覺描述</th></tr>
+    <tr><td><strong>🌸 日式水彩</strong></td><td>經典款・溫馨旅遊</td><td style='font-size:11px'>溫暖、迷人、手繪水彩插畫，柔和輪廓線與溫潤紋理</td></tr><tr><td><strong>🧸 親子黏土風</strong></td><td>適合親子族群</td><td style='font-size:11px'>3D 等距視角、黏土擬真質感、馬卡龍色調，像微縮模型玩具</td></tr><tr><td><strong>👾 像素復古風</strong></td><td>IG 限動・年輕族群</td><td style='font-size:11px'>16-bit 復古像素藝術，類似 90 年代 RPG 遊戲畫面</td></tr><tr><td><strong>🎎 浮世繪風</strong></td><td>長輩/文青・超有質感</td><td style='font-size:11px'>日本傳統浮世繪風格，大膽輪廓線、平塗色彩、泛黃紙張質感</td></tr><tr><td><strong>🌃 賽博龐克</strong></td><td>都會年輕人・東京夜景</td><td style='font-size:11px'>深色背景搭配霓虹光（粉紅、青色、紫色），科幻氛圍</td></tr><tr><td><strong>✏️ 極簡線條</strong></td><td>文青/極簡控・雜誌風</td><td style='font-size:11px'>大量留白、黑色細線條描繪輪廓，低飽和度莫蘭迪色系點綴</td></tr>
+  </table>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>🎙️ NotebookLM Audio Overview（Podcast 場景）</h3>
+    <p style="font-size:11px;color:#888">NotebookLM 可將你的研究資料自動生成雙人對話 podcast。選擇場景後，將描述貼入 NotebookLM 的「自訂」Audio Overview 設定。</p>
+  </div>
+  <div class="scenario-card no-break">
+    <h4>🏠 家族親情版</h4>
+    <div class="scenario-meta">主持角色：引導者與溫馨小助手</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">語氣成熟穩重，著重慢活步調、無障礙舒適度、在地文化與長輩適合的傳統美食。像在客廳聊天的氛圍。</p>
+  </div><div class="scenario-card no-break">
+    <h4>💼 商務考察版</h4>
+    <div class="scenario-meta">主持角色：分析師與亮點觀察家</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">語氣理性沉穩，著重行程效率、CP 值、後勤管理與路徑規劃邏輯。像專業矽谷科技談話節目。</p>
+  </div><div class="scenario-card no-break">
+    <h4>🥂 熱血好友版</h4>
+    <div class="scenario-meta">主持角色：高能量死黨默契組合</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">兩人像極有默契的死黨，對談高能量、幽默、充滿興奮感，偶爾鬥嘴。營造「明天就要出發」的派對氣氛。</p>
+  </div><div class="scenario-card no-break">
+    <h4>🎈 親子探險版</h4>
+    <div class="scenario-meta">主持角色：冒險隊長與好奇小夥伴</div>
+    <p style="font-size:12px;color:#555;margin-top:4px">充滿童心與活力，稱呼聽眾為「小小冒險家」。語氣生動活潑，充滿故事感與童趣。</p>
+  </div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="section-header">
+  <div class="section-num">單元 07</div>
+  <h1 class="section-title">LINE 貼圖工坊</h1>
+  <p class="section-sub">產出專屬旅行主題 LINE 貼圖素材，可進一步用 LINE 拍貼裁切送審。</p>
+</div>
+  <img src="images/sticker-lab/hero-sticker-grid-01.webp" class="section-hero" style="" loading="lazy" />
+
+  <div class="content-block">
+    <h3>成果層級</h3>
+    <div class="two-col">
+      <div class="info-card"><div class="icon">✅</div><h4>必達目標</h4><p>完成一張「8 格貼圖素材總圖」</p></div>
+      <div class="info-card"><div class="icon">🚀</div><h4>進階目標</h4><p>匯入 LINE 拍貼 → 裁切 8 張 → 送審上架</p></div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <h3>LINE 拍貼操作流程</h3>
+    <ol class="step-list">
+      <li><span class="step-num">1</span><strong>下載 LINE 拍貼</strong> — 從 App Store / Google Play 下載 LINE 拍貼 App</li>
+      <li><span class="step-num">2</span><strong>建立新專案</strong> — 開啟 App 點擊「+」建立新的貼圖專案</li>
+      <li><span class="step-num">3</span><strong>匯入素材總圖</strong> — 將 AI 生成的 8 格總圖匯入</li>
+      <li><span class="step-num">4</span><strong>裁切 8 張貼圖</strong> — LINE 拍貼會自動偵測格線，手動微調裁切</li>
+      <li><span class="step-num">5</span><strong>填寫基本資料</strong> — 輸入貼圖名稱、說明、設定價格</li>
+      <li><span class="step-num">6</span><strong>預覽並送審</strong> — 預覽確認後送出審核，約 1-2 週上架</li>
+    </ol>
+  </div>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">LINE 貼圖送審常見退件原因</div>
+    <div class="kb-text">1. 圖片模糊或解析度不足（需 370×320px 以上）。2. 有未授權的商標、品牌 Logo。3. 內容涉及暴力、色情或仇恨言論。4. 文字排版裁切超出安全區。建議送審前先在 LINE 拍貼內預覽效果。</div>
+  </div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>LINE 拍貼詳細操作指引</h3>
+  </div>
+
+  <div class="content-block">
+    <h3>主畫面按鍵說明</h3>
+    <table>
+      <tr><th>按鍵/區域</th><th>功能</th><th>什麼時候用</th></tr>
+      <tr><td>+新增專案</td><td>建立新的貼圖主題</td><td>每次製作新貼圖時，從頭開始</td></tr>
+      <tr><td>編輯按鈕（鉛筆圖示）</td><td>進入已建立的專案繼續編輯</td><td>中途離開、或想修改之前做的貼圖</td></tr>
+      <tr><td>預覽（眼睛圖示）</td><td>查看貼圖在聊天室中的模擬效果</td><td>裁切完成後，確認每張貼圖大小、位置是否正常</td></tr>
+      <tr><td>文字工具（T 圖示）</td><td>在貼圖上加文字</td><td>想為貼圖加對話、標語或表情文字時</td></tr>
+      <tr><td>擦除/去背（橡皮擦圖示）</td><td>手動擦掉背景或不需要的區域</td><td>AI 生成邊緣有雜色、想要透明背景效果時</td></tr>
+      <tr><td>旋轉/翻轉</td><td>旋轉或水平翻轉貼圖</td><td>調整角色方向、或想讓貼圖左右對調</td></tr>
+      <tr><td>裁切框</td><td>拖曳調整每張貼圖的選取範圍</td><td>AI 生成格線不準、需要手動微調每張貼圖邊界</td></tr>
+      <tr><td>送審按鈕</td><td>送出貼圖審核申請</td><td>全部 8 張都確認完畢、價格設定好後</td></tr>
+    </table>
+  </div>
+
+  <div class="content-block">
+    <h3>情境操作指南</h3>
+    <table>
+      <tr><th>情境</th><th>問題</th><th>解決步驟</th></tr>
+      <tr><td>自動裁切不準</td><td>格線偵測偏移，貼圖頭被切到</td><td>1. 點該格貼圖進入編輯模式<br>2. 拖曳裁切框四角調整範圍<br>3. 點預覽確認不會被切到</td></tr>
+      <tr><td>背景太雜</td><td>AI 生成的總圖背景有雜色或不想全白</td><td>1. 點橡皮擦圖示<br>2. 手動塗抹想移除的區域<br>3. 或用「自動去背」功能一鍵處理</td></tr>
+      <tr><td>想加文字</td><td>想讓貼圖加上「早安」、「好累」等對話</td><td>1. 選文字工具 T<br>2. 輸入文字、調整大小與位置<br>3. 注意文字不要超出貼圖安全區</td></tr>
+      <tr><td>貼圖太小/太大</td><td>角色在貼圖中比例不理想</td><td>1. 兩指縮放調整角色大小<br>2. 確保完整角色都在裁切框內<br>3. 預覽在聊天室中的呈現效果</td></tr>
+      <tr><td>要被退件</td><td>擔心送審被退</td><td>1. 確認每張圖 ≥ 370×320px<br>2. 檢查有無品牌 Logo / 商標<br>3. 先用預覽功能確認效果<br>4. 確保內容適當、無違規</td></tr>
+    </table>
+  </div>
+
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">建議先完成一組送審後再做下一組</div>
+    <div class="kb-text">LINE 貼圖審核約 1-2 週，建議先用你最滿意的一組風格送審，等上架後再回頭製作其他風格。這樣可以邊賣邊學，累積經驗。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page page-break">
+  <div class="header-line"></div>
+  <div class="sticker-pack-card no-break">
+    <div class="sticker-pack-img"><img src="images/sticker-lab/pack-solo.png" class="" style="" loading="lazy" /></div>
+    <div class="sticker-pack-info">
+      <h4>我的旅遊小分身</h4>
+      <p style="font-size:11px;color:#888">延續 3D 公仔的驚喜感，做出一組「我的旅行角色」貼圖。</p>
+      <p style="font-size:11px;color:#777">📷 適合照片：自己的個人照，半身照或全身照都可以</p>
+      <div class="sticker-pack-scenes"><span>出發囉！(GO)</span><span>行李收好了(OK)</span><span>今天走輕鬆路線(CHILL)</span><span>好想吃這個(YUM)</span><span>幫我拍一張(SMILE)</span><span>迷路中(OH NO)</span><span>買到了！(BUY)</span><span>回家收心中(BYE)</span></div>
+    </div>
+  </div>
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">我的旅遊小分身 — 生成提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我上傳的個人照片，設計一張「8 格旅行主題 LINE 貼圖素材總圖」。
+
+請保留人物主要臉部特徵、髮型與整體氣質，將人物轉化成可愛、精緻、有親和力的 3D 公仔風角色。
+
+整體設計要求：
+1. 輸出為一張整齊的 4 欄 × 2 列貼圖素材總圖，共 8 格。
+2. 每一格中的角色穿著不同的服裝與造型，配合各情境換裝。
+3. 使用純白色（#FFFFFF）的純單色背景，無任何漸層，無任何陰影投影或地板倒影，方便後續去背。
+4. 每一格留有足夠空間，角色不要碰到格線或邊框。
+5. 在每一格的角色旁，加入對應的簡短英文或繁體中文手寫藝術字。
+
+請設計以下 8 個情境與文字：
+1. 出發囉！角色拿著小行李箱，充滿期待（字: &quot;GO&quot; 或 &quot;出發&quot;）
+2. 行李收好了，角色站在整理好的行李旁比讚（字: &quot;OK&quot; 或 &quot;好了&quot;）
+3. 今天走輕鬆路線，角色悠閒地戴墨鏡或拿飲料（字: &quot;CHILL&quot; 或 &quot;放鬆&quot;）
+4. 好想吃這個，角色看著美食眼睛發亮（字: &quot;YUM&quot; 或 &quot;好吃&quot;）
+5. 幫我拍一張，角色擺出拍照姿勢（字: &quot;SMILE&quot; 或 &quot;拍照&quot;）
+6. 迷路中，角色拿著地圖露出可愛困惑表情（字: &quot;OH NO&quot; 或 &quot;迷路&quot;）
+7. 買到了！角色提著戰利品開心歡呼（字: &quot;BUY&quot; 或 &quot;買！&quot;）
+8. 回家收心中，角色抱著小枕頭露出依依不捨的樣子（字: &quot;BYE&quot; 或 &quot;收心&quot;）</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="sticker-pack-card no-break">
+    <div class="sticker-pack-img"><img src="images/sticker-lab/pack-family-kid.png" class="" style="" loading="lazy" /></div>
+    <div class="sticker-pack-info">
+      <h4>親子旅行歡樂包</h4>
+      <p style="font-size:11px;color:#888">主打親子旅行的可愛日常，容易讓媽媽族群產生成就感與分享慾。</p>
+      <p style="font-size:11px;color:#777">📷 適合照片：一位家長與一位孩子合照</p>
+      <div class="sticker-pack-scenes"><span>我們出發啦(GO)</span><span>媽媽我要這個(WANT)</span><span>休息一下好嗎(TIRED)</span><span>我餓了(HUNGRY)</span><span>拍照比 YA(PEACE)</span><span>今天超開心(HAPPY)</span><span>不想回家(NO)</span><span>下次還要來(AGAIN)</span></div>
+    </div>
+  </div>
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">親子旅行歡樂包 — 生成提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我上傳的親子照片，設計一張「8 格親子旅行主題 LINE 貼圖素材總圖」。
+
+請保留大人與孩子的主要臉部特徵、髮型與互動關係，將他們轉化成可愛、溫暖、有親密感的 3D 公仔風角色。
+
+整體設計要求：
+1. 輸出為一張整齊的 4 欄 × 2 列貼圖素材總圖，共 8 格。
+2. 每一格中大人與小孩的服裝在不同情境皆不相同。
+3. 使用純白色（#FFFFFF）的純單色背景，無任何漸層，無任何陰影投影或地板倒影，方便後續去背。
+4. 每一格留有足夠空間，角色不要碰到格線或邊框。
+5. 在每一格的角色旁，加入對應的簡短英文或繁體中文手寫藝術字。
+
+8 個情境與文字：
+1. 我們出發啦：親子一起推小行李箱牽手出發（字: &quot;GO&quot; 或 &quot;出發&quot;）
+2. 媽媽我要這個：孩子興奮指著前方，大人露出寵溺表情（字: &quot;WANT&quot; 或 &quot;買給我&quot;）
+3. 休息一下好嗎：孩子微累坐著，大人溫柔陪伴（字: &quot;TIRED&quot; 或 &quot;累了&quot;）
+4. 我餓了：孩子摸肚子期待美食，大人遞上食物（字: &quot;HUNGRY&quot; 或 &quot;餓了&quot;）
+5. 拍照比 YA：親子一起開心比 YA（字: &quot;PEACE&quot; 或 &quot;耶&quot;）
+6. 今天超開心：孩子蹦跳，大人笑著看他（字: &quot;HAPPY&quot; 或 &quot;開心&quot;）
+7. 不想回家：孩子依依不捨抱著玩偶（字: &quot;NO&quot; 或 &quot;不想走&quot;）
+8. 下次還要來：親子一起揮手充滿期待（字: &quot;AGAIN&quot; 或 &quot;還要來&quot;）</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="sticker-pack-card no-break">
+    <div class="sticker-pack-img"><img src="images/sticker-lab/pack-whole-family.png" class="" style="" loading="lazy" /></div>
+    <div class="sticker-pack-info">
+      <h4>全家一起旅行包</h4>
+      <p style="font-size:11px;color:#888">呈現「全家一起出去玩」的溫馨歡樂感，非常適合工作坊主題。</p>
+      <p style="font-size:11px;color:#777">📷 適合照片：家庭合照，夫妻＋孩子</p>
+      <div class="sticker-pack-scenes"><span>全家集合(FAMILY)</span><span>準備出門(LET'S GO)</span><span>今天行程滿滿(BUSY)</span><span>先吃再說(EAT)</span><span>爸爸拍照中(SMILE)</span><span>媽媽最會安排(BOSS)</span><span>小孩玩瘋了(FUN)</span><span>完美的一天(SUPER)</span></div>
+    </div>
+  </div>
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">全家一起旅行包 — 生成提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我上傳的家庭合照，設計一張「8 格全家旅行主題 LINE 貼圖素材總圖」。
+
+請保留主要家庭成員的臉部特色、髮型與家庭氛圍，轉化成溫暖可愛的 3D 家庭公仔角色。
+
+整體設計要求：
+1. 輸出為一張整齊的 4 欄 × 2 列貼圖素材總圖，共 8 格。
+2. 每一格中家庭成員穿著不同的服裝，配合情境造型變化。
+3. 使用純白色（#FFFFFF）的純單色背景，無任何漸層，無任何陰影投影或地板倒影。
+4. 每一格留有足夠空間，角色不要碰到格線或邊框。
+5. 在每一格加入對應的簡短英文或繁體中文手寫藝術字。
+
+8 個情境與文字：
+1. 全家集合：大家開心站在一起（字: &quot;FAMILY&quot; 或 &quot;全家&quot;）
+2. 準備出門：家人拿行李或背旅行包（字: &quot;LET&#x27;S GO&quot; 或 &quot;出門囉&quot;）
+3. 今天行程滿滿：有人拿行程表或地圖（字: &quot;BUSY&quot; 或 &quot;出發&quot;）
+4. 先吃再說：家人開心準備吃美食（字: &quot;EAT&quot; 或 &quot;開動&quot;）
+5. 爸爸拍照中：其中一位家人拿相機拍照（字: &quot;SMILE&quot; 或 &quot;看鏡頭&quot;）
+6. 媽媽最會安排：手拿手機安排路線（字: &quot;BOSS&quot; 或 &quot;聽我的&quot;）
+7. 小孩玩瘋了：孩子充滿活力（字: &quot;FUN&quot; 或 &quot;好玩&quot;）
+8. 完美的一天：全家一起比讚或開心歡呼（字: &quot;SUPER&quot; 或 &quot;讚&quot;）</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="sticker-pack-card no-break">
+    <div class="sticker-pack-img"><img src="images/sticker-lab/pack-pet.png" class="" style="" loading="lazy" /></div>
+    <div class="sticker-pack-info">
+      <h4>毛孩旅行日記</h4>
+      <p style="font-size:11px;color:#888">寵物貼圖最容易引發全場笑聲與分享慾，適合現場氣氛。</p>
+      <p style="font-size:11px;color:#777">📷 適合照片：狗狗、貓咪或其他毛孩的清楚照片</p>
+      <div class="sticker-pack-scenes"><span>我也要去(ME TOO)</span><span>出發汪／出發喵(GO)</span><span>到處聞聞(SMELL)</span><span>休息時間(REST)</span><span>這裡好玩(FUN)</span><span>給我零食(SNACK)</span><span>拍我拍我(PHOTO)</span><span>回家睡翻(SLEEP)</span></div>
+    </div>
+  </div>
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">毛孩旅行日記 — 生成提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我上傳的寵物照片，設計一張「8 格毛孩旅行主題 LINE 貼圖素材總圖」。
+
+請保留寵物最具辨識度的特徵（毛色、耳朵、眼神、花紋），將牠轉化成可愛、療癒的 3D 寵物公仔角色。
+
+整體設計要求：
+1. 輸出為一張整齊的 4 欄 × 2 列貼圖素材總圖，共 8 格。
+2. 每一格中寵物戴有不同的配件或衣服造型（小帽子、小背包、圍巾、領結、太陽眼鏡等）。
+3. 使用純白色（#FFFFFF）的純單色背景，無任何漸層，無任何陰影投影或地板倒影。
+4. 每一格留有足夠空間，角色不要碰到格線或邊框。
+5. 在每一格加入對應的簡短英文或繁體中文手寫藝術字。
+
+8 個情境與文字：
+1. 我也要去：毛孩站在行李箱旁期待出發（字: &quot;ME TOO&quot; 或 &quot;要跟&quot;）
+2. 出發汪／出發喵：戴上小旅行帽與小背包（字: &quot;GO&quot; 或 &quot;出發&quot;）
+3. 到處聞聞：好奇探索周圍（字: &quot;SMELL&quot; 或 &quot;探索&quot;）
+4. 休息時間：坐下或趴著放鬆（字: &quot;REST&quot; 或 &quot;累了&quot;）
+5. 這裡好玩：開心奔跑或搖尾巴（字: &quot;FUN&quot; 或 &quot;好玩&quot;）
+6. 給我零食：期待看著零食，流口水（字: &quot;SNACK&quot; 或 &quot;肉肉&quot;）
+7. 拍我拍我：擺出可愛姿勢看鏡頭（字: &quot;PHOTO&quot; 或 &quot;萌&quot;）
+8. 回家睡翻：疲憊又滿足地睡著（字: &quot;SLEEP&quot; 或 &quot;晚安&quot;）</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="sticker-pack-card no-break">
+    <div class="sticker-pack-img"><img src="images/sticker-lab/pack-besties.png" class="" style="" loading="lazy" /></div>
+    <div class="sticker-pack-info">
+      <h4>姐妹閨蜜出遊包</h4>
+      <p style="font-size:11px;color:#888">適合女性多的工作坊，畫面活潑、時尚、有聊天群組感。</p>
+      <p style="font-size:11px;color:#777">📷 適合照片：兩位好友合照、姐妹照、夥伴合照</p>
+      <div class="sticker-pack-scenes"><span>說走就走(GO)</span><span>今天一定要拍美(BEAUTY)</span><span>這家我可以(YUMMY)</span><span>買它！(BUY IT)</span><span>再逛一下(MORE)</span><span>先喝咖啡(COFFEE)</span><span>太好笑了(LOL)</span><span>下次再一起(LOVE)</span></div>
+    </div>
+  </div>
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">姐妹閨蜜出遊包 — 生成提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我上傳的兩人合照，設計一張「8 格姐妹／閨蜜旅行主題 LINE 貼圖素材總圖」。
+
+請保留兩位人物的主要臉部特徵、髮型與相處氛圍，轉化成活潑、時尚、可愛的 3D 公仔風角色。
+
+整體設計要求：
+1. 輸出為一張整齊的 4 欄 × 2 列貼圖素材總圖，共 8 格。
+2. 每一格中兩人的服飾與打扮皆不同，換上各種亮眼時尚服裝與髮飾。
+3. 使用純白色（#FFFFFF）的純單色背景，無任何漸層，無任何陰影投影或地板倒影。
+4. 每一格留有足夠空間，角色不要碰到格線或邊框。
+5. 在每一格加入對應的簡短英文或繁體中文手寫藝術字。
+
+8 個情境與文字：
+1. 說走就走：兩人拿著小包包開心出發（字: &quot;GO&quot; 或 &quot;出發&quot;）
+2. 今天一定要拍美：兩人擺時尚拍照姿勢（字: &quot;BEAUTY&quot; 或 &quot;美翻&quot;）
+3. 這家我可以：甜點或飲品很期待（字: &quot;YUMMY&quot; 或 &quot;想吃&quot;）
+4. 買它！：兩人購物時興奮比讚（字: &quot;BUY IT&quot; 或 &quot;買了&quot;）
+5. 再逛一下：一人拉著另一人繼續逛（字: &quot;MORE&quot; 或 &quot;繼續逛&quot;）
+6. 先喝咖啡：兩人坐在咖啡桌旁手捧咖啡杯（字: &quot;COFFEE&quot; 或 &quot;下午茶&quot;）
+7. 太好笑了：兩人笑到眼睛彎彎（字: &quot;LOL&quot; 或 &quot;笑死&quot;）
+8. 下次再一起：兩人開心揮手勾手（字: &quot;LOVE&quot; 或 &quot;愛妳&quot;）</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="sticker-pack-card no-break">
+    <div class="sticker-pack-img"><img src="images/sticker-lab/pack-couple.png" class="" style="" loading="lazy" /></div>
+    <div class="sticker-pack-info">
+      <h4>幸福雙人旅行包</h4>
+      <p style="font-size:11px;color:#888">偏溫馨與陪伴感，適合夫妻、情侶或想做雙人旅行回憶的學員。</p>
+      <p style="font-size:11px;color:#777">📷 適合照片：夫妻照、情侶照</p>
+      <div class="sticker-pack-scenes"><span>一起出發(GO)</span><span>跟著我就對了(FOLLOW)</span><span>今天去哪？(WHERE)</span><span>你拍我(SMILE)</span><span>吃這家好嗎(EAT?)</span><span>累了抱一下(HUG)</span><span>這趟很值得(BEST)</span><span>下次再出發(BYE)</span></div>
+    </div>
+  </div>
+  <div class="prompt-card 適用 chatgpt / gemini">
+  <div class="prompt-header">
+    <span class="prompt-icon">💬</span>
+    <span class="prompt-title">幸福雙人旅行包 — 生成提示詞</span>
+    <span class="prompt-platform-tag tag-適用 chatgpt / gemini">適用 CHATGPT / GEMINI</span>
+  </div>
+  
+  <div class="prompt-body"><pre>請根據我上傳的雙人合照，設計一張「8 格幸福雙人旅行主題 LINE 貼圖素材總圖」。
+
+請保留兩位人物的主要臉部特徵、髮型與相處氣質，轉化成溫馨、可愛、有陪伴感的 3D 雙人公仔角色。
+
+整體設計要求：
+1. 輸出為一張整齊的 4 欄 × 2 列貼圖素材總圖，共 8 格。
+2. 每一格中兩人的服裝與造型皆不同，配合情境造型變化。
+3. 使用純白色（#FFFFFF）的純單色背景，無任何漸層，無任何陰影投影或地板倒影。
+4. 每一格留有足夠空間，角色不要碰到格線或邊框。
+5. 在每一格加入對應的簡短英文或繁體中文手寫藝術字。
+
+8 個情境與文字：
+1. 一起出發：兩人開心站在行李箱旁揮手（字: &quot;GO&quot; 或 &quot;出發&quot;）
+2. 跟著我就對了：一人自信帶路，另一人微笑跟著（字: &quot;FOLLOW&quot; 或 &quot;跟著我&quot;）
+3. 今天去哪？：兩人一起看著地圖或手機（字: &quot;WHERE&quot; 或 &quot;去哪裡&quot;）
+4. 你拍我：一人幫另一人拍照（字: &quot;SMILE&quot; 或 &quot;拍我&quot;）
+5. 吃這家好嗎：兩人手拿美食開心微笑（字: &quot;EAT?&quot; 或 &quot;吃這家&quot;）
+6. 累了抱一下：兩人自然溫馨擁抱（字: &quot;HUG&quot; 或 &quot;累了&quot;）
+7. 這趟很值得：兩人一起欣賞美景比讚（字: &quot;BEST&quot; 或 &quot;值得&quot;）
+8. 下次再出發：兩人開心揮手（字: &quot;BYE&quot; 或 &quot;下次見&quot;）</pre></div>
+  <div class="prompt-copy-hint">📋 複製此提示詞，一鍵複製到 AI 使用</div>
+</div>
+</div><div class="page">
+  <div class="header-line"></div>
+  <div class="content-block">
+    <h3>網站貼圖參考圖</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <img src="images/sticker-lab/sticker-pack-cute-01.webp" class="" style="width:100%;border-radius:8px" loading="lazy" />
+      <img src="images/sticker-lab/sticker-pack-family-01.webp" class="" style="width:100%;border-radius:8px" loading="lazy" />
+      <img src="images/sticker-lab/sticker-pack-pet-01.webp" class="" style="width:100%;border-radius:8px" loading="lazy" />
+    </div>
+  </div>
+  <div class="knowledge-box">
+  <div class="kb-icon">💡</div>
+  <div class="kb-content">
+    <div class="kb-title">LINE 貼圖作品上傳提醒</div>
+    <div class="kb-text">產出素材總圖後，別忘了上傳到工作坊 LINE 群組，你的作品將有機會參加現場人氣票選！回家後可繼續用這些提示詞生成不同風格的貼圖素材。</div>
+  </div>
+</div>
+  <div class="footer-note">AI 旅遊規劃師工作坊 課後講義</div>
+</div><div class="page back-cover">
+  <div class="cover-content">
+    <h2>謝謝你今天的參與！</h2>
+    <p>希望這份講義能陪你在 AI 學習的路上繼續前進。</p>
+    <p>有任何問題，歡迎透過 LINE 官方 AI 助教聯繫。</p>
+    <p style="margin-top:24px;font-size:13px;color:rgba(255,255,255,.7)">AI 旅遊規劃師工作坊 · 2026 年 6 月 · 講師 耀文 Randy</p>
+    <p style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">本講義提示詞適用於 ChatGPT 與 Gemini，回家可重複使用</p>
+  </div>
+</div>
+</body>
+</html>
