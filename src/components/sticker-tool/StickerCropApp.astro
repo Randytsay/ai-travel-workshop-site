@@ -145,6 +145,9 @@ import '../../styles/sticker-tool.css';
   <!-- Lightbox -->
   <div id="st-lightbox" role="dialog" aria-label="貼圖預覽">
     <img id="st-lbImg" alt="">
+    <div id="st-ios-hint" style="display: none; color: #fff; background: rgba(0,0,0,0.65); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; margin-top: 12px; font-weight: bold; border: 1px dashed rgba(255,255,255,0.4); text-align: center; max-width: 90%;">
+       iPhone 儲存指引：請「長按」上方貼圖，選擇「儲存至照片」即可直接存入手機相簿！
+    </div>
     <div class="st-lb-row">
       <button class="st-lb-btn" id="st-lbDl">⬇ 下載此張</button>
       <button class="st-lb-btn st-lb-btn danger" id="st-lbDel">✕ 刪除</button>
@@ -159,7 +162,7 @@ import { detectBackground, removeBackground, autoTrim, type BgColor } from '../.
 import { detectGrid, type Rect } from '../../lib/sticker-tool/gridDetector';
 import { detectWatermarkPresence, removeWatermark, loadWatermarkRef } from '../../lib/sticker-tool/watermarkRemoval';
 import { fitToLineSpec } from '../../lib/sticker-tool/lineSpec';
-import { buildZip, triggerDownload, downloadAllPng } from '../../lib/sticker-tool/zipExport';
+import { buildZip, triggerDownload, downloadAllPng, loadJSZip, isIOS } from '../../lib/sticker-tool/zipExport';
 
 function initStickerApp() {
 
@@ -239,6 +242,7 @@ const lbImg = $('st-lbImg') as HTMLImageElement;
 const lbDl = $('st-lbDl') as HTMLButtonElement;
 const lbDel = $('st-lbDel') as HTMLButtonElement;
 const lbClose = $('st-lbClose') as HTMLButtonElement;
+const iosHint = $('st-ios-hint') as HTMLDivElement | null;
 
 // ─── State ────────────────────────────────────────────────
 let img: HTMLImageElement | null = null;
@@ -1289,6 +1293,11 @@ function removeItem(i: number) {
 
 async function downloadOne(i: number) {
   const it = items[i];
+  if (isIOS()) {
+    openLb(i);
+    toast(' iPhone 儲存指引：請「長按」上方貼圖，選擇「儲存至照片」即可存入相簿！');
+    return;
+  }
   const blob = await (await fetch(it.dataUrl)).blob();
   triggerDownload(blob, it.name);
   toast(STRINGS.downloaded(1));
@@ -1320,10 +1329,16 @@ function openLb(i: number) {
   lbIndex = i;
   lbImg.src = items[i].dataUrl;
   lightbox.classList.add('on');
+  if (isIOS() && iosHint) {
+    iosHint.style.display = 'block';
+  }
 }
 function closeLb() {
   lightbox.classList.remove('on');
   lbIndex = -1;
+  if (iosHint) {
+    iosHint.style.display = 'none';
+  }
 }
 lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
 lbClose.addEventListener('click', closeLb);
@@ -1350,6 +1365,10 @@ btnDlZip.addEventListener('click', async () => {
 
 btnDlAll.addEventListener('click', async () => {
   if (!items.length) return;
+  if (isIOS()) {
+    alert('由於 iOS 系統限制，不支援批次下載多張 PNG。\n\n請改用「下載 ZIP」打包下載，或點擊單張圖片「長按儲存」喔！');
+    return;
+  }
   btnDlAll.disabled = true;
   toast(STRINGS.zipPackaging);
   try {
@@ -1364,6 +1383,9 @@ btnDlAll.addEventListener('click', async () => {
 
 // ─── Init ────────────────────────────────────────────────
 (async () => {
+  // 背景預載 JSZip 檔案，以防 iOS 因 user gesture 延遲封鎖 ZIP 下載
+  loadJSZip().catch(e => console.warn('JSZip 預載失敗：', e));
+
   // 預載 Gemini 浮水印參考圖（背景）
   try {
     watermarkRefCache = await loadWatermarkRef();

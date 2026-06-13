@@ -45,16 +45,32 @@ function dataUrlToUint8(dataUrl: string): Uint8Array {
   return arr;
 }
 
+export function isIOS(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
 /** 觸發瀏覽器下載 */
 export function triggerDownload(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 3000);
+  
+  if (isIOS()) {
+    // iOS Safari 必須使用直接跳轉，否則會因為 async/user gesture 限制導致 a.click() 下載無反應
+    window.location.href = url;
+  } else {
+    const a = document.createElement('a');
+    a.href = url; 
+    a.download = filename;
+    document.body.appendChild(a); 
+    a.click(); 
+    document.body.removeChild(a);
+  }
+  // 增加到 10 秒後再銷毀 ObjectURL，確保 iOS 有足夠時間處理檔案下載
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
-/** 批次觸發多檔下載（瀏覽器會依序彈出，間隔 200ms 避擋） */
+/** 批次觸發多檔下載（瀏覽器會依序彈出，間隔 250ms 避擋） */
 export async function downloadAllPng(items: ZipItem[]): Promise<void> {
   for (let i = 0; i < items.length; i++) {
     const it = items[i];
