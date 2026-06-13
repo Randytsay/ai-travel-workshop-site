@@ -206,6 +206,11 @@ import { stationRoles } from '../content/journeyGuide';
             </label>
           </div>
         </div>
+        
+        <!-- 提交按鈕 -->
+        <button type="submit" class="btn" style="width: 100%; padding: 14px; font-size: 1.05rem; background: var(--sunset); color: #fff; border: 0; box-shadow: var(--shadow-button); border-radius: 12px; margin-top: 24px; cursor: pointer; font-weight: 800;">
+          🔮 分析旅遊人格與生成 AI 生圖指令
+        </button>
       </form>
 
       <!-- Quiz Result (Hidden by default) -->
@@ -303,13 +308,16 @@ import { stationRoles } from '../content/journeyGuide';
       DD: { suffix: '·極限規劃型', modPersonality: '您把冒險視為一種修煉，每一分風險都在您的精密計算之中。您熱愛挑戰極限，但絕不盲目衝動。您對每個細節的極致追求，讓您即使在最危險的環境下，也能保持冷靜並帶領大家安全突圍，這就是您作為極限規劃者的強大實力。' }
     };
 
-    function evaluateQuiz() {
+    function evaluateQuiz(shouldScroll = false) {
       const form = document.getElementById('quiz-form');
-      const formData = new FormData(form);
-      const q1 = formData.get('q1');
-      const q2 = formData.get('q2');
-      const q3 = formData.get('q3');
-      const nameInput = document.getElementById('quiz-name').value.trim();
+      if (!form) return;
+      const formData = new FormData(form as HTMLFormElement);
+      const q1 = formData.get('q1') as string | null;
+      const q2 = formData.get('q2') as string | null;
+      const q3 = formData.get('q3') as string | null;
+      const nameEl = document.getElementById('quiz-name') as HTMLInputElement | null;
+      if (!nameEl) return;
+      const nameInput = nameEl.value.trim();
       
       if (!q1 || !q2 || !q3 || !nameInput) return;
       
@@ -322,14 +330,20 @@ import { stationRoles } from '../content/journeyGuide';
       
       const promptText = `請參考我上傳的照片，生成一張【可愛討喜且極具電影級質感】的 3D 卡通旅遊海報。\n\n🌟 視覺風格：${base.cartoonStyle}。請使用 Pixar 3D 渲染技術，呈現極致柔和的電影級光影、溫潤材質與 8K 高清細節，整體氛圍要溫馨且高級。\n👤 人物設定：請精確保留「附圖中的臉部特徵」，將其轉化為表情生動、比例可愛的討喜 3D 角色。\n✍️ 畫面文字：在合適位置加入精緻藝術字：「${nameInput} 的${base.name}之旅」\n🏷️ 隱藏彩蛋：請在畫面某個角落，以「旅行貼紙」、「城市街牌」或「復古印章」的形式，自然融入文字「AI 旅遊工作坊」，風格要像圖的一部分，完全不像廣告。\n比例：1:1`;
       
-      document.getElementById('result-fullname').textContent = base.emoji + ' ' + fullName;
-      document.getElementById('result-desc').innerText = fullDesc;
-      document.getElementById('result-prompt').value = promptText;
+      const fullnameEl = document.getElementById('result-fullname');
+      const descEl = document.getElementById('result-desc');
+      const promptEl = document.getElementById('result-prompt') as HTMLTextAreaElement | null;
+      
+      if (fullnameEl) fullnameEl.textContent = base.emoji + ' ' + fullName;
+      if (descEl) (descEl as HTMLElement).innerText = fullDesc;
+      if (promptEl) promptEl.value = promptText;
       
       const resultDiv = document.getElementById('quiz-result');
-      if (resultDiv.style.display === 'none') {
+      if (resultDiv) {
         resultDiv.style.display = 'block';
-        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (shouldScroll) {
+          resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
     }
 
@@ -352,8 +366,12 @@ import { stationRoles } from '../content/journeyGuide';
     document.addEventListener('astro:page-load', () => {
       const form = document.getElementById('quiz-form');
       if (form) {
-        form.addEventListener('change', evaluateQuiz);
-        form.addEventListener('input', evaluateQuiz);
+        form.addEventListener('change', () => evaluateQuiz(false));
+        form.addEventListener('input', () => evaluateQuiz(false));
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          evaluateQuiz(true);
+        });
       }
       
       const copyBtn = document.getElementById('copy-prompt-btn');
