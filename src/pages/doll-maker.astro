@@ -3,8 +3,6 @@ import WorkshopLayout from '../layouts/WorkshopLayout.astro';
 import CompleteTaskButton from '../components/progress/CompleteTaskButton.astro';
 import StationRole from '../components/common/StationRole.astro';
 import Icon from '../components/common/Icon.astro';
-import PromptGroup from '../components/prompts/PromptGroup.astro';
-import { dollPrompts } from '../content/prompts';
 import { stationRoles } from '../content/journeyGuide';
 ---
 <WorkshopLayout title="認識 AI 與旅遊人格測驗" currentPath="/doll-maker">
@@ -254,17 +252,7 @@ import { stationRoles } from '../content/journeyGuide';
     </div>
   </section>
 
-  <!-- Step 3: Classic Prompts -->
-  <section id="classic-prompts" class="section-heading" style="margin-top: 56px;">
-    <p class="eyebrow">💡 經典公仔提示詞 (免填測驗直接複製)</p>
-    <h2>經典角色生圖指令速查</h2>
-  </section>
 
-  <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px;">
-    {dollPrompts.map((item) => (
-      <PromptGroup title={item.title} description={item.description} prompts={item.prompts} />
-    ))}
-  </div>
 
   <CompleteTaskButton 
     taskId="doll-maker-complete" 
@@ -274,7 +262,7 @@ import { stationRoles } from '../content/journeyGuide';
     successMessage="太棒了！您已成功認識 AI 並獲得專屬旅遊人格，接下來我們將開始整理旅遊需求！"
   />
 
-  <script is:inline>
+  <script>
     // ===== 旅遊人格測驗邏輯 =====
     const BASE = {
       A: { 
