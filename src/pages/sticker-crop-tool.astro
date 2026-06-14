@@ -66,17 +66,34 @@ import StickerCropApp from '../components/sticker-tool/StickerCropApp.astro';
         <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 800; color: var(--night); margin-bottom: 16px;">🚀 使用「LINE 拍貼」App 上架商店教學</h3>
         
         <!-- iOS 專用提示區 -->
-        <div style="margin: 0 0 20px 0; padding: 16px; background: #f0f7ff; border-left: 4px solid #3b82f6; border-radius: 12px; font-size: 0.88rem; color: #1e3a8a; line-height: 1.6; box-shadow: var(--shadow-sm);">
-          <strong style="display: flex; align-items: center; gap: 6px; font-size: 0.95rem; margin-bottom: 8px; color: #1d4ed8;">
-             iPhone 使用者：ZIP 下載、解壓與匯入相簿指南
+        <div style="margin: 0 0 20px 0; padding: 18px; background: #f0f7ff; border-left: 4px solid #3b82f6; border-radius: 12px; font-size: 0.88rem; color: #1e3a8a; line-height: 1.6; box-shadow: var(--shadow-sm);">
+          <strong style="display: flex; align-items: center; gap: 6px; font-size: 0.98rem; margin-bottom: 10px; color: #1d4ed8;">
+             iPhone (iOS) 使用者：貼圖下載與儲存完整攻略
           </strong>
-          <ol style="margin: 0; padding-left: 18px; font-size: 0.85rem; color: #1e40af; display: flex; flex-direction: column; gap: 6px;">
-            <li><strong>一鍵解壓：</strong>打開 iPhone 內建的「檔案」App ➔ 找到剛下載的 ZIP 檔 ➔ 「點擊一下」即自動在原地解壓出貼圖資料夾。</li>
-            <li><strong>整包儲存：</strong>進入該資料夾 ➔ 點右上角「...」➔ 點「選取」➔ 勾選所有貼圖 ➔ 點左下角「分享（向上箭頭）」 ➔ 點選「儲存 X 張影像」，即可一次存入手機相簿！</li>
-            <li style="color: #4b5563; list-style-type: none; margin-top: 4px; padding-left: 0; font-style: italic;">
-              💡 備用捷徑：解壓後，在 LINE 拍貼 App 內點選新增時，直接選擇「檔案」並選取解壓後的透明 PNG 也可以。
-            </li>
-          </ol>
+          
+          <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed rgba(59, 130, 246, 0.25);">
+            <strong style="color: #1d4ed8; font-size: 0.9rem; display: block; margin-bottom: 4px;">📥 方式 A：單張下載（適合個別下載與儲存）</strong>
+            <ul style="margin: 0; padding-left: 18px; font-size: 0.85rem; color: #1e40af; display: flex; flex-direction: column; gap: 4px; list-style-type: disc;">
+              <li>點擊貼圖下方的<strong>「⬇」個別下載</strong>。</li>
+              <li>在跳出的預覽大圖上<strong>「長按圖片」</strong>，選擇<strong>「儲存至照片」</strong>（或「加入照片」），即可將透明 PNG 直接存入手機相簿。</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed rgba(59, 130, 246, 0.25);">
+            <strong style="color: #1d4ed8; font-size: 0.9rem; display: block; margin-bottom: 4px;">📦 方式 B：下載 ZIP（適合整包批次儲存，最推薦！）</strong>
+            <ol style="margin: 0; padding-left: 18px; font-size: 0.85rem; color: #1e40af; display: flex; flex-direction: column; gap: 6px;">
+              <li>點擊<strong>「下載 ZIP」</strong>，檔案會下載至 Safari 的下載項目（可從網址列左側的下載圖示查看）。</li>
+              <li>開啟 iPhone 內建的<strong>「檔案」App</strong>，找到該 ZIP 檔，<strong>「點擊一下」</strong>即自動原地解壓縮出貼圖資料夾。</li>
+              <li>進入解壓後的資料夾 ➔ 點擊右上角<strong>「...」</strong> ➔ 選擇<strong>「選取」</strong> ➔ 勾選所有貼圖 ➔ 點擊左下角<strong>「分享（向上箭頭）」</strong> ➔ 點選<strong>「儲存 X 張影像」</strong>，即可一次將所有貼圖儲存至手機相簿！</li>
+              <li style="color: #4b5563; list-style-type: none; margin-top: 4px; padding-left: 0; font-style: italic;">
+                💡 備用做法：在「LINE 拍貼」App 中新增貼圖時，也可以直接選擇「檔案」並選取解壓資料夾中的透明 PNG。
+              </li>
+            </ol>
+          </div>
+
+          <div style="font-size: 0.82rem; color: #4b5563; line-height: 1.4; background: rgba(255, 255, 255, 0.6); padding: 8px 12px; border-radius: 8px;">
+            ⚠️ <strong>系統限制說明：</strong>由於 iOS Safari 內建的安全防護機制會自動阻擋「一次下載多個檔案」（彈出視窗阻擋），因此「全部下載 PNG」在 iPhone 上無法使用。建議一律使用<strong>「下載 ZIP 壓縮檔」</strong>來進行整包下載。
+          </div>
         </div>
 
         <ol style="margin: 0; padding-left: 20px; color: var(--night); line-height: 1.8; font-size: 0.92rem;">

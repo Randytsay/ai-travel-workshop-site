@@ -6,7 +6,7 @@ export const siteConfig = {
   cashbackInterestUrl: '#',
   externalLinks: {
     travelPlannerGptUrl:
-      'https://chatgpt.com/g/g-6a0829f788b88191ac0643f6ee0d615d-ai-lu-you-gui-hua-shi-gong-zuo-fang-ban',
+      'https://chatgpt.com/g/g-6a2df68ef1a48191bef05cd22132999a-ai-lu-you-gui-hua-xiao-bang-shou',
     geminiUrl: 'https://gemini.google.com/',
     travelPlannerGemUrl: 'https://gemini.google.com/gem/1tBw-WprmTYo9C-j9-nV0SqiEtWWbg1iI?usp=sharing',
     notebookLmUrl: 'https://notebooklm.google.com/'
