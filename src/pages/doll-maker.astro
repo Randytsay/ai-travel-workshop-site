@@ -323,9 +323,9 @@ import { stationRoles } from '../content/journeyGuide';
       
       if (!q1 || !q2 || !q3 || !nameInput) return;
       
-      const base = BASE[q1] || BASE['A'];
-      const modKey = q2 + q3;
-      const mod = MOD[modKey] || MOD['AA'];
+      const base = (q1 && q1 in BASE) ? BASE[q1 as keyof typeof BASE] : BASE['A'];
+      const modKey = (q2 && q3) ? (q2 + q3) : 'AA';
+      const mod = (modKey in MOD) ? MOD[modKey as keyof typeof MOD] : MOD['AA'];
       
       const fullName = base.name + mod.suffix;
       const fullDesc = base.personality + '\n\n' + mod.modPersonality;
@@ -351,17 +351,19 @@ import { stationRoles } from '../content/journeyGuide';
 
     // 複製文字
     function copyPromptText() {
-      const textarea = document.getElementById('result-prompt');
-      textarea.select();
-      textarea.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(textarea.value).then(() => {
-        const btnText = document.querySelector('#copy-prompt-btn .btn-text');
-        const originalText = btnText.textContent;
-        btnText.textContent = '✅ 已複製成功！';
-        setTimeout(() => {
-          btnText.textContent = originalText;
-        }, 2000);
-      });
+      const textarea = document.getElementById('result-prompt') as HTMLTextAreaElement | null;
+      const btnText = document.querySelector('#copy-prompt-btn .btn-text') as HTMLElement | null;
+      if (textarea && btnText) {
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(textarea.value).then(() => {
+          const originalText = btnText.textContent || '';
+          btnText.textContent = '✅ 已複製成功！';
+          setTimeout(() => {
+            btnText.textContent = originalText;
+          }, 2000);
+        });
+      }
     }
 
     // 初始化監聽事件

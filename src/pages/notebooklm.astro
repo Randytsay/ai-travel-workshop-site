@@ -201,7 +201,9 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
     <ImageCard src="/images/notebooklm/presentation-output-01.webp" alt="旅遊研究延伸成簡報與資訊圖表的成果展示" title="簡報與圖表延伸" text="課後可再把研究內容改成簡報、懶人包或同行討論資料。" />
   </section>
 
-  <script is:inline define:vars={{ pptScenarios, infographicStyles, podcastScenarios }}>
+  <script>
+    import { pptScenarios, infographicStyles, podcastScenarios } from '../content/notebookStudio';
+
     // 1. Studio Tab 點擊切換
     const tabs = document.querySelectorAll('.studio-tab');
     const panels = document.querySelectorAll('.studio-panel');
@@ -213,19 +215,21 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
 
         tab.classList.add('active');
         const targetId = tab.getAttribute('data-tab');
-        document.getElementById(targetId).classList.add('active');
+        if (targetId) {
+          document.getElementById(targetId)?.classList.add('active');
+        }
       });
     });
 
     // 2. Scenario (Panel A) 切換
     const pptCards = document.querySelectorAll('[data-ppt-key]');
-    const pptTextarea = document.getElementById('ppt-prompt');
+    const pptTextarea = document.getElementById('ppt-prompt') as HTMLTextAreaElement | null;
     pptCards.forEach(card => {
       card.addEventListener('click', () => {
         pptCards.forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         const key = card.getAttribute('data-ppt-key');
-        if (pptScenarios[key]) {
+        if (key && pptScenarios[key] && pptTextarea) {
           pptTextarea.value = pptScenarios[key].prompt;
         }
       });
@@ -233,11 +237,11 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
 
     // 3. Infographic Style (Panel B) 切換
     const infographicCards = document.querySelectorAll('[data-infographic-key]');
-    const infographicTextarea = document.getElementById('infographic-prompt');
+    const infographicTextarea = document.getElementById('infographic-prompt') as HTMLTextAreaElement | null;
     
-    function updateInfographicPrompt(key) {
+    function updateInfographicPrompt(key: string) {
       const s = infographicStyles[key];
-      if (s) {
+      if (s && infographicTextarea) {
         infographicTextarea.value = `# 角色與目標
 你是一位專業的插畫家。請將來源的行程轉化為一幅資訊圖表地圖。
 
@@ -258,7 +262,9 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
         infographicCards.forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         const key = card.getAttribute('data-infographic-key');
-        updateInfographicPrompt(key);
+        if (key) {
+          updateInfographicPrompt(key);
+        }
       });
     });
     
@@ -267,28 +273,28 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
 
     // 4. Podcast Scenario (Panel C) 切換
     const podcastCards = document.querySelectorAll('[data-podcast-key]');
-    const podcastTextarea = document.getElementById('podcast-prompt');
+    const podcastTextarea = document.getElementById('podcast-prompt') as HTMLTextAreaElement | null;
     podcastCards.forEach(card => {
       card.addEventListener('click', () => {
         podcastCards.forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         const key = card.getAttribute('data-podcast-key');
-        if (podcastScenarios[key]) {
+        if (key && podcastScenarios[key] && podcastTextarea) {
           podcastTextarea.value = podcastScenarios[key].prompt;
         }
       });
     });
 
     // 5. Copy Buttons Utility
-    function handleCopy(btnId, textareaId) {
+    function handleCopy(btnId: string, textareaId: string) {
       const btn = document.getElementById(btnId);
-      const textarea = document.getElementById(textareaId);
+      const textarea = document.getElementById(textareaId) as HTMLTextAreaElement | null;
       if (!btn || !textarea) return;
 
       btn.addEventListener('click', async () => {
         try {
           await navigator.clipboard.writeText(textarea.value);
-          const originalText = btn.textContent;
+          const originalText = btn.textContent || '';
           btn.textContent = '✅ 複製成功！';
           btn.style.background = '#10b981';
           
@@ -309,7 +315,7 @@ const deepResearchPrompt = notebookContent.prompts.find(p => p.id === 'deep-rese
     handleCopy('copy-podcast-btn', 'podcast-prompt');
 
     // Helper function for showing toast
-    function showToast(msg) {
+    function showToast(msg: string) {
       let toast = document.querySelector('.copy-toast');
       if (!toast) {
         toast = document.createElement('div');
